@@ -1,7 +1,7 @@
 import pprint
 
 from telegram import (
-    ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+    ReplyKeyboardMarkup, ReplyKeyboardRemove, Update, ParseMode
 )
 from telegram.ext import CallbackContext
 
@@ -25,12 +25,17 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
         markup = ReplyKeyboardMarkup(
             keyboards.create.reply_keyboard,
             resize_keyboard=True,
-            one_time_keyboard=False
+            one_time_keyboard=False,
+            input_field_placeholder='Escribe el nombre'
         )
         update.message.reply_text(
-            "Ups, aun no tienes una tienda. Pues vamos a crearla.\n\n"
-            "Cual es el nombre de tu tienda?",
-            reply_markup=markup
+            'Empecemos registrando tu tienda 🏬',
+            parse_mode=ParseMode.MARKDOWN
+        )
+        update.message.reply_text(
+            "¿Cual es el nombre de tu tienda?",
+            reply_markup=markup,
+            parse_mode=ParseMode.MARKDOWN
         )
 
         return SHOP_CREATE
@@ -56,7 +61,8 @@ def name(update: Update, context: CallbackContext) -> str:
     user_data["shop"]["name"] = name
 
     update.message.reply_text(
-        "Descripcion de tu tienda (que productos/servicios presta): "
+        "Escribe una descripción para tu tienda 👇",
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return SHOP_DESCRIPTION
@@ -75,10 +81,10 @@ def description(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        "Genial, ahora se de que se trata todo esto\n\n"
-        "Sube el logo de tu tienda para que sea mas facil reconocerla:\n"
-        "Si quieres omitir este paso, dale al boton /omitir\n",
-        reply_markup=markup
+        "¡Agrega una foto de tu tienda!\n\n"
+        "👇 Presiona el boton en forma de clip📎 y selecciona una foto",
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
     return SHOP_LOGO
 
@@ -93,23 +99,23 @@ def logo(update: Update, context: CallbackContext) -> str:
     user_data["shop"]["logo"] = logo_path
 
     update.message.reply_text(
-        "Ok, tu logo ha sido subido. Pues sigamos!\n"
-        "Ingresa la localizacion de tu tienda (direccion del mapa)\n\n"
-        "Asi los interesados puedan saber a donde te encuentras ubicado\n"
+        "¿Donde esta ubicada tu tienda?!\n\n"
+        "👇 Presiona el botón en forma de clip📎, selecciona ubicación 📍y envia la ubicación de tu tienda",
+        parse_mode=ParseMode.MARKDOWN
     )
-    render_send_location_help(update)
     
     return SHOP_LOCATION
 
 
 def skip_logo(update: Update, context: CallbackContext) -> str:
     update.message.reply_text(
-        "No te preocupes, puedes subir el logo de tu tienda luego!\n"
-        "Ingresa la localizacion de tu tienda (direccion del mapa)\n\n"
-        "Asi los interesados puedan saber a donde te encuentras ubicado\n"
+        "No hay problema, puedes configurar la foto de tu tienda luego\n"
     )
-
-    render_send_location_help(update)
+    update.message.reply_text(
+        "¿Donde esta ubicada tu tienda?!\n\n"
+        "👇 Presiona el botón en forma de clip📎, selecciona ubicación 📍y envia la ubicación de tu tienda",
+        parse_mode=ParseMode.MARKDOWN
+    )
 
     return SHOP_LOCATION
 
@@ -138,10 +144,10 @@ def location(update: Update, context: CallbackContext) -> str:
         one_time_keyboard=False
     )
     update.message.reply_text(
-        "Listo. Creo que esto es todo. Tu negocio ha sido registrado. Diviertete\n",
-        reply_markup=markup
+        "Tu tienda 🏬 ha sido registrada exitosamente",
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
-
 
     return END_SHOP_REGISTRATION
 
@@ -163,10 +169,13 @@ def skip_location(update: Update, context: CallbackContext) -> str:
         one_time_keyboard=False
     )
     update.message.reply_text(
-        "Listo. Creo que esto es todo. Tu negocio ha sido registrado. Diviertete\n",
-        reply_markup=markup
+        "No hay problema, puedes configurar la ubicación de tu tienda luego\n"
     )
-
+    update.message.reply_text(
+        "Tu tienda 🏬 ha sido registrada exitosamente",
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
+    )
     return END_SHOP_REGISTRATION
 
 
