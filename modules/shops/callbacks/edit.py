@@ -1,0 +1,350 @@
+import pprint
+from emoji import emojize
+import flag
+
+from telegram import (
+    ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+)
+from telegram.ext import CallbackContext
+
+from modules.base.requests import get_token_or_refresh
+from modules.base.states import BACK
+from modules.base.render import render_send_location_help
+from modules.shops import keyboards, callbacks
+from utils.helpers import get_unique_filename
+from ..states import *
+from ..requests.base import do_shop_logo_update, do_shop_update
+from ..render import show_shop
+
+
+def navigate_to_self(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+
+    markup = ReplyKeyboardMarkup(
+        keyboards.edit.reply_keyboard,
+        resize_keyboard=True,
+        one_time_keyboard=False
+    )
+    update.message.reply_text(
+        "Configuracion de los datos de la tienda\n",
+        reply_markup=markup
+    )
+
+    return SHOP_EDIT
+
+
+def navigate_to_edit_currency(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+    currencies = [
+        (':ar:', 'ARS'),
+        (':bo:', 'BOB'),
+        (':br:', 'BRL'),
+        (':cl:', 'CLP'),
+        (':co:', 'COP'),
+        (':cr:', 'CRC'),
+        (':cu:', 'CUP'),
+        (':do:', 'DOP'),
+        (':sv:', 'SVC'),
+        (':gt:', 'GTQ'),
+        (':ht:', 'HTG'),
+        (':hn:', 'HNL'),
+        (':mx:', 'MXN'),
+        (':ni:', 'NIO'),
+        (':pa:', 'PAB'),
+        (':py:', 'PYG'),
+        (':pe:', 'PEN'),
+        (':uy:', 'UYU'),
+        (':ve:', 'VES'),
+        (':us:', 'USD'),
+        (':cn:', 'CNY')
+    ]
+
+    currencies_text = ''
+
+    for country_code, code in currencies:
+        currencies_text += emojize(f":point_right: ", use_aliases=True) + flag.flag(country_code) + f"{code}\n"
+    
+    # token = get_token_or_refresh(user_data)
+
+    markup = ReplyKeyboardMarkup(
+        keyboards.edit.reply_keyboard_currency,
+        resize_keyboard=True,
+        one_time_keyboard=False
+    )
+    text = "\nEscribe el codigo de la moneda en la cual estaran basados los precios de tus productos :point_down:"
+    text = emojize(text, use_aliases=True)
+
+    update.message.reply_text(
+        currencies_text + text,
+        reply_markup=markup
+    )
+
+    return SHOP_EDIT_CURRENCY
+
+
+def back(update: Update, context: CallbackContext) -> str:
+    callbacks.settings.navigate_to_self(update, context)
+    return SHOP_EDIT_BACK
+
+
+def back_currency(update: Update, context: CallbackContext) -> str:
+    callbacks.settings.navigate_to_self(update, context)
+    return SHOP_EDIT_CURRENCY_BACK
+
+
+def back_to_edit_choosing(update: Update, context: CallbackContext) -> str:
+    navigate_to_self(update, context)
+    return SHOP_EDIT_CHOOSING
+
+
+def name(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+
+    user_data['shop_edit_field'] = 'name'
+
+    markup = ReplyKeyboardMarkup(
+        keyboards.edit.reply_keyboard_back,
+        resize_keyboard=True,
+        one_time_keyboard=False
+    )
+
+    update.message.reply_text(
+        'Escriba el nombre de la tienda',
+        reply_markup=markup
+    )
+
+    return SHOP_EDIT_TYPING
+
+
+def description(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+
+    user_data['shop_edit_field'] = 'description'
+    markup = ReplyKeyboardMarkup(
+        keyboards.edit.reply_keyboard_back,
+        resize_keyboard=True,
+        one_time_keyboard=False
+    )
+
+    update.message.reply_text(
+        'Escriba una descripcion de la tienda',
+        reply_markup=markup
+    )
+
+    return SHOP_EDIT_TYPING
+
+
+def logo(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+
+    user_data['shop_edit_field'] = 'logo'
+    markup = ReplyKeyboardMarkup(
+        keyboards.edit.reply_keyboard_back,
+        resize_keyboard=True,
+        one_time_keyboard=False
+    )
+
+    update.message.reply_text(
+        'Sube la foto del logo de la tienda',
+        reply_markup=markup
+    )
+
+    return SHOP_EDIT_TYPING
+
+
+def location(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+
+    user_data['shop_edit_field'] = 'location'
+
+    markup = ReplyKeyboardMarkup(
+        keyboards.edit.reply_keyboard_back,
+        resize_keyboard=True,
+        one_time_keyboard=False
+    )
+
+    update.message.reply_text(
+        'Ingresa la ubicacion de la tienda',
+        reply_markup=markup
+    )
+    render_send_location_help(update)
+
+    return SHOP_EDIT_TYPING
+
+
+def phone_number(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+
+    user_data['shop_edit_field'] = 'phone_number'
+    
+    markup = ReplyKeyboardMarkup(
+        keyboards.edit.reply_keyboard_back,
+        resize_keyboard=True,
+        one_time_keyboard=False
+    )
+
+    update.message.reply_text(
+        'El numero de telefono debe ser ingresado en el siguiente formato: '
+        '+00000000000 y no debe contener mas de 15 digitos.\n',
+        reply_markup=markup
+    )
+
+    return SHOP_EDIT_TYPING
+
+
+def update_shop(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+    field = user_data.pop('shop_edit_field')
+    value = update.message.text
+
+    markup = ReplyKeyboardMarkup(
+        keyboards.edit.reply_keyboard,
+        resize_keyboard=True,
+        one_time_keyboard=False
+    )
+
+    payload = {field: value}
+
+    token = user_data['token']
+    shop_id = user_data['shop']['id']
+
+    shop = do_shop_update(token, shop_id, payload)
+    
+    if shop:
+        user_data['shop'] = shop
+        show_shop(update, shop, markup=markup)
+    else:
+        show_shop(update, user_data['shop'], markup=markup)
+        update.message.reply_text(
+            'El formato del numero de telefono no es valido\n',
+        )
+
+    return SHOP_EDIT_CHOOSING
+
+
+def update_logo(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+    _ = user_data.pop('shop_edit_field')
+
+    logo_path = get_unique_filename()
+    logo_file = update.message.photo[-1].get_file()
+    logo_file.download(logo_path)
+
+    markup = ReplyKeyboardMarkup(
+        keyboards.edit.reply_keyboard,
+        resize_keyboard=True,
+        one_time_keyboard=False
+    )
+    token = user_data['token']
+    shop_id = user_data['shop']['id']
+
+    response = do_shop_logo_update(shop_id, logo_path, token)
+    shop = response['data']
+    user_data['shop'] = shop
+    show_shop(update, shop, markup=markup)
+
+    return SHOP_EDIT_CHOOSING
+
+
+def update_logo_attach(update: Update, context: CallbackContext) -> str:
+    photo_path = get_unique_filename()
+    file = context.bot.getFile(update.message.document.file_id)
+    file.download(photo_path)
+
+    user_data = context.user_data
+    _ = user_data.pop('shop_edit_field')
+
+    markup = ReplyKeyboardMarkup(
+        keyboards.edit.reply_keyboard,
+        resize_keyboard=True,
+        one_time_keyboard=False
+    )
+    token = user_data['token']
+    shop_id = user_data['shop']['id']
+
+    response = do_shop_logo_update(shop_id, photo_path, token)
+    shop = response['data']
+    user_data['shop'] = shop
+    show_shop(update, shop, markup=markup)
+
+    return SHOP_EDIT_CHOOSING
+
+
+def update_location(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+    _ = user_data.pop('shop_edit_field')
+    location = update.message.location
+    location = [location.latitude, location.longitude]
+
+    location = {
+        "type": "Point",
+        "coordinates": location
+    }
+
+    payload = {'location': location}
+    markup = ReplyKeyboardMarkup(
+        keyboards.edit.reply_keyboard,
+        resize_keyboard=True,
+        one_time_keyboard=False
+    )
+    token = user_data['token']
+    shop_id = user_data['shop']['id']
+
+    shop = do_shop_update(token, shop_id, payload)
+    user_data['shop'] = shop
+    show_shop(update, shop, markup=markup)
+
+    return SHOP_EDIT_CHOOSING
+
+
+def update_currency(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+    token = get_token_or_refresh(user_data)
+
+    currencies = [
+        (':ar:', 'ARS'),
+        (':bo:', 'BOB'),
+        (':br:', 'BRL'),
+        (':cl:', 'CLP'),
+        (':co:', 'COP'),
+        (':cr:', 'CRC'),
+        (':cu:', 'CUP'),
+        (':do:', 'DOP'),
+        (':sv:', 'SVC'),
+        (':gt:', 'GTQ'),
+        (':ht:', 'HTG'),
+        (':hn:', 'HNL'),
+        (':mx:', 'MXN'),
+        (':ni:', 'NIO'),
+        (':pa:', 'PAB'),
+        (':py:', 'PYG'),
+        (':pe:', 'PEN'),
+        (':uy:', 'UYU'),
+        (':ve:', 'VES'),
+        (':us:', 'USD'),
+        (':cn:', 'CNY')
+    ]
+
+    currency = update.message.text
+    currency = currency.upper()
+
+    if currency in [curr[1] for curr in currencies]:
+        shop_id = user_data['shop']['id']
+        shop = do_shop_update(token, shop_id, {'currency': currency})
+        user_data['shop'] = shop
+
+        show_shop(update, shop)
+
+        callbacks.settings.navigate_to_self(update, context)
+        return SHOP_EDIT_CURRENCY_BACK
+    
+    else:
+        currencies_text = ''
+
+        for country_code, code in currencies:
+            currencies_text += emojize(f":point_right: ", use_aliases=True) + flag.flag(country_code) + f"{code}\n"
+    
+        update.message.reply_text(
+            'Selecciona una de las monedas disponibles\n\n' + currencies_text
+        )
+        

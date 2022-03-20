@@ -1,0 +1,14 @@
+(
+    GENDER,
+    FIRST_NAME,
+    LAST_NAME,
+    AGE,
+    EMAIL,
+    PHOTO,
+    LOCATION,
+    ACCEPT_CONDITIONS,
+    USER_EDIT,
+    USER_EDIT_BACK,
+    USER_EDIT_TYPING,
+    USER_EDIT_CHOOSING,
+) = map(chr, range(100, 112))

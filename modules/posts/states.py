@@ -1,0 +1,8 @@
+(
+    POST_CREATE,
+    POST_CREATE_BACK,
+    POST_CREATE_PUBLISHER_TYPE,
+    POST_CREATE_END,
+    POST_LIST,
+    POST_LIST_BACK,
+) = map(chr, range(500, 506))

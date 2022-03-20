@@ -1,0 +1,389 @@
+from ast import Call
+from emoji import emojize
+from telegram import (
+    ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+)
+from telegram.ext import CallbackContext
+
+from modules.base.requests import get_token_or_refresh
+from modules.base.render import render_send_location_help
+from modules.products import keyboards
+from modules import shops
+from modules import welcome
+from modules.products.keyboards.search import get_view_store_products_inline_keyboard_markup
+from ..states import *
+from ..requests.list import get_products
+from ..requests.search import (
+    get_product, product_search, do_update_search_settings,
+    rating_product,
+)
+from ..render import (
+    render_search_product, render_search_product_inline,
+    render_search_product_map,
+)
+from ..keyboards.search import get_product_search_inline_markup
+
+
+def navigate_to_self(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+    count_products = user_data.get('count_products', 0)
+    
+    if count_products > 0 and 'search_product' in user_data:
+        markup = ReplyKeyboardMarkup(
+            keyboards.search.reply_keyboard,
+            resize_keyboard=True,
+            one_time_keyboard=False,
+            input_field_placeholder='Ingrese el nombre'
+        )
+
+        update.message.reply_text(
+            'Resultados de busqueda\n\n',
+            reply_markup=markup
+        )
+
+        render_search_product(update, user_data['search_product'], user_data)
+
+    else:
+        markup = ReplyKeyboardMarkup(
+            keyboards.search.reply_keyboard_non_response,
+            resize_keyboard=True,
+            one_time_keyboard=False,
+            input_field_placeholder='Ingrese el nombre'
+        )
+        text = 'Ademas, puedes configurar el radio y la ubicacion de la busqueda seleccionando la opcion ⚙️ en el teclado. 👇👇'
+        text = emojize(text, use_aliases=True)
+
+        update.message.reply_text(
+            'Ingrese el nombre del producto/servicio que buscas 🔎\n\n' + text,
+            reply_markup=markup
+        )
+
+    return PRODUCT_SEARCH
+
+
+def navigate_to_search_settings(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+
+    markup = ReplyKeyboardMarkup(
+        keyboards.search.reply_keyboard_search_settings,
+        resize_keyboard=True,
+        one_time_keyboard=False,
+    )
+    text = 'Configure los parametros de busqueda aqui (Ubicacion, Rango)'
+    text = emojize(text, use_aliases=True)
+
+    update.message.reply_text(
+        text,
+        reply_markup=markup
+    )
+
+    return SEARCH_SETTINGS
+
+
+def navigate_to_search_range_settings(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+
+    markup = ReplyKeyboardMarkup(
+        keyboards.search.reply_keyboard_search_range_settings,
+        resize_keyboard=True,
+        one_time_keyboard=False,
+    )
+    text = 'Seleccione el rango para actualizar la amplitud de la busqueda'
+    text = emojize(text, use_aliases=True)
+
+    update.message.reply_text(
+        text,
+        reply_markup=markup
+    )
+
+    return SEARCH_RANGE_SETTINGS
+
+def navigate_to_search_location_settings(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+
+    markup = ReplyKeyboardMarkup(
+        keyboards.search.reply_keyboard_search_location_settings,
+        resize_keyboard=True,
+        one_time_keyboard=False,
+    )
+    text = 'Actualiza la ubicacion de la busqueda'
+    text = emojize(text, use_aliases=True)
+
+    update.message.reply_text(
+        text,
+        reply_markup=markup
+    )
+
+    render_send_location_help(update)
+
+    return SEARCH_LOCATION_SETTINGS
+
+
+def back(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+    user_data.pop('search_product', None)
+    user_data.pop('current_page', None)
+    user_data.pop('count_products', None)
+
+    welcome.callbacks.start_app(update, context)
+    return PRODUCT_SEARCH_BACK
+
+
+def back_search_settings(update: Update, context: CallbackContext) -> str:
+    navigate_to_self(update, context)
+    return SEARCH_SETTINGS_BACK
+
+
+def back_search_location_settings(update: Update, context: CallbackContext) -> str:
+    navigate_to_search_settings(update, context)
+    return SEARCH_LOCATION_SETTINGS_BACK
+
+
+def back_search_range_settings(update: Update, context: CallbackContext) -> str:
+    navigate_to_search_settings(update, context)
+    return SEARCH_RANGE_SETTINGS_BACK
+
+
+def handle_query(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+    token = get_token_or_refresh(user_data)
+
+    query = update.message.text
+    query = query.lower()
+
+    products, count = product_search(token, query, page=1)
+    
+    if count > 0:
+        user_data['search_product'] = products[0]
+        user_data['current_page'] = 1
+        user_data['count_products'] = count
+        user_data['query'] = query
+
+        markup = ReplyKeyboardMarkup(
+            keyboards.search.reply_keyboard,
+            resize_keyboard=True,
+            one_time_keyboard=False
+        )
+        update.message.reply_text(
+            'Resultados de busqueda\n\n',
+            reply_markup=markup
+        )
+
+        render_search_product(update, products[0], user_data)
+    else:
+        user_data['count_products'] = count
+        
+        markup = ReplyKeyboardMarkup(
+            keyboards.search.reply_keyboard_non_response,
+            resize_keyboard=True,
+            one_time_keyboard=False
+        )
+
+        update.message.reply_text(
+            'Ups, al parecer no venden esos productos cerca de ti.\n'
+            'Configura tu rango de busqueda para obtener mas resultados\n',
+            reply_markup=markup
+        )
+
+
+def prev(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+    
+    if user_data['count_products'] == 0:
+        update.message.reply_text(
+            "Estas en la primera pagina y al parecer no has registrado productos"
+        )
+    elif user_data['current_page'] == 1:
+        render_search_product(update, user_data['search_product'], user_data)
+
+    else:
+        token = user_data['token']
+        query = user_data['query']
+        current_page = user_data['current_page']
+        
+        products, _ = product_search(token, query, page=current_page - 1)
+
+        user_data['search_product'] = products[0]
+        user_data['current_page'] -= 1
+
+        render_search_product(update, products[0], user_data)
+
+
+def next(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+
+    if user_data['count_products'] == 0:
+        update.message.reply_text(
+            "Estas en la primera pagina y al parecer no has registrado productos"
+        )
+    elif user_data['current_page'] == user_data['count_products']:
+        render_search_product(update, user_data['search_product'], user_data)
+
+    else:
+        token = user_data['token']
+        query = user_data['query']
+        current_page = user_data['current_page']
+
+        products, _ = product_search(token, query, page=current_page + 1)
+
+        user_data['search_product'] = products[0]
+        user_data['current_page'] += 1
+
+        render_search_product(update, products[0], user_data)
+
+
+def update_search_range_settings(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+    search_range = update.message.text.split()[0]
+    search_range = int(search_range) * 1000
+
+    token = get_token_or_refresh(user_data)
+    payload = {'distance': search_range}
+
+    response = do_update_search_settings(token, payload)
+    
+    text = f'El radio de busqueda :satellite: ha sido actualizado a {search_range / 1000} Km'
+    text = emojize(text, use_aliases=True)
+
+    update.message.reply_text(
+        text
+    )
+    navigate_to_search_settings(update, context)
+
+    return SEARCH_RANGE_SETTINGS_BACK
+
+
+def update_search_location_settings(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+    location = update.message.location
+    location = [location.latitude, location.longitude]
+
+    payload = {
+        'location': {
+            'type': 'Point',
+            'coordinates': location,
+        },
+    }
+    token = get_token_or_refresh(user_data)
+    response = do_update_search_settings(token, payload)
+
+    text = f'La ubicacion de busqueda :round_pushpin: ha sido actualizada'
+    text = emojize(text, use_aliases=True)
+    update.message.reply_text(
+        text
+    )
+
+    navigate_to_search_settings(update, context)
+    return SEARCH_LOCATION_SETTINGS_BACK
+
+
+def add_to_car(update: Update, context: CallbackContext):
+    query = update.callback_query
+    _, product_id = query.data.split('-')
+
+    print("Adding product to car: ", product_id)
+    update.callback_query.answer()
+
+
+def view_store_products(update: Update, context: CallbackContext):
+    query = update.callback_query
+    _, product_id, shop_id = query.data.split('-')
+    
+    markup = get_view_store_products_inline_keyboard_markup(
+        product_id, shop_id, page=1
+    )
+    products, count = get_products(context.user_data['token'], shop_id, page=1)
+    update.callback_query.answer()
+
+    render_search_product_inline(update, products[0], markup, context.user_data)
+
+
+def view_store_products_next(update: Update, context: CallbackContext):
+    query = update.callback_query
+    _, product_id, shop_id, page = query.data.split('-')
+    page = int(page)
+
+    products, count = get_products(context.user_data['token'], shop_id, page=page)
+    update.callback_query.answer()
+
+    if page < count:
+        page = page + 1
+
+        markup = get_view_store_products_inline_keyboard_markup(
+            product_id, shop_id, page
+        )
+
+        render_search_product_inline(update, products[0], markup, context.user_data)
+
+
+def view_store_products_prev(update: Update, context: CallbackContext):
+    query = update.callback_query
+    _, product_id, shop_id, page = query.data.split('-')
+    page = int(page)
+
+    if page > 1:
+        page = page - 1
+        update.callback_query.answer()
+
+        markup = get_view_store_products_inline_keyboard_markup(
+            product_id, shop_id, page
+        )
+        products, count = get_products(context.user_data['token'], shop_id, page=page)
+        render_search_product_inline(update, products[0], markup, context.user_data)
+    else:
+        update.callback_query.answer()
+
+
+def view_store_products_back(update: Update, context: CallbackContext):
+    query = update.callback_query
+    _, product_id, shop_id, page = query.data.split('-')
+
+    update.callback_query.answer()
+
+    product = get_product(context.user_data['token'], product_id)
+    markup = get_product_search_inline_markup(product)
+
+    render_search_product_inline(update, product, markup, context.user_data)
+
+
+def like_product(update: Update, context: CallbackContext):
+    user_data = context.user_data
+    token = user_data['token']
+
+    query = update.callback_query
+    product_id = query.data.split('-')[-1]
+
+    message = rating_product(token, product_id)
+
+    # update.callback_query.bot.forward_message(
+    #     user_data['user']['telegram_chat_id'],
+    #     update.callback_query.id)
+    query.answer(text=message)
+
+
+def chat(update: Update, context: CallbackContext):
+    context.bot.send_message(
+        chat_id=update.message.chat_id,
+        reply_to_message_id=update.message.message_id,
+        text="Hey there!")
+
+
+def view_product_shop_map(update: Update, context: CallbackContext):
+    user_data = context.user_data
+
+    product = user_data['search_product']
+    shop_location = product['shop']['location']
+
+    if shop_location:
+        lat, lon = shop_location['coordinates']
+        update.message.reply_location(
+            latitude=lat,
+            longitude=lon
+        )
+        update.message.reply_text(
+            product['shop']['address']['address']
+        )
+    else:
+        update.message.reply_text(
+            'No se puede obtener la localizacion de la tienda'
+        )

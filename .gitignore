@@ -1,0 +1,11 @@
+*.pyc
+__pycache__/
+
+# Ignore persistence files and directory
+storage/
+
+# Ignore media files and directory. Including photos and files
+media/
+*.jpg
+*.png
+*.jpeg
