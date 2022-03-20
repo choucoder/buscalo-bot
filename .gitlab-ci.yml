@@ -5,8 +5,26 @@
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 stages:
-- test
-sast:
-  stage: test
-include:
-- template: Security/SAST.gitlab-ci.yml
+  - install
+  - deploy
+
+install:
+  image: python:3.8.8
+  stage: install
+  script:
+    - python -m pip install -r requirements.txt
+  only:
+    - master
+
+deploy:
+  image: ruby:latest
+  stage: deploy
+  before_script:
+    - gem install dpl
+  script:
+    - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
+  environment:
+    name: main
+    url: $HEROKU_APP_HOST
+  only:
+    - master
