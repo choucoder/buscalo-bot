@@ -3,7 +3,7 @@ from threading import local
 import time
 
 from telegram import (
-    ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+    ParseMode, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 )
 from telegram.ext import CallbackContext
 from modules.base.render import get_start_message
@@ -27,12 +27,16 @@ def navigate_to_self(update: Update, context: CallbackContext, show=True) -> str
         markup = ReplyKeyboardMarkup(
             keyboards.create.reply_keyboard,
             resize_keyboard=True,
-            one_time_keyboard=False
+            one_time_keyboard=False,
+            input_field_placeholder='Escribe el nombre de tu tienda'
         )
         update.message.reply_text(
-            "Ups, aun no tienes una tienda. Pues vamos a crearla.\n\n"
-            "Ingrese el nombre de su tienda: ",
+            'Empecemos registrando tu tienda'
+        )
+        update.message.reply_text(
+            "Cual es el nombre de tu tienda?",
             reply_markup=markup,
+            parse_mode=ParseMode.MARKDOWN
         )
         user_data["shop"] = {}
 
