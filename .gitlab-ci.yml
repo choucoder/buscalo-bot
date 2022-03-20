@@ -14,7 +14,7 @@ install:
   script:
     - python -m pip install -r requirements.txt
   only:
-    - master
+    - main
 
 deploy:
   image: ruby:latest
@@ -27,4 +27,4 @@ deploy:
     name: main
     url: $HEROKU_APP_HOST
   only:
-    - master
+    - main
