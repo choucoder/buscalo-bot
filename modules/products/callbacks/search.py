@@ -51,7 +51,8 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
         )
         update.message.reply_text(
             "Aqui puedes realizar 🔎 busquedas y ⚙️ configurar parametros de busqueda (ubicación, amplitud de busqueda)\n\n"
-            "Escribe el nombre del producto o servicio que buscas 👇\n\n",
+            "Escribe el nombre del producto o servicio que buscas 👇\n"
+            "Escribe: @shop id-de-tienda, para buscar una tienda 👇",
             reply_markup=markup,
             parse_mode=ParseMode.MARKDOWN
         )
@@ -135,44 +136,47 @@ def back_search_range_settings(update: Update, context: CallbackContext) -> str:
 
 def handle_query(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
-    token = get_token_or_refresh(user_data)
-
     query = update.message.text
-    query = query.lower()
 
-    products, count = product_search(token, query, page=1)
-    
-    if count > 0:
-        user_data['search_product'] = products[0]
-        user_data['current_page'] = 1
-        user_data['count_products'] = count
-        user_data['query'] = query
-
-        markup = ReplyKeyboardMarkup(
-            keyboards.search.reply_keyboard,
-            resize_keyboard=True,
-            one_time_keyboard=False
-        )
-        update.message.reply_text(
-            "...",
-            reply_markup=markup
-        )
-        render_search_product(update, products[0], user_data)
+    if '@shop' in query and len(query.split()) == 2:
+        _, shop_id = query.split()
+        shops.callbacks.search.navigate_to_self(update, context)
     else:
-        user_data['count_products'] = count
+        query = query.lower()
+        token = get_token_or_refresh(user_data)
+        products, count = product_search(token, query, page=1)
         
-        markup = ReplyKeyboardMarkup(
-            keyboards.search.reply_keyboard_non_response,
-            resize_keyboard=True,
-            one_time_keyboard=False
-        )
+        if count > 0:
+            user_data['search_product'] = products[0]
+            user_data['current_page'] = 1
+            user_data['count_products'] = count
+            user_data['query'] = query
 
-        update.message.reply_text(
-            "No pudimos encontrar lo que buscas 😞\n"
-            "Configura ⚙️ los parametros de búsqueda e intentalo de nuevo",
-            reply_markup=markup,
-            parse_mode=ParseMode.MARKDOWN
-        )
+            markup = ReplyKeyboardMarkup(
+                keyboards.search.reply_keyboard,
+                resize_keyboard=True,
+                one_time_keyboard=False
+            )
+            update.message.reply_text(
+                "...",
+                reply_markup=markup
+            )
+            render_search_product(update, products[0], user_data)
+        else:
+            user_data['count_products'] = count
+            
+            markup = ReplyKeyboardMarkup(
+                keyboards.search.reply_keyboard_non_response,
+                resize_keyboard=True,
+                one_time_keyboard=False
+            )
+
+            update.message.reply_text(
+                "No pudimos encontrar lo que buscas 😞\n"
+                "Configura ⚙️ los parametros de búsqueda e intentalo de nuevo",
+                reply_markup=markup,
+                parse_mode=ParseMode.MARKDOWN
+            )
 
 
 def prev(update: Update, context: CallbackContext) -> str:

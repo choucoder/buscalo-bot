@@ -18,4 +18,6 @@
     SHOP_DETAILS,
     SHOP_DETAILS_BACK,
     SHOP_DETAILS_VIEW_PRODUCTS,
-) = map(chr, range(300, 319))
+    SHOP_SEARCH,
+    SHOP_SEARCH_BACK,
+) = map(chr, range(300, 321))

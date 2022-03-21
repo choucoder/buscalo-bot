@@ -31,6 +31,8 @@ def show_shop(update: Update, shop: Dict, markup=None) -> None:
     if shop['phone_number']:
         text += f"WhatsApp: {shop['phone_number']}\n"
 
+    text += f"\nID: `{shop['id']}`"
+
     is_photo = False
 
     if shop['logo']:    
@@ -82,6 +84,8 @@ def render_shop(update: Update, shop: Dict, markup=None) -> None:
     if shop['currency']:
         text += f"🪙 Moneda: {shop['currency']['code']} " + flag.flag(f":{shop['currency']['country_code']}:") + "\n"
     
+    text += f"\nID: `{shop['id']}`"
+
     is_photo = False
 
     if shop['logo']:    
