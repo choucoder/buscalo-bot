@@ -83,6 +83,12 @@ def navigate_to_self_non_owner(update: Update, context: CallbackContext) -> str:
         )
     else:
         user_data['count_products'] = 0
+        
+        markup = ReplyKeyboardMarkup(
+            keyboards.list.reply_keyboard_empty,
+            resize_keyboard=True,
+            one_time_keyboard=False
+        )
 
         update.message.reply_text(
             'No hay productos que mostrar\n',
