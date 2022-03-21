@@ -1,5 +1,5 @@
 from telegram import (
-    ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+    ParseMode, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 )
 from telegram.ext import CallbackContext
 
@@ -23,8 +23,9 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        'Usa este campo para enviarnos tus sugerencias',
-        reply_markup=markup
+        'Escribe tus sugerencia(s) 👇',
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return FEEDBACK
@@ -44,11 +45,10 @@ def send(update: Update, context: CallbackContext) -> str:
     response =  send_feedback(token, {"text": text})
 
     update.message.reply_text(
-        'La sugerencia ha sido enviada',
-        reply_markup=markup
+        "Tu mensaje ha sido enviado a nuestro buzón de sugerencias",
     )
 
-    return FEEDBACK_BACK
+    # return FEEDBACK_BACK
 
 
 def back(update: Update, context: CallbackContext) -> str:

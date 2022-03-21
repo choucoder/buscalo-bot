@@ -1,7 +1,7 @@
 from ast import Call
 from emoji import emojize
 from telegram import (
-    ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+    ParseMode, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 )
 from telegram.ext import CallbackContext
 
@@ -37,7 +37,7 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
         )
 
         update.message.reply_text(
-            'Resultados de busqueda\n\n',
+            "...",
             reply_markup=markup
         )
 
@@ -48,73 +48,62 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
             keyboards.search.reply_keyboard_non_response,
             resize_keyboard=True,
             one_time_keyboard=False,
-            input_field_placeholder='Ingrese el nombre'
         )
-        text = 'Ademas, puedes configurar el radio y la ubicacion de la busqueda seleccionando la opcion ⚙️ en el teclado. 👇👇'
-        text = emojize(text, use_aliases=True)
-
         update.message.reply_text(
-            'Ingrese el nombre del producto/servicio que buscas 🔎\n\n' + text,
-            reply_markup=markup
+            "Aqui puedes realizar 🔎 busquedas y ⚙️ configurar parametros de busqueda (ubicación, amplitud de busqueda)\n\n"
+            "Escribe el nombre del producto o servicio que buscas 👇\n\n",
+            reply_markup=markup,
+            parse_mode=ParseMode.MARKDOWN
         )
 
     return PRODUCT_SEARCH
 
 
 def navigate_to_search_settings(update: Update, context: CallbackContext) -> str:
-    user_data = context.user_data
-
     markup = ReplyKeyboardMarkup(
         keyboards.search.reply_keyboard_search_settings,
         resize_keyboard=True,
         one_time_keyboard=False,
     )
-    text = 'Configure los parametros de busqueda aqui (Ubicacion, Rango)'
-    text = emojize(text, use_aliases=True)
 
     update.message.reply_text(
-        text,
-        reply_markup=markup
+        "Selecciona el parametro de busqueda a editar 👇",
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return SEARCH_SETTINGS
 
 
 def navigate_to_search_range_settings(update: Update, context: CallbackContext) -> str:
-    user_data = context.user_data
-
     markup = ReplyKeyboardMarkup(
         keyboards.search.reply_keyboard_search_range_settings,
         resize_keyboard=True,
         one_time_keyboard=False,
     )
-    text = 'Seleccione el rango para actualizar la amplitud de la busqueda'
-    text = emojize(text, use_aliases=True)
 
     update.message.reply_text(
-        text,
-        reply_markup=markup
+        "Selecciona la amplitud de la busqueda 👇",
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return SEARCH_RANGE_SETTINGS
 
-def navigate_to_search_location_settings(update: Update, context: CallbackContext) -> str:
-    user_data = context.user_data
 
+def navigate_to_search_location_settings(update: Update, context: CallbackContext) -> str:
     markup = ReplyKeyboardMarkup(
         keyboards.search.reply_keyboard_search_location_settings,
         resize_keyboard=True,
         one_time_keyboard=False,
     )
-    text = 'Actualiza la ubicacion de la busqueda'
-    text = emojize(text, use_aliases=True)
 
     update.message.reply_text(
-        text,
-        reply_markup=markup
+        "¿Donde quieres buscar?!\n\n"
+        "👇 Presiona el botón en forma de clip📎, selecciona ubicación 📍y envia la ubicación",
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
-
-    render_send_location_help(update)
 
     return SEARCH_LOCATION_SETTINGS
 
@@ -165,10 +154,9 @@ def handle_query(update: Update, context: CallbackContext) -> str:
             one_time_keyboard=False
         )
         update.message.reply_text(
-            'Resultados de busqueda\n\n',
+            "...",
             reply_markup=markup
         )
-
         render_search_product(update, products[0], user_data)
     else:
         user_data['count_products'] = count
@@ -180,9 +168,10 @@ def handle_query(update: Update, context: CallbackContext) -> str:
         )
 
         update.message.reply_text(
-            'Ups, al parecer no venden esos productos cerca de ti.\n'
-            'Configura tu rango de busqueda para obtener mas resultados\n',
-            reply_markup=markup
+            "No pudimos encontrar lo que buscas 😞\n"
+            "Configura ⚙️ los parametros de búsqueda e intentalo de nuevo",
+            reply_markup=markup,
+            parse_mode=ParseMode.MARKDOWN
         )
 
 
@@ -242,7 +231,7 @@ def update_search_range_settings(update: Update, context: CallbackContext) -> st
 
     response = do_update_search_settings(token, payload)
     
-    text = f'El radio de busqueda :satellite: ha sido actualizado a {search_range / 1000} Km'
+    text = f'El radio de búsqueda :satellite: ha sido actualizado a {search_range / 1000} Km'
     text = emojize(text, use_aliases=True)
 
     update.message.reply_text(
@@ -267,7 +256,7 @@ def update_search_location_settings(update: Update, context: CallbackContext) ->
     token = get_token_or_refresh(user_data)
     response = do_update_search_settings(token, payload)
 
-    text = f'La ubicacion de busqueda :round_pushpin: ha sido actualizada'
+    text = f'La ubicación de búsqueda :round_pushpin: ha sido actualizada'
     text = emojize(text, use_aliases=True)
     update.message.reply_text(
         text

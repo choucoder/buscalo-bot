@@ -1,6 +1,6 @@
 from pprint import pprint
 from telegram import (
-    ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+    ParseMode, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 )
 from telegram.ext import CallbackContext
 
@@ -29,8 +29,10 @@ def navigate_to_self(update: Update, context: CallbackContext, swipe_down=True) 
 
     if swipe_down:
         update.message.reply_text(
-            "Dale al boton 'Deslizar' para avanzar por los estados",
-            reply_markup=markup
+            "Aqui puedes deslizar para ver estados y postearlos subiendo "
+            "una foto con subtítulo o selecionando la opción ➕ Nuevo estado",
+            reply_markup=markup,
+            parse_mode=ParseMode.MARKDOWN
         )
 
         response = get_feed(token)
@@ -51,8 +53,10 @@ def navigate_to_self(update: Update, context: CallbackContext, swipe_down=True) 
         shop_back = user_data.pop('shop_back', False)
         if shop_back:
             update.message.reply_text(
-                "Dale al boton 'Deslizar' para avanzar por los estados",
-                reply_markup=markup
+                "Aqui puedes deslizar para ver estados y postearlos subiendo "
+                "una foto con subtítulo o selecionando la opción ➕ Nuevo estado",
+                reply_markup=markup,
+                parse_mode=ParseMode.MARKDOWN
             )
             feed = user_data['feed']
             markup = get_feed_inline_keyboard_markup(feed)
@@ -117,5 +121,5 @@ def navigate_to_shop_details(update: Update, context: CallbackContext) -> str:
         return SHOP_DETAILS
     else:
         update.message.reply_text(
-            'El post no tiene una tienda asociada'
+            'El estado no fue publicado por una tienda'
         )

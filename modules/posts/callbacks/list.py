@@ -45,7 +45,7 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
         )
 
         update.message.reply_text(
-            'No hay posts que mostrar\n',
+            'No hay estados que mostrar',
             reply_markup=markup
         )
 

@@ -1,5 +1,5 @@
 from telegram import (
-    ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+    ParseMode, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 )
 from telegram.ext import CallbackContext
 
@@ -22,13 +22,13 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
         keyboards.create.reply_keyboard,
         resize_keyboard=True,
         one_time_keyboard=False,
-        input_field_placeholder='Selecciona la foto'
     )
 
     update.message.reply_text(
-        'Sube un estado en esta seccion\n\n'
-        'Sube una foto y escribe algun texto para publicar tu estado: ',
-        reply_markup=markup
+        "¡Sube una foto para publicar un estado!\n\n"
+        "👇 Presiona el botón en forma de clip📎, selecciona una foto y agregale un comentario",
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return POST_CREATE
@@ -57,8 +57,9 @@ def photo(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        'Selecciona con que perfil publicar tu estado.',
-        reply_markup=markup
+        'Selecciona con que perfil publicar tu estado 👇',
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
     
     return POST_CREATE_PUBLISHER_TYPE
@@ -82,8 +83,9 @@ def photo_attach(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        'Selecciona con que perfil publicar tu estado.',
-        reply_markup=markup
+        'Selecciona con que perfil publicar tu estado 👇',
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
     
     return POST_CREATE_PUBLISHER_TYPE
@@ -110,7 +112,7 @@ def publisher_type(update: Update, context: CallbackContext) -> str:
 
     render_post(update, post)
     update.message.reply_text(
-        'El estado ha sido subido correctamente\n',
+        'El estado ha sido publicado correctamente\n',
         reply_markup=markup
     )
 

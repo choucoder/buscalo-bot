@@ -29,7 +29,7 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
             input_field_placeholder='Escribe el nombre'
         )
         update.message.reply_text(
-            'Empecemos registrando tu tienda 🏬',
+            '¡Empecemos registrando tu tienda 🏬!',
             parse_mode=ParseMode.MARKDOWN
         )
         update.message.reply_text(
@@ -81,8 +81,8 @@ def description(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        "¡Agrega una foto de tu tienda!\n\n"
-        "👇 Presiona el boton en forma de clip📎 y selecciona una foto",
+        "¡Agrega una foto al perfil de tu tienda!\n\n"
+        "👇 Presiona el botón en forma de clip📎 y selecciona una foto",
         reply_markup=markup,
         parse_mode=ParseMode.MARKDOWN
     )
@@ -98,6 +98,24 @@ def logo(update: Update, context: CallbackContext) -> str:
 
     user_data["shop"]["logo"] = logo_path
 
+    update.message.reply_text(
+        "¿Donde esta ubicada tu tienda?!\n\n"
+        "👇 Presiona el botón en forma de clip📎, selecciona ubicación 📍y envia la ubicación de tu tienda",
+        parse_mode=ParseMode.MARKDOWN
+    )
+    
+    return SHOP_LOCATION
+
+
+def logo_attach(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+
+    logo_path = get_unique_filename()
+    file = context.bot.getFile(update.message.document.file_id)
+    file.download(logo_path)
+
+    user_data["shop"]["logo"] = logo_path
+    
     update.message.reply_text(
         "¿Donde esta ubicada tu tienda?!\n\n"
         "👇 Presiona el botón en forma de clip📎, selecciona ubicación 📍y envia la ubicación de tu tienda",

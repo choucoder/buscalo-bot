@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from telegram import (
-    ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+    ParseMode, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 )
 from telegram.ext import CallbackContext
 
@@ -30,12 +30,7 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
         resize_keyboard=True,
         one_time_keyboard=False,
     )
-
-    update.message.reply_text(
-        'Configuracion del perfil de usuario',
-        reply_markup=markup
-    )
-    render_user(update, user_data['profile_data'])
+    render_user(update, user_data['profile_data'], markup=markup)
 
     return USER_EDIT
 
@@ -61,7 +56,7 @@ def first_name(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        'Escribe el nombre',
+        "¿Cual es tu nombre?",
         reply_markup=markup
     )
 
@@ -79,7 +74,7 @@ def last_name(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        'Escribe el apellido',
+        "¿Cual es tu apellido?",
         reply_markup=markup
     )
 
@@ -97,10 +92,12 @@ def birthdate(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        'Escribe la fecha de nacimiento en los siguientes formatos\n\n'
-        'dd-mm-yy Ejemplo: 22-04-1997\n'
-        'dd/mm/yy Ejemplo: 22/04/1997\n',
-        reply_markup=markup
+        f"¿Cual es tu fecha de nacimiento? 📅\n\n"
+        "Usa los siguientes formatos: \n"
+        "dd-mm-yy Ejemplo: *22-04-1997*\n"
+        "dd/mm/yy Ejemplo: *22/04/1997*\n",
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return USER_EDIT_TYPING
@@ -118,8 +115,10 @@ def gender(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        'Selecciona el genero\n',
-        reply_markup=markup
+        "¿Cual es tu género?\n\n"
+        "Selecciona una de las siguientes opciones 👇👇👇",
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return USER_EDIT_TYPING
@@ -136,8 +135,10 @@ def photo(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        'Selecciona y sube una foto de tu galeria',
-        reply_markup=markup
+        "¡Agrega una foto tuya o hazte un selfie!\n\n"
+        "👇 Presiona el boton en forma de clip📎 y selecciona o hazte una foto",
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return USER_EDIT_TYPING
@@ -154,10 +155,11 @@ def location(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        'Sube la ubicacion seleccionando esta desde tu mapa',
-        reply_markup=markup
+        f"¿Cual es tu ubicación?\n\n"
+        "👇 Presiona el botón en forma de clip📎, selecciona ubicación 📍y envia donde te encuentras",
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
-    render_send_location_help(update)
 
     return USER_EDIT_TYPING
 
@@ -172,8 +174,6 @@ def update_text_fields(update: Update, context: CallbackContext) -> str:
     if field == 'first_name' or field == 'last_name':
         payload = {
             field: query,
-            'telegram_username': update.effective_user.username,
-            'username': update.effective_user.username,
         }
         if 'first_name' == field:
             msg = 'Tu nombre ha sido actualizado'
@@ -186,8 +186,6 @@ def update_text_fields(update: Update, context: CallbackContext) -> str:
 
         payload = {
             'gender': gender,
-            'telegram_username': update.effective_user.username,
-            'username': update.effective_user.username,
         }
         msg = 'Tu genero ha sido actualizado'
 
@@ -209,8 +207,6 @@ def update_text_fields(update: Update, context: CallbackContext) -> str:
                     _birthdate = '-'.join(_birthdate.split('-')[:: -1])
                     payload = {
                         'birthdate': _birthdate,
-                        'telegram_username': update.effective_user.username,
-                        'username': update.effective_user.username,
                     }
 
             except:
@@ -229,13 +225,15 @@ def update_text_fields(update: Update, context: CallbackContext) -> str:
                     _birthdate = '-'.join(_birthdate.split('/')[:: -1])
                     payload = {
                         'birthdate': _birthdate,
-                        'telegram_username': update.effective_user.username,
-                        'username': update.effective_user.username,
                     }
             except:
                 msg = 'Formato de fecha invalido'  
 
     if payload:
+        if update.effective_user.username:
+            payload['telegram_username'] = update.effective_user.username
+            payload['username'] = update.effective_user.username
+
         token = get_token_or_refresh(user_data)
         user_data['profile_data'] = do_user_update(token, payload)
         
@@ -246,11 +244,11 @@ def update_text_fields(update: Update, context: CallbackContext) -> str:
         )
 
         render_user(update, user_data['profile_data'], markup=markup)
+        return USER_EDIT_CHOOSING
+    else:
         update.message.reply_text(
             msg
         )
-        return USER_EDIT_CHOOSING
-    else:
         return birthdate(update, context)
 
 
@@ -271,9 +269,7 @@ def update_photo(update: Update, context: CallbackContext) -> str:
     )
 
     render_user(update, user_data['profile_data'], markup=markup)
-    update.message.reply_text(
-        'La foto ha sido actualizada'
-    )
+
     return USER_EDIT_CHOOSING
 
 
@@ -294,9 +290,6 @@ def update_photo_attach(update: Update, context: CallbackContext) -> str:
     )
 
     render_user(update, user_data['profile_data'], markup=markup)
-    update.message.reply_text(
-        'La foto ha sido actualizada'
-    )
     return USER_EDIT_CHOOSING
 
 
@@ -326,7 +319,4 @@ def update_location(update: Update, context: CallbackContext) -> str:
     )
 
     render_user(update, user_data['profile_data'], markup=markup)
-    update.message.reply_text(
-        'La ubicacion ha sido actualizada'
-    )
     return USER_EDIT_CHOOSING

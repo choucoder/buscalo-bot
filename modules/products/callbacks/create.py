@@ -1,5 +1,5 @@
 from telegram import (
-    ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+    ReplyKeyboardMarkup, ReplyKeyboardRemove, Update, ParseMode
 )
 from telegram.ext import CallbackContext
 from modules.base.requests import get_token_or_refresh
@@ -17,7 +17,6 @@ from ..render import render_product
 
 def navigate_to_self(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
-
     user_data['product_cache'] = {}
 
     markup = ReplyKeyboardMarkup(
@@ -27,22 +26,22 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        'Registra tus productos en este apartado\n\n'
-        'Ingresa el nombre de tu producto: ',
-        reply_markup=markup
+        'Escribe el nombre del producto 👇',
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return PRODUCT_CREATE
 
 
 def name(update: Update, context: CallbackContext) -> str:
-
     user_data = context.user_data
     name = update.message.text
     user_data['product_cache']['name'] = name
 
     update.message.reply_text(
-        "Detalles del producto: "
+        "Escribe los detalles acerca del producto 👇",
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return PRODUCT_DETAILS
@@ -55,8 +54,9 @@ def details(update: Update, context: CallbackContext) -> str:
     user_data['product_cache']['details'] = details
 
     update.message.reply_text(
-        'Ingresa el precio en $ del producto: \n'
-        'Use `,` para separar los decimales. Ejemplo: 450,18.\n'
+        'Ingresa el precio del producto en tu moneda local o en $ 👇\n\n'
+        "👉 Usa la coma ',' para separar los decimales\n",
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return PRODUCT_PRICE
@@ -64,7 +64,6 @@ def details(update: Update, context: CallbackContext) -> str:
 
 def price(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
-
     price = update.message.text
     price = price.replace(',', '.')
 
@@ -77,20 +76,18 @@ def price(update: Update, context: CallbackContext) -> str:
             one_time_keyboard=False,
         )
         update.message.reply_text(
-            'Ingresa una foto para tu producto\n'
-            'O puedes darle /omitir para ingresarla luego.',
+            "¡Agrega una foto de tu producto!\n\n"
+            "👇 Presiona el boton en forma de clip📎 y selecciona una foto",
             reply_markup=markup
         )
 
         return PRODUCT_PHOTO
 
-    except (TypeError, ValueError) as e:
-        print(f"E: {e}")
-        
+    except (TypeError, ValueError) as e:        
         update.message.reply_text(
-            'Ups, has ingresado el precio en un formato incorrecto\n\n'
-            'Ingresa el precio en $ del producto:\n'
-            'Por favor utiliza el siguiente formato 550,19. La `,` separa los decimales',
+            'Ingresa el precio del producto en tu moneda local o en $ 👇\n\n'
+            "👉 Usa la coma ',' para separar los decimales\n",
+            parse_mode=ParseMode.MARKDOWN
         )
 
         return PRODUCT_PRICE
@@ -113,7 +110,7 @@ def photo(update: Update, context: CallbackContext) -> str:
     )
     render_product(update, product)
     update.message.reply_text(
-        'El producto ha sido registrado exitosamente'
+        '¡Producto registrado exitosamente!'
     )
     shops.callbacks.main.navigate_to_self(update, context, show=False)
 
@@ -136,7 +133,7 @@ def photo_attach(update: Update, context: CallbackContext) -> str:
     )
     render_product(update, product)
     update.message.reply_text(
-        'El producto ha sido registrado exitosamente'
+        '¡Producto registrado exitosamente!'
     )
     shops.callbacks.main.navigate_to_self(update, context, show=False)
 
@@ -153,9 +150,8 @@ def skip_photo(update: Update, context: CallbackContext) -> str:
         user_data['shop']['id']
     )
     render_product(update, product)
-
     update.message.reply_text(
-        'El producto ha sido registrado sin foto exitosamente.'
+        '¡Producto registrado exitosamente!'
     )
     shops.callbacks.main.navigate_to_self(update, context, show=False)
 

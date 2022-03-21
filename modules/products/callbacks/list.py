@@ -1,7 +1,8 @@
 from telegram import (
-    ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+    ParseMode, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 )
 from telegram.ext import CallbackContext
+from modules.base.render import get_product_list_section_help
 
 from modules.products import keyboards
 from modules import shops
@@ -33,6 +34,10 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
             update, products[0], markup=markup,
             current_page=user_data['current_product_page'],
             pages=user_data['count_products']
+        )
+        update.message.reply_text(
+            get_product_list_section_help(),
+            parse_mode=ParseMode.MARKDOWN
         )
     else:
         user_data['count_products'] = 0

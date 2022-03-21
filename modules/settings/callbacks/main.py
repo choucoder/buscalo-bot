@@ -1,5 +1,5 @@
 from telegram import (
-    ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+    ParseMode, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 )
 from telegram.ext import CallbackContext
 
@@ -20,8 +20,9 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        'Configuracion de la cuenta',
-        reply_markup=markup
+        "Selecciona una opción 👇",
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return SETTINGS
