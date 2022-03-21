@@ -36,3 +36,7 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
 def back(update: Update, context: CallbackContext) -> str:
     callbacks.main.navigate_to_self(update, context)
     return SHOP_SETTINGS_BACK
+
+
+def navigate_to_view_products(update: Update, context: CallbackContext) -> str:
+    pass

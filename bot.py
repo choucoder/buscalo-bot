@@ -466,7 +466,7 @@ def main() -> None:
         per_message=False,
     )
     conversations.append(shop_search_conv)
-    
+
     product_search_conv = ConversationHandler(
         entry_points=[
             MessageHandler(Filters.regex('Atras$'), products.callbacks.search.back),
@@ -488,7 +488,7 @@ def main() -> None:
             ],
             shops.states.SHOP_SEARCH: [
                 shop_search_conv,
-            ]
+            ],
         },
         fallbacks={},
         map_to_parent={
