@@ -8,4 +8,5 @@ __all__ = (
     'main',
     'settings',
     'details',
+    'search',
 )
