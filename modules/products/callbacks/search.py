@@ -140,7 +140,7 @@ def handle_query(update: Update, context: CallbackContext) -> str:
 
     if '@shop' in query and len(query.split()) == 2:
         _, shop_id = query.split()
-        shops.callbacks.search.navigate_to_self(update, context, shop_id=shop_id)
+        return shops.callbacks.search.navigate_to_self(update, context, shop_id=shop_id)
     else:
         query = query.lower()
         token = get_token_or_refresh(user_data)

@@ -21,7 +21,7 @@ def show_shop(update: Update, shop: Dict, markup=None) -> None:
         state = address.get('state', None)
         country = address.get('country', None)
 
-        text += f":globe_with_meridians: {city}, {state}, {country}\n\n"
+        text += f":globe_with_meridians: {city}, {state}, {country}\n"
     else:
         text += f":globe_with_meridians: Desconocida\n"
 
