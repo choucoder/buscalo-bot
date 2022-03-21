@@ -266,6 +266,9 @@ def main() -> None:
                 MessageHandler(
                     Filters.photo, shops.callbacks.create.logo
                 ),
+                MessageHandler(
+                    Filters.attachment, shops.callbacks.create.logo_attach
+                ),
                 MessageHandler(Filters.regex('Atras$'), shops.callbacks.create.back),
                 CommandHandler(
                     'omitir', shops.callbacks.create.skip_logo

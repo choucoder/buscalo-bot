@@ -6,7 +6,7 @@ from telegram import (
     ParseMode, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 )
 from telegram.ext import CallbackContext
-from modules.base.render import get_start_message
+from modules.base.render import get_shop_section_help, get_start_message
 
 from modules.base.requests import get_token_or_refresh
 from modules.shops.render import show_shop
@@ -58,13 +58,15 @@ def navigate_to_self(update: Update, context: CallbackContext, show=True) -> str
         if show:
             show_shop(update, user_data['shop'])
             update.message.reply_text(
-                "Bienvenido a la seccion de tu tienda",
-                reply_markup=markup
+                get_shop_section_help(),
+                reply_markup=markup,
+                parse_mode=ParseMode.MARKDOWN
             )
         else:
             update.message.reply_text(
-                'Seccion de tu tienda',
-                reply_markup=markup
+                get_shop_section_help(),
+                reply_markup=markup,
+                parse_mode=ParseMode.MARKDOWN
             )
 
         return SHOP_MAIN

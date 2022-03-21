@@ -17,8 +17,6 @@ API_URL = config('API_URL')
 
 
 def render_user(update: Update, user: Dict, markup=None):
-    from pprint import pprint
-
     text = f"{user['first_name']} {user['last_name']}\n"
 
     birthdate = datetime.datetime.strptime(user['birthdate'], "%d-%m-%Y")

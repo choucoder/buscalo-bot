@@ -1,9 +1,10 @@
 import pprint
 
 from telegram import (
-    ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+    ParseMode, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 )
 from telegram.ext import CallbackContext
+from modules.base.render import get_shop_section_help, get_shop_settings_section_help
 
 from modules.base.requests import get_token_or_refresh
 from modules.base.states import BACK
@@ -24,8 +25,9 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
         one_time_keyboard=False
     )
     update.message.reply_text(
-        "Configuracion de la tienda\n",
-        reply_markup=markup
+        get_shop_settings_section_help(),
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return SHOP_SETTINGS

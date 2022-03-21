@@ -54,7 +54,9 @@ def start_help(update: Update):
 
 
 def get_start_message():
-    text = "En esta sección puedes buscar 🔎 productos o servicios, publicar o ver estados 🌎, acceder a la sección de tu tienda 🏬, ver los estados 📮 que has publicado y modificar tu perfil ⚙️"
+    text = "En esta sección puedes buscar 🔎 productos o servicios, publicar o ver estados 🌎, acceder a la sección de tu tienda 🏬, ver los estados 📮 que has publicado y configurar ⚙️ tu cuenta\n\n"
+    text +="👇 Presiona el botón en forma de clip📎, selecciona una foto y agregale un comentario para publicar un estado",
+
     return text
 
 
@@ -63,6 +65,21 @@ def get_photo_help():
     text += "👇 Presiona el emoji del clip📎 y selecciona una foto"
 
     return text
+
+def get_shop_section_help():
+    text = "En esta sección puedes ➕ agregar productos a tu tienda, ver los productos que has agregado y modificar ⚙️ la información de tu tienda"
+    return text
+
+
+def get_shop_settings_section_help():
+    text = "Aqui puedes configurar la 💱 moneda y los ✏️ datos de tu tienda\n\n"
+    text = "Selecciona una opción 👇👇"
+    return text
+
+def get_product_list_section_help():
+    text = "Aqui puedes ver tus productos, ✏️ editarlos y ❌ eliminarlos"
+    return text
+
 
 def get_location_help():
     text = "👇 Presiona el boton en forma de clip📎, selecciona ubicacion 📍y envia donde te encuentras"

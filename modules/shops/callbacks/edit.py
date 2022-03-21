@@ -3,7 +3,7 @@ from emoji import emojize
 import flag
 
 from telegram import (
-    ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+    ParseMode, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 )
 from telegram.ext import CallbackContext
 
@@ -25,10 +25,7 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
         resize_keyboard=True,
         one_time_keyboard=False
     )
-    update.message.reply_text(
-        "Configuracion de los datos de la tienda\n",
-        reply_markup=markup
-    )
+    show_shop(update, user_data['shop'], markup=markup)
 
     return SHOP_EDIT
 
@@ -59,13 +56,11 @@ def navigate_to_edit_currency(update: Update, context: CallbackContext) -> str:
         (':cn:', 'CNY')
     ]
 
-    currencies_text = ''
+    currencies_text = "👇 *Monedas disponibles*\n"
 
     for country_code, code in currencies:
         currencies_text += emojize(f":point_right: ", use_aliases=True) + flag.flag(country_code) + f"{code}\n"
     
-    # token = get_token_or_refresh(user_data)
-
     markup = ReplyKeyboardMarkup(
         keyboards.edit.reply_keyboard_currency,
         resize_keyboard=True,
@@ -76,7 +71,8 @@ def navigate_to_edit_currency(update: Update, context: CallbackContext) -> str:
 
     update.message.reply_text(
         currencies_text + text,
-        reply_markup=markup
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return SHOP_EDIT_CURRENCY
@@ -109,8 +105,9 @@ def name(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        'Escriba el nombre de la tienda',
-        reply_markup=markup
+        'Escriba el nombre de tu tienda 👇',
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return SHOP_EDIT_TYPING
@@ -127,8 +124,9 @@ def description(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        'Escriba una descripcion de la tienda',
-        reply_markup=markup
+        'Escribe una descripción para tu tienda 👇',
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return SHOP_EDIT_TYPING
@@ -145,8 +143,10 @@ def logo(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        'Sube la foto del logo de la tienda',
-        reply_markup=markup
+        "¡Agrega una foto al perfil de tu tienda!\n\n"
+        "👇 Presiona el boton en forma de clip📎 y selecciona una foto",
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return SHOP_EDIT_TYPING
@@ -164,10 +164,11 @@ def location(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        'Ingresa la ubicacion de la tienda',
+        "¿Donde esta ubicada tu tienda?!\n\n"
+        "👇 Presiona el botón en forma de clip📎, selecciona ubicación 📍y envia la ubicación de tu tienda",
+        parse_mode=ParseMode.MARKDOWN,
         reply_markup=markup
     )
-    render_send_location_help(update)
 
     return SHOP_EDIT_TYPING
 
@@ -184,9 +185,10 @@ def phone_number(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        'El numero de telefono debe ser ingresado en el siguiente formato: '
-        '+00000000000 y no debe contener mas de 15 digitos.\n',
-        reply_markup=markup
+        "Escribe el número de teléfono tu tienda 👇\n\n"
+        "El número debe estar en el formato internacional: +(código de país) (código de área) (número de teléfono)\n",
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return SHOP_EDIT_TYPING
@@ -216,7 +218,7 @@ def update_shop(update: Update, context: CallbackContext) -> str:
     else:
         show_shop(update, user_data['shop'], markup=markup)
         update.message.reply_text(
-            'El formato del numero de telefono no es valido\n',
+            'El formato del número de teléfono no es valido\n',
         )
 
     return SHOP_EDIT_CHOOSING
@@ -334,17 +336,19 @@ def update_currency(update: Update, context: CallbackContext) -> str:
         user_data['shop'] = shop
 
         show_shop(update, shop)
-
         callbacks.settings.navigate_to_self(update, context)
         return SHOP_EDIT_CURRENCY_BACK
     
     else:
-        currencies_text = ''
+        currencies_text = "👇 *Monedas disponibles*\n"
 
         for country_code, code in currencies:
             currencies_text += emojize(f":point_right: ", use_aliases=True) + flag.flag(country_code) + f"{code}\n"
-    
-        update.message.reply_text(
-            'Selecciona una de las monedas disponibles\n\n' + currencies_text
-        )
+
+        text = "\nEscribe el codigo de la moneda en la cual estaran basados los precios de tus productos :point_down:"
+        text = emojize(text, use_aliases=True)
         
+        update.message.reply_text(
+            currencies_text + text,
+            parse_mode=ParseMode.MARKDOWN
+        )
