@@ -28,7 +28,6 @@ def start_app(update: Update, context: CallbackContext) -> str:
     update.message.reply_text(
         get_start_message(),
         reply_markup=markup,
-        parse_mode=ParseMode.MARKDOWN
     )
     
     token = get_token_or_refresh(user_data)
