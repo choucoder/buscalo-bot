@@ -16,7 +16,7 @@ from modules import products
 from ..states import *
 
 
-def navigate_to_self(update: Update, context: CallbackContext, shop_id=shop_id) -> str:
+def navigate_to_self(update: Update, context: CallbackContext, shop_id=None) -> str:
     user_data = context.user_data
 
     update.message.reply_text(
