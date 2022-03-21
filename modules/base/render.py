@@ -53,9 +53,9 @@ def start_help(update: Update):
     )
 
 
-def get_start_message():
+def get_start_message() -> str:
     text = "En esta sección puedes buscar 🔎 productos o servicios, publicar o ver estados 🌎, acceder a la sección de tu tienda 🏬, ver los estados 📮 que has publicado y configurar ⚙️ tu cuenta\n\n"
-    text +="👇 Presiona el botón en forma de clip📎, selecciona una foto y agregale un comentario para publicar un estado",
+    text = text + "👇 Presiona el botón en forma de clip📎, selecciona una foto y agregale un comentario para publicar un estado",
 
     return text
 
