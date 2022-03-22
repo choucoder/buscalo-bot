@@ -104,7 +104,7 @@ def back(update: Update, context: CallbackContext) -> str:
 
 
 def back_non_owner(update: Update, context: CallbackContext) -> str:
-    shops.callbacks.details.navigate_to_self(update, context)
+    shops.callbacks.details.navigate_to_self(update, context, show_contact_keyboard=True)
     return PRODUCT_LIST_BACK
 
 
