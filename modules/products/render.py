@@ -17,7 +17,7 @@ from .keyboards.search import get_product_search_inline_markup
 API_URL = config('API_URL')
 
 def render_product(update: Update, product: Dict, markup=None, current_page=None, pages=None) -> None:
-    text = f"*{product['name']}*:pushpin:\n\n"
+    text = f"*{product['name']}* :pushpin:\n\n"
     text += f"{product['details']}\n"
     if product['shop']['currency']:
         currency = product['shop']['currency']['code']

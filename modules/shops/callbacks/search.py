@@ -45,7 +45,7 @@ def navigate_to_self(update: Update, context: CallbackContext, shop_id=None) -> 
             reply_markup=markup
         )
         markup = keyboards.search.get_shop_contact_inline_markup(shop)
-        show_shop(update, shop, markup=markup)
+        show_shop(update, shop, markup=markup, hidden_ws=True)
         return SHOP_SEARCH
 
     else:

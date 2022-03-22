@@ -4,6 +4,7 @@ from telegram import (
     ReplyKeyboardMarkup, Update
 )
 from telegram.ext import CallbackContext
+from modules.shops.keyboards.search import get_shop_contact_inline_markup
 
 from modules.shops.render import render_shop
 from modules.shops.requests import base
@@ -12,7 +13,7 @@ from modules import feed, products
 from ..states import *
 
 
-def navigate_to_self(update: Update, context: CallbackContext) -> str:
+def navigate_to_self(update: Update, context: CallbackContext, show_contact_keyboard=False) -> str:
     user_data = context.user_data
     token = user_data['token']
 
@@ -21,15 +22,22 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
     
     shop = base.get_shop(token, shop_id)
     user_data['post']['shop'] = shop
-
-
     markup = ReplyKeyboardMarkup(
         keyboards.details.reply_keyboard,
         resize_keyboard=True,
         one_time_keyboard=False
     )
 
-    render_shop(update, shop, markup=markup)
+    if not show_contact_keyboard:
+        render_shop(update, shop, markup=markup)
+    else:
+        update.message.reply_text(
+            "...",
+            reply_markup=markup
+        )
+
+        markup = get_shop_contact_inline_markup(shop)
+        render_shop(update, shop, markup=markup, hidden_ws=True)
 
     return SHOP_DETAILS
 
