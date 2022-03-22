@@ -34,6 +34,11 @@ def navigate_to_self(update: Update, context: CallbackContext, shop_id=None) -> 
             resize_keyboard=True,
             one_time_keyboard=False
         )
+        update.message.reply_text(
+            "...",
+            reply_markup=markup
+        )
+        markup = keyboards.search.get_shop_contact_inline_markup(shop)
         show_shop(update, shop, markup=markup)
         return SHOP_SEARCH
 
