@@ -52,7 +52,7 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
         update.message.reply_text(
             "Aqui puedes realizar 🔎 busquedas y ⚙️ configurar parametros de busqueda (ubicación, amplitud de busqueda)\n\n"
             "Escribe el nombre del producto o servicio que buscas 👇\n"
-            "Escribe: @shop id-de-tienda, para buscar una tienda 👇",
+            "Escribe @<id-de-tienda>, para ver el perfil de la tienda 👇",
             reply_markup=markup,
             parse_mode=ParseMode.MARKDOWN
         )
@@ -138,8 +138,8 @@ def handle_query(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
     query = update.message.text
 
-    if '@shop' in query and len(query.split()) == 2:
-        _, shop_id = query.split()
+    if query.startswith('@') and len(query) >=8 and ' ' not in query:
+        shop_id = query[1: ]
         return shops.callbacks.search.navigate_to_self(update, context, shop_id=shop_id)
     else:
         query = query.lower()
