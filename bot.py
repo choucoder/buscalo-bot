@@ -449,12 +449,33 @@ def main() -> None:
     )
     conversations.append(search_settings_conv)
 
+    shop_search_view_products_conv = ConversationHandler(
+        entry_points=[
+            MessageHandler(Filters.regex('Atras$'), shops.callbacks.search.back_to_shop_search),
+            MessageHandler(Filters.regex('Anterior$'), shops.callbacks.search.prev_product),
+            MessageHandler(Filters.regex('^Siguiente'), shops.callbacks.search.next_product),
+        ],
+        states={
+        },
+        map_to_parent={
+            shops.states.SHOP_SEARCH_VIEW_PRODUCTS_BACK: shops.states.SHOP_SEARCH,
+            shops.states.SHOP_SEARCH_VIEW_PRODUCTS: shops.states.SHOP_SEARCH_VIEW_PRODUCTS,
+        },
+        fallbacks={},
+        persistent=True,
+        name='shop_search_view_products_conv',
+    )
+    conversations.append(shop_search_view_products_conv)
+
     shop_search_conv = ConversationHandler(
         entry_points=[
             MessageHandler(Filters.regex('Atras$'), shops.callbacks.search.back),
             MessageHandler(Filters.regex('Ver productos$'), shops.callbacks.search.navigate_to_view_products),
         ],
         states={
+            shops.states.SHOP_SEARCH_VIEW_PRODUCTS: [
+                shop_search_view_products_conv,
+            ]
         },
         fallbacks={},
         map_to_parent={

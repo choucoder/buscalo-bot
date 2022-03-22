@@ -13,6 +13,22 @@ reply_keyboard = [
     ]
 ]
 
+reply_keyboard_view_products = [
+    [
+        KeyboardButton(text=emojize(':arrow_left: Anterior', use_aliases=True)),
+        KeyboardButton(text=emojize('Siguiente :arrow_right:', use_aliases=True)),
+    ],
+    [
+        KeyboardButton(text=emojize(':arrow_left: Atras', use_aliases=True)),
+    ],
+]
+
+reply_keyboard_view_products_empty = [
+    [
+        KeyboardButton(text=emojize(':arrow_left: Atras', use_aliases=True)),
+    ],
+]
+
 def get_shop_contact_inline_markup(shop: Dict) -> InlineKeyboardMarkup:
     user = shop['user']
     username = user['telegram_username']
