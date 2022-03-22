@@ -64,13 +64,13 @@ def render_product(update: Update, product: Dict, markup=None, current_page=None
 
 def render_search_product(update: Update, product: Dict, user_data) -> None:
     text = f"*{product['name']}* :pushpin:\n\n"
-    text += f"ℹ️ {product['details']}\n"
+    text += f"{product['details']}\n"
     if product['shop']['currency']:
         currency = product['shop']['currency']['code']
     else:
         currency = ''
 
-    text += f"💲 {product['price']} {currency}\n"
+    text += f"💲 Precio: {product['price']} {currency}\n"
     text += f":department_store: {product['shop']['name']} `{product['shop']['id']}`\n"
      
     if "address" in product['shop'] and product['shop']['address']:
@@ -122,13 +122,13 @@ def render_search_product(update: Update, product: Dict, user_data) -> None:
 
 def render_search_product_inline(update: Update, product: Dict, markup: InlineKeyboardMarkup, user_data):    
     text = f"*{product['name']}* :pushpin:\n\n"
-    text += f"ℹ️  {product['details']}\n"
+    text += f"{product['details']}\n"
     if product['shop']['currency']:
         currency = product['shop']['currency']['code']
     else:
         currency = ''
 
-    text += f"💲 {product['price']} {currency}\n"
+    text += f"💲 Precio: {product['price']} {currency}\n"
     text += f":department_store: {product['shop']['name']} `{product['shop']['id']}`\n"
     
     if "address" in product['shop'] and product['shop']['address']:
