@@ -19,7 +19,7 @@ from ..states import *
 def navigate_to_self(update: Update, context: CallbackContext, shop_id=None) -> str:
     user_data = context.user_data
 
-    message_sent = update.message.reply_text(
+    update.message.reply_text(
         "...",
         parse_mode=ParseMode.MARKDOWN,
         reply_markup=ReplyKeyboardRemove()
@@ -34,9 +34,8 @@ def navigate_to_self(update: Update, context: CallbackContext, shop_id=None) -> 
             resize_keyboard=True,
             one_time_keyboard=False
         )
-        message_sent.delete()
         update.message.reply_text(
-            "...",
+            "Tienda encontrada",
             reply_markup=markup
         )
         markup = keyboards.search.get_shop_contact_inline_markup(shop)
