@@ -71,7 +71,7 @@ def render_search_product(update: Update, product: Dict, user_data) -> None:
         currency = ''
 
     text += f"💲 {product['price']} {currency}\n"
-    text += f":department_store: {product['shop']['name']} `@{product['shop']['id']}`\n"
+    text += f":department_store: {product['shop']['name']} `{product['shop']['id']}`\n"
      
     if "address" in product['shop'] and product['shop']['address']:
         address = product['shop']['address']
@@ -129,7 +129,7 @@ def render_search_product_inline(update: Update, product: Dict, markup: InlineKe
         currency = ''
 
     text += f"💲 {product['price']} {currency}\n"
-    text += f":department_store: {product['shop']['name']} `@{product['shop']['id']}`\n"
+    text += f":department_store: {product['shop']['name']} `{product['shop']['id']}`\n"
     
     if "address" in product['shop'] and product['shop']['address']:
         address = product['shop']['address']
@@ -165,7 +165,7 @@ def render_search_product_inline(update: Update, product: Dict, markup: InlineKe
     
     if is_photo:
         update.callback_query.edit_message_media(
-            InputMediaPhoto(response.content, caption=emojize(text, use_aliases=True))
+            InputMediaPhoto(response.content, caption=emojize(text, use_aliases=True), parse_mode=ParseMode.MARKDOWN)
         )
     else:
         update.callback_query.edit_message_text(
