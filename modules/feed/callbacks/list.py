@@ -117,7 +117,7 @@ def navigate_to_shop_details(update: Update, context: CallbackContext) -> str:
     post = user_data.get('post', None)
 
     if post and post['shop']:
-        shops.callbacks.details.navigate_to_self(update, context)
+        shops.callbacks.details.navigate_to_self(update, context, show_contact_keyboard=True)
         return SHOP_DETAILS
     else:
         update.message.reply_text(
