@@ -56,7 +56,7 @@ def navigate_to_edit_currency(update: Update, context: CallbackContext) -> str:
         (':cn:', 'CNY')
     ]
 
-    currencies_text = "👇 *Monedas disponibles*\n"
+    currencies_text = "*Monedas disponibles*\n"
 
     for country_code, code in currencies:
         currencies_text += emojize(f":point_right: ", use_aliases=True) + flag.flag(country_code) + f"{code}\n"
@@ -340,7 +340,7 @@ def update_currency(update: Update, context: CallbackContext) -> str:
         return SHOP_EDIT_CURRENCY_BACK
     
     else:
-        currencies_text = "👇 *Monedas disponibles*\n"
+        currencies_text = "*Monedas disponibles*\n"
 
         for country_code, code in currencies:
             currencies_text += emojize(f":point_right: ", use_aliases=True) + flag.flag(country_code) + f"{code}\n"
