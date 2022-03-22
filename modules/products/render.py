@@ -5,7 +5,7 @@ from pprint import pprint
 from emoji import emojize
 from geopy.distance import geodesic
 from telegram import (
-    InlineKeyboardMarkup, Update, ParseMode
+    InlineKeyboardMarkup, Update, ParseMode, InputMediaPhoto
 )
 
 import requests
@@ -63,16 +63,16 @@ def render_product(update: Update, product: Dict, markup=None, current_page=None
             )
 
 def render_search_product(update: Update, product: Dict, user_data) -> None:
-    text = f"{product['name']}\n"
-    text += f"{product['details']}\n"
+    text = f"*{product['name']}* :pushpin:\n\n"
+    text += f"ℹ️{product['details']}\n"
     if product['shop']['currency']:
         currency = product['shop']['currency']['code']
     else:
         currency = ''
 
-    text += f"Precio: {product['price']} {currency}\n\n"
-    text += f":department_store: Tienda: {product['shop']['name']}\n"
-    
+    text += f"💲 {product['price']} {currency}\n\n"
+    text += f":department_store: {product['shop']['name']} `@{product['shop']['id']}`\n"
+     
     if "address" in product['shop'] and product['shop']['address']:
         address = product['shop']['address']
         city = address.get('city', None)
@@ -97,7 +97,6 @@ def render_search_product(update: Update, product: Dict, user_data) -> None:
     else:
         text += "\n"
 
-    # text += f":backhand_index_pointing_down: Presiona 'Abrir chat de la tienda' para abrir el chat de la tienda"
     text += f":heart: {product['votes_amount']}\n"
 
     is_photo = False
@@ -122,17 +121,15 @@ def render_search_product(update: Update, product: Dict, user_data) -> None:
 
 
 def render_search_product_inline(update: Update, product: Dict, markup: InlineKeyboardMarkup, user_data):    
-    from telegram import InputMediaPhoto
-
-    text = f"{product['name']}\n"
-    text += f"{product['details']}\n"
+    text = f"*{product['name']}* :pushpin:\n\n"
+    text += f"ℹ️ {product['details']}\n"
     if product['shop']['currency']:
         currency = product['shop']['currency']['code']
     else:
         currency = ''
 
-    text += f"{product['price']} {currency}\n\n"
-    text +=f":department_store: Tienda: {product['shop']['name']}\n"
+    text += f"💲 {product['price']} {currency}\n\n"
+    text += f":department_store: {product['shop']['name']} `@{product['shop']['id']}`\n"
     
     if "address" in product['shop'] and product['shop']['address']:
         address = product['shop']['address']
@@ -158,7 +155,6 @@ def render_search_product_inline(update: Update, product: Dict, markup: InlineKe
     else:
         text += "\n"
 
-    # text +=f":backhand_index_pointing_down: Presiona 'Abrir chat de la tienda' para abrir el chat de la tienda"
     text += f":heart: {product['votes_amount']}\n"
     
     is_photo = False
