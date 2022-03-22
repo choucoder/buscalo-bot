@@ -11,7 +11,7 @@ from decouple import config
 
 API_URL = config('API_URL')
 
-def show_shop(update: Update, shop: Dict, markup=None) -> None:
+def show_shop(update: Update, shop: Dict, markup=None, hidden_ws=False) -> None:
     text = f"*{shop['name']}*\n\n"
     text += f":information_source: {shop['description']}\n"
 
@@ -28,7 +28,7 @@ def show_shop(update: Update, shop: Dict, markup=None) -> None:
     if shop['currency']:
         text += f"🪙 Moneda: {shop['currency']['code']} " + flag.flag(f":{shop['currency']['country_code']}:") + "\n"
     
-    if shop['phone_number']:
+    if shop['phone_number'] and not hidden_ws:
         text += f"📞 WhatsApp: {shop['phone_number']}\n"
 
     text += f"\nID: `{shop['id']}`"
@@ -67,7 +67,7 @@ def show_shop(update: Update, shop: Dict, markup=None) -> None:
                 reply_markup=markup
             )
 
-def render_shop(update: Update, shop: Dict, markup=None) -> None:
+def render_shop(update: Update, shop: Dict, markup=None, hidden_ws=False) -> None:
     text = f"*{shop['name']}*\n\n"
     text += f":information_source: {shop['description']}\n"
 
