@@ -6,7 +6,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, KeyboardButton
 
 reply_keyboard = [
     [
-        KeyboardButton(text=emojize('Ver Productos', use_aliases=True)),
+        KeyboardButton(text=emojize('Ver productos', use_aliases=True)),
     ],
     [
         KeyboardButton(text=emojize(':arrow_left: Atras', use_aliases=True)),
