@@ -43,11 +43,11 @@ def navigate_to_self(update: Update, context: CallbackContext, shop_id=None) -> 
         return SHOP_SEARCH
 
     else:
-        products.callbacks.search.navigate_to_self(update, context)
         update.message.reply_text(
             f"La tienda con el id `{shop_id}` no existe",
             parse_mode=ParseMode.MARKDOWN
         )
+        products.callbacks.search.navigate_to_self(update, context)
 
 
 def back(update: Update, context: CallbackContext) -> str:
