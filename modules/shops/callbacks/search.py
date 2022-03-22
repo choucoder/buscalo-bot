@@ -64,7 +64,7 @@ def back(update: Update, context: CallbackContext) -> str:
 def navigate_to_view_products(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
 
-    shop = user_data['query_shop']
+    shop = user_data['qs_shop']
     token = get_token_or_refresh(user_data)
 
     products, count = get_products(token, shop['id'], page=1)
