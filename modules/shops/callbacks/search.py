@@ -147,7 +147,7 @@ def next_product(update: Update, context: CallbackContext) -> str:
         update.message.reply_text(
             "Estas en la primera pagina y al parecer no has registrado productos"
         )
-    elif user_data['qs_current_product_page'] == user_data['count_products']:
+    elif user_data['qs_current_product_page'] == user_data['qs_count_products']:
         render_product(
             update, user_data['qs_current_product'],
             current_page=user_data['qs_current_product_page'],
