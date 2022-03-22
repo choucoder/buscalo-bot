@@ -29,7 +29,7 @@ def show_shop(update: Update, shop: Dict, markup=None) -> None:
         text += f"🪙 Moneda: {shop['currency']['code']} " + flag.flag(f":{shop['currency']['country_code']}:") + "\n"
     
     if shop['phone_number']:
-        text += f"WhatsApp: {shop['phone_number']}\n"
+        text += f"📞 WhatsApp: {shop['phone_number']}\n"
 
     text += f"\nID: `{shop['id']}`"
 
