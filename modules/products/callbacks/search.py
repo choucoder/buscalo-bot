@@ -52,7 +52,7 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
         update.message.reply_text(
             "Aqui puedes realizar 🔎 busquedas y ⚙️ configurar parametros de busqueda (ubicación, amplitud de busqueda)\n\n"
             "Escribe el nombre del producto o servicio que buscas 👇\n"
-            "Escribe: @shop id-de-tienda, para buscar una tienda 👇",
+            "Escribe @<id-de-tienda>, para ver el perfil de la tienda 👇",
             reply_markup=markup,
             parse_mode=ParseMode.MARKDOWN
         )
