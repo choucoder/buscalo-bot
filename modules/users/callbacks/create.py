@@ -164,18 +164,14 @@ def age(update: Update, context: CallbackContext) -> str:
 
             else:
                 update.message.reply_text(
-                    f"¿Cual es tu correo electrónico {name}?\n\n"
-                    "Puedes omitir esta parte presionando el botón Omitir 👇",
-                    reply_markup=ReplyKeyboardMarkup(
-                        keyboard=reply_keyboard_skip,
-                        resize_keyboard=True,
-                        one_time_keyboard=False,
-                    )
+                    f"¡Agrega una foto tuya o hazte un selfie {name}!\n\n"
+                    "👇 Presiona el boton en forma de clip📎 y selecciona una foto",
+                    parse_mode=ParseMode.MARKDOWN,
                 )
                 birthdate = '-'.join(birthdate.split('-')[:: -1])
                 user_data['profile_data']['birthdate'] = birthdate
 
-                return EMAIL
+                return PHOTO
         except:
             update.message.reply_text(
                 'Formato de fecha incorrecto'
@@ -221,18 +217,14 @@ def age(update: Update, context: CallbackContext) -> str:
 
             else:
                 update.message.reply_text(
-                    f"¿Cual es tu correo electrónico {name}?\n\n"
-                    "Puedes omitir esta parte presionando el botón Omitir 👇",
-                    reply_markup=ReplyKeyboardMarkup(
-                        keyboard=reply_keyboard_skip,
-                        resize_keyboard=True,
-                        one_time_keyboard=False,
-                    )
+                    f"¡Agrega una foto tuya o hazte un selfie {name}!\n\n"
+                    "👇 Presiona el boton en forma de clip📎 y selecciona una foto",
+                    parse_mode=ParseMode.MARKDOWN,
                 )
                 birthdate = '-'.join(birthdate.split('/')[:: -1])
                 user_data['profile_data']['birthdate'] = birthdate
 
-                return EMAIL
+                return PHOTO
 
         except:
             update.message.reply_text(
