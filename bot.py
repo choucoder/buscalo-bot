@@ -76,6 +76,12 @@ def start(update: Update, context: CallbackContext) -> str:
         )
 
 
+def wrong(update: Update, context: CallbackContext) -> str:
+    update.message.reply_text(
+        "??"
+    )
+
+
 def main() -> None:
     PORT = int(os.environ.get('PORT', 8443))
     TOKEN = config('API_KEY')
@@ -700,7 +706,7 @@ def main() -> None:
         map_to_parent={
             WELCOME: WELCOME,
         },
-        fallbacks={},
+        fallbacks=[MessageHandler(Filters.all, wrong)],
         persistent=True,
         name='user_registration',
     )
