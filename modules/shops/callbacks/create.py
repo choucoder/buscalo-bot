@@ -7,7 +7,7 @@ from telegram.ext import CallbackContext
 
 from modules.base.requests import get_token_or_refresh
 from modules.base.states import BACK
-from modules.base.render import render_send_location_help
+from modules.base.render import get_shop_section_help, render_send_location_help
 from modules.shops.requests import base
 from modules.shops import keyboards
 from modules import welcome
@@ -179,7 +179,8 @@ def location(update: Update, context: CallbackContext) -> str:
         one_time_keyboard=False
     )
     update.message.reply_text(
-        "Tu tienda 🏬 ha sido registrada exitosamente",
+        "Tu tienda 🏬 ha sido registrada exitosamente\n\n"
+        "\t\t" + get_shop_section_help(),
         reply_markup=markup,
         parse_mode=ParseMode.MARKDOWN
     )
@@ -207,10 +208,12 @@ def skip_location(update: Update, context: CallbackContext) -> str:
         "No hay problema, puedes configurar la ubicación de tu tienda luego\n"
     )
     update.message.reply_text(
-        "Tu tienda 🏬 ha sido registrada exitosamente",
+        "Tu tienda 🏬 ha sido registrada exitosamente\n\n"
+        "\t\t" + get_shop_section_help(),
         reply_markup=markup,
         parse_mode=ParseMode.MARKDOWN
     )
+    
     return END_SHOP_REGISTRATION
 
 
