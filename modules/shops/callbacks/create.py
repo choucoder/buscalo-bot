@@ -26,7 +26,6 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
             keyboards.create.reply_keyboard,
             resize_keyboard=True,
             one_time_keyboard=False,
-            input_field_placeholder='Escribe el nombre'
         )
         update.message.reply_text(
             '¡Empecemos registrando tu tienda 🏬!',
@@ -100,12 +99,13 @@ def logo(update: Update, context: CallbackContext) -> str:
 
     update.message.reply_text(
         "¿Donde esta ubicada tu tienda?!\n\n"
+        "\t\t\tLa ubicación es solicitada para que los usuarios cercanos puedan encontrar lo que vendes\n\n"
         "👇 Presiona el botón en forma de clip📎, selecciona ubicación 📍y envia la ubicación de tu tienda",
         parse_mode=ParseMode.MARKDOWN,
         reply_markup=ReplyKeyboardMarkup(
             keyboards.create.reply_keyboard_back,
             resize_keyboard=True,
-            one_time_keyboard=False    
+            one_time_keyboard=False
         )
     )
     
@@ -123,12 +123,13 @@ def logo_attach(update: Update, context: CallbackContext) -> str:
     
     update.message.reply_text(
         "¿Donde esta ubicada tu tienda?!\n\n"
+        "\t\t\tLa ubicación es solicitada para que los usuarios cercanos puedan encontrar lo que vendes\n\n"
         "👇 Presiona el botón en forma de clip📎, selecciona ubicación 📍y envia la ubicación de tu tienda",
         parse_mode=ParseMode.MARKDOWN,
         reply_markup=ReplyKeyboardMarkup(
             keyboards.create.reply_keyboard_back,
             resize_keyboard=True,
-            one_time_keyboard=False    
+            one_time_keyboard=False
         )
     )
     
@@ -141,12 +142,13 @@ def skip_logo(update: Update, context: CallbackContext) -> str:
     )
     update.message.reply_text(
         "¿Donde esta ubicada tu tienda?!\n\n"
+        "\t\t\tLa ubicación es solicitada para que los usuarios cercanos puedan encontrar tus productos\n\n"
         "👇 Presiona el botón en forma de clip📎, selecciona ubicación 📍y envia la ubicación de tu tienda",
         parse_mode=ParseMode.MARKDOWN,
         reply_markup=ReplyKeyboardMarkup(
             keyboards.create.reply_keyboard_back,
             resize_keyboard=True,
-            one_time_keyboard=False    
+            one_time_keyboard=False
         )
     )
 
