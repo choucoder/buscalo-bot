@@ -30,7 +30,7 @@ terms_and_conditions = (
     "*Terminos y condiciones*\n\n"
     "Acepto que la información que he suministrado en este bot es "
     "correcta y que soy mayor de 13 años de edad.\n\n"
-    "\t\tEl uso o la publicación de imagenes pornográficas, material que pueda contribuir "
+    "\t\t\tEl uso o la publicación de imagenes pornográficas, material que pueda contribuir "
     "a actividades terroristas o acciones que se consideren un delito penal, "
     "propaganda de violencia, discriminación racial, así como material que pueda "
     "ofender la dignidad humana, esta prohibido. Y su uso "
@@ -305,7 +305,7 @@ def photo(update: Update, context: CallbackContext) -> str:
 
     update.message.reply_text(
         f"¿Cual es tu ubicación {name}?\n\n"
-        "La ubicación es solicitada para proporcionarte contenido en base a tu ubicación\n\n"
+        "\t\t\tLa ubicación es solicitada para proporcionarte contenido en base a tu ubicación\n\n"
         "👇 Presiona el botón en forma de clip📎, selecciona ubicación 📍y envia donde te encuentras",
         parse_mode=ParseMode.MARKDOWN,
         reply_markup=ReplyKeyboardMarkup(
@@ -330,7 +330,7 @@ def photo_attach(update: Update, context: CallbackContext) -> str:
 
     update.message.reply_text(
         f"¿Cual es tu ubicación {name}?\n\n"
-        "La ubicación es solicitada para proporcionarte contenido en base a tu ubicación\n\n"
+        "\t\t\tLa ubicación es solicitada para proporcionarte contenido en base a tu ubicación\n\n"
         "👇 Presiona el botón en forma de clip📎, selecciona ubicación 📍y envia donde te encuentras",
         parse_mode=ParseMode.MARKDOWN,
         reply_markup=ReplyKeyboardMarkup(
@@ -354,7 +354,7 @@ def skip_photo(update: Update, context: CallbackContext) -> str:
     )
     update.message.reply_text(
         f"¿Cual es tu ubicación {name}?\n\n"
-        "La ubicación es solicitada para proporcionarte contenido en base a tu ubicación\n\n"
+        "\t\t\tLa ubicación es solicitada para proporcionarte contenido en base a tu ubicación\n\n"
         "👇 Presiona el botón en forma de clip📎, selecciona ubicacion 📍y envia donde te encuentras",
         parse_mode=ParseMode.MARKDOWN,
         reply_markup=ReplyKeyboardMarkup(
