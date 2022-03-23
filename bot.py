@@ -276,16 +276,12 @@ def main() -> None:
                     Filters.attachment, shops.callbacks.create.logo_attach
                 ),
                 MessageHandler(Filters.regex('Atras$'), shops.callbacks.create.back),
-                CommandHandler(
-                    'omitir', shops.callbacks.create.skip_logo
-                )
             ],
             shops.states.SHOP_LOCATION: [
                 MessageHandler(Filters.regex('Atras$'), shops.callbacks.create.back),
                 MessageHandler(
                     Filters.location, shops.callbacks.create.location
                 ),
-                CommandHandler('omitir', shops.callbacks.create.skip_location)
             ],
         },
         map_to_parent={
@@ -683,9 +679,6 @@ def main() -> None:
                 ),
                 MessageHandler(
                     Filters.attachment, users.callbacks.create.photo_attach
-                ),
-                CommandHandler(
-                    'Omitir', users.callbacks.create.skip_photo
                 )
             ],
             users.states.LOCATION: [
@@ -737,7 +730,6 @@ def main() -> None:
     feed_selection_conv.entry_points.extend(message_handlers)
 
     dispatcher.add_handler(start_conversation)
-    # updater.start_polling(allowed_updates=Update.ALL_TYPES)
     updater.start_webhook(listen='0.0.0.0',
                           port=int(PORT),
                           url_path=TOKEN,

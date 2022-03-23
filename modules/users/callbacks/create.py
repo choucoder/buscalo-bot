@@ -30,6 +30,11 @@ terms_and_conditions = (
     "*Terminos y condiciones*\n\n"
     "Acepto que la información que he suministrado en este bot es "
     "correcta y que soy mayor de 13 años de edad.\n\n"
+    "\t\tEl uso o la publicación de imagenes pornográficas, material que pueda contribuir "
+    "a actividades terroristas o acciones que se consideren un delito penal, "
+    "propaganda de violencia, discriminación racial, así como material que pueda "
+    "ofender la dignidad humana, esta prohibido. Y su uso "
+    "conllevará a la denegación del acceso del usuario al servicio (bot)"
 )
 
 
@@ -165,7 +170,7 @@ def age(update: Update, context: CallbackContext) -> str:
             else:
                 update.message.reply_text(
                     f"¡Agrega una foto tuya o hazte un selfie {name}!\n\n"
-                    "👇 Presiona el boton en forma de clip📎 y selecciona una foto",
+                    "👇 Presiona el botón en forma de clip📎 y selecciona una foto",
                     parse_mode=ParseMode.MARKDOWN,
                 )
                 birthdate = '-'.join(birthdate.split('-')[:: -1])
@@ -218,7 +223,7 @@ def age(update: Update, context: CallbackContext) -> str:
             else:
                 update.message.reply_text(
                     f"¡Agrega una foto tuya o hazte un selfie {name}!\n\n"
-                    "👇 Presiona el boton en forma de clip📎 y selecciona una foto",
+                    "👇 Presiona el botón en forma de clip📎 y selecciona una foto",
                     parse_mode=ParseMode.MARKDOWN,
                 )
                 birthdate = '-'.join(birthdate.split('/')[:: -1])
@@ -251,7 +256,7 @@ def email(update: Update, context: CallbackContext) -> str:
 
         update.message.reply_text(
             f"¡Agrega una foto tuya o hazte un selfie {name}!\n\n"
-            "👇 Presiona el boton en forma de clip📎 y selecciona una foto",
+            "👇 Presiona el bóton en forma de clip📎 y selecciona una foto",
             parse_mode=ParseMode.MARKDOWN,
         )
 
@@ -280,7 +285,7 @@ def skip_email(update: Update, context: CallbackContext) -> str:
     )
     update.message.reply_text(
         f"¡Agrega una foto tuya o hazte un selfie {name}!\n\n"
-        "👇 Presiona el boton en forma de clip📎 y selecciona una foto",
+        "👇 Presiona el botón en forma de clip📎 y selecciona una foto",
         parse_mode=ParseMode.MARKDOWN,
     )
 
@@ -300,8 +305,14 @@ def photo(update: Update, context: CallbackContext) -> str:
 
     update.message.reply_text(
         f"¿Cual es tu ubicación {name}?\n\n"
-        "👇 Presiona el botón en forma de clip📎, selecciona ubicacion 📍y envia donde te encuentras",
-        parse_mode=ParseMode.MARKDOWN
+        "La ubicación es solicitada para proporcionarte contenido en base a tu ubicación\n\n"
+        "👇 Presiona el botón en forma de clip📎, selecciona ubicación 📍y envia donde te encuentras",
+        parse_mode=ParseMode.MARKDOWN,
+        reply_markup=ReplyKeyboardMarkup(
+            keyboard=reply_keyboard_skip,
+            resize_keyboard=True,
+            one_time_keyboard=False,
+        ),
     )
 
     return LOCATION
@@ -319,8 +330,14 @@ def photo_attach(update: Update, context: CallbackContext) -> str:
 
     update.message.reply_text(
         f"¿Cual es tu ubicación {name}?\n\n"
-        "👇 Presiona el botón en forma de clip📎, selecciona ubicacion 📍y envia donde te encuentras",
-        parse_mode=ParseMode.MARKDOWN
+        "La ubicación es solicitada para proporcionarte contenido en base a tu ubicación\n\n"
+        "👇 Presiona el botón en forma de clip📎, selecciona ubicación 📍y envia donde te encuentras",
+        parse_mode=ParseMode.MARKDOWN,
+        reply_markup=ReplyKeyboardMarkup(
+            keyboard=reply_keyboard_skip,
+            resize_keyboard=True,
+            one_time_keyboard=False,
+        ),
     )
 
     return LOCATION
@@ -337,8 +354,14 @@ def skip_photo(update: Update, context: CallbackContext) -> str:
     )
     update.message.reply_text(
         f"¿Cual es tu ubicación {name}?\n\n"
+        "La ubicación es solicitada para proporcionarte contenido en base a tu ubicación\n\n"
         "👇 Presiona el botón en forma de clip📎, selecciona ubicacion 📍y envia donde te encuentras",
-        parse_mode=ParseMode.MARKDOWN
+        parse_mode=ParseMode.MARKDOWN,
+        reply_markup=ReplyKeyboardMarkup(
+            keyboard=reply_keyboard_skip,
+            resize_keyboard=True,
+            one_time_keyboard=False,
+        ),
     )
 
     return LOCATION
@@ -384,7 +407,8 @@ def skip_location(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        f"No tan genial {name}, pareces algo paranoico {name}, pero continuamos\n"
+        f"Pareces algo paranoico {name}\n\n"
+        "No te preocupes, puedes establecer tu ubicación luego\n\n",
     )
 
     update.message.reply_text(
@@ -418,7 +442,7 @@ def accept_conditions(update: Update, context: CallbackContext) -> str:
         return WELCOME
     else:
         update.message.reply_text(
-            'Ha ocurrido un error\n\n'
+            'Ha ocurrido un error al intentar registrarte\n\n'
             "El email que ingresaste ya lo ocupa otra persona\n"
         )
         return navigate_to_self(update, context)
