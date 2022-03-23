@@ -54,7 +54,7 @@ def start_help(update: Update):
 
 
 def get_start_message() -> str:
-    text = "En esta sección puedes buscar 🔎 productos o servicios, publicar o ver estados 🌎, acceder a la sección de tu tienda 🏬, ver los estados 📮 que has publicado y configurar ⚙️ tu cuenta\n\n👇 Presiona el botón en forma de clip📎, selecciona una foto y agregale un comentario para publicar un estado"
+    text = "\t\t\tEn esta sección puedes buscar 🔎 productos o servicios, publicar o ver estados 🌎, acceder a la sección de tu tienda 🏬, ver los estados 📮 que has publicado y configurar ⚙️ tu cuenta\n\n👇 Presiona el botón en forma de clip📎, selecciona una foto y agregale un comentario para publicar un estado"
     return text
 
 
@@ -65,7 +65,7 @@ def get_photo_help():
     return text
 
 def get_shop_section_help():
-    text = "En esta sección puedes ➕ agregar productos a tu tienda, ver los productos que has agregado y modificar ⚙️ la información de tu tienda"
+    text = "\t\t\tEn esta sección puedes ➕ agregar productos a tu tienda, ver los productos que has agregado y modificar ⚙️ la información de tu tienda"
     return text
 
 
@@ -75,7 +75,7 @@ def get_shop_settings_section_help():
     return text
 
 def get_product_list_section_help():
-    text = "Aqui puedes ver tus productos, ✏️ editarlos y ❌ eliminarlos"
+    text = "\t\t\tAqui puedes ver tus productos, ✏️ editarlos y ❌ eliminarlos"
     return text
 
 
