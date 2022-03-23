@@ -1,7 +1,8 @@
 from telegram import (
-    ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+    ParseMode, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 )
 from telegram.ext import CallbackContext
+from modules.base.requests import get_token_or_refresh
 
 from modules.products import keyboards, callbacks
 from modules import shops
@@ -23,7 +24,7 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        'Seleccione el campo a editar del producto: ',
+        'Selecciona una opción 👇',
         reply_markup=markup
     )
 
@@ -41,8 +42,9 @@ def name(update: Update, context: CallbackContext) -> str:
     user_data['product_edit_field'] = 'name'
 
     update.message.reply_text(
-        'Escriba el nuevo nombre del producto: ',
+        'Escribe el nombre del producto 👇',
         reply_markup=ReplyKeyboardRemove(),
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return PRODUCT_EDIT_TYPING
@@ -54,8 +56,9 @@ def details(update: Update, context: CallbackContext) -> str:
     user_data['product_edit_field'] = 'details'
 
     update.message.reply_text(
-        'Ingrese los detalles del producto: ',
-        reply_markup=ReplyKeyboardRemove()
+        "Escribe los detalles acerca del producto 👇",
+        reply_markup=ReplyKeyboardRemove(),
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return PRODUCT_EDIT_TYPING
@@ -67,8 +70,10 @@ def price(update: Update, context: CallbackContext) -> str:
     user_data['product_edit_field'] = 'price'
 
     update.message.reply_text(
-        'Ingrese el nuevo precio del producto: ',
-        reply_markup=ReplyKeyboardRemove()
+        "Ingresa el precio del producto en tu moneda local o en $ 👇\n\n"
+        "👉 Usa la coma ',' para separar los decimales\n",
+        reply_markup=ReplyKeyboardRemove(),
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return PRODUCT_EDIT_TYPING
@@ -80,8 +85,10 @@ def photo(update: Update, context: CallbackContext) -> str:
     user_data['product_edit_field'] = 'photo'
 
     update.message.reply_text(
-        'Suba la nueva foto del producto: ',
-        reply_markup=ReplyKeyboardRemove()
+        "¡Agrega una foto de tu producto!\n\n"
+        "👇 Presiona el boton en forma de clip📎 y selecciona una foto",
+        reply_markup=ReplyKeyboardRemove(),
+        parse_mode=ParseMode.MARKDOWN
     )
 
     return PRODUCT_EDIT_TYPING
@@ -106,17 +113,26 @@ def update_product(update: Update, context: CallbackContext) -> str:
         payload['details'] = value
     else:
         price = value.replace(',', '.')
-        payload['price'] = price
+        try:
+            payload['price'] = float(price)
+        except:
+            pass
 
-    token = user_data['token']
-    product_id = user_data['current_product']['id']
+    if payload:
+        token = get_token_or_refresh(user_data)
+        product_id = user_data['current_product']['id']
 
-    product = do_update(token, payload, product_id)
+        product = do_update(token, payload, product_id)
     
-    if product:
-        user_data['current_product'] = product
+        if product:
+            user_data['current_product'] = product
 
-    render_product(update, user_data['current_product'], markup=markup)
+        render_product(update, user_data['current_product'], markup=markup)
+    else:
+        update.message.reply_text(
+            "El formato del precio del producto no es valido."
+        )
+        render_product(update, user_data['current_product'], markup=markup)
 
     return PRODUCT_EDIT_CHOOSING
 

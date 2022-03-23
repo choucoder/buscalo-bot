@@ -54,7 +54,7 @@ def details(update: Update, context: CallbackContext) -> str:
     user_data['product_cache']['details'] = details
 
     update.message.reply_text(
-        'Ingresa el precio del producto en tu moneda local o en $ 👇\n\n'
+        "Ingresa el precio del producto en tu moneda local o en $ 👇\n\n"
         "👉 Usa la coma ',' para separar los decimales\n",
         parse_mode=ParseMode.MARKDOWN
     )
