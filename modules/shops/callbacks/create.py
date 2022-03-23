@@ -75,7 +75,7 @@ def description(update: Update, context: CallbackContext) -> str:
     user_data["shop"]["description"] = description
 
     markup = ReplyKeyboardMarkup(
-        keyboards.create.reply_keyboard_skip,
+        keyboards.create.reply_keyboard_back,
         resize_keyboard=True,
         one_time_keyboard=False
     )
@@ -101,7 +101,12 @@ def logo(update: Update, context: CallbackContext) -> str:
     update.message.reply_text(
         "¿Donde esta ubicada tu tienda?!\n\n"
         "👇 Presiona el botón en forma de clip📎, selecciona ubicación 📍y envia la ubicación de tu tienda",
-        parse_mode=ParseMode.MARKDOWN
+        parse_mode=ParseMode.MARKDOWN,
+        reply_markup=ReplyKeyboardMarkup(
+            keyboards.create.reply_keyboard_back,
+            resize_keyboard=True,
+            one_time_keyboard=False    
+        )
     )
     
     return SHOP_LOCATION
@@ -119,7 +124,12 @@ def logo_attach(update: Update, context: CallbackContext) -> str:
     update.message.reply_text(
         "¿Donde esta ubicada tu tienda?!\n\n"
         "👇 Presiona el botón en forma de clip📎, selecciona ubicación 📍y envia la ubicación de tu tienda",
-        parse_mode=ParseMode.MARKDOWN
+        parse_mode=ParseMode.MARKDOWN,
+        reply_markup=ReplyKeyboardMarkup(
+            keyboards.create.reply_keyboard_back,
+            resize_keyboard=True,
+            one_time_keyboard=False    
+        )
     )
     
     return SHOP_LOCATION
@@ -132,7 +142,12 @@ def skip_logo(update: Update, context: CallbackContext) -> str:
     update.message.reply_text(
         "¿Donde esta ubicada tu tienda?!\n\n"
         "👇 Presiona el botón en forma de clip📎, selecciona ubicación 📍y envia la ubicación de tu tienda",
-        parse_mode=ParseMode.MARKDOWN
+        parse_mode=ParseMode.MARKDOWN,
+        reply_markup=ReplyKeyboardMarkup(
+            keyboards.create.reply_keyboard_back,
+            resize_keyboard=True,
+            one_time_keyboard=False    
+        )
     )
 
     return SHOP_LOCATION
