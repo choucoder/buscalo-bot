@@ -28,13 +28,13 @@ def navigate_to_self(update: Update, context: CallbackContext, show=True) -> str
             keyboards.create.reply_keyboard,
             resize_keyboard=True,
             one_time_keyboard=False,
-            input_field_placeholder='Escribe el nombre de tu tienda'
         )
         update.message.reply_text(
-            'Empecemos registrando tu tienda'
+            '¡Empecemos registrando tu tienda 🏬!',
+            parse_mode=ParseMode.MARKDOWN
         )
         update.message.reply_text(
-            "Cual es el nombre de tu tienda?",
+            "¿Cual es el nombre de tu tienda?",
             reply_markup=markup,
             parse_mode=ParseMode.MARKDOWN
         )

@@ -26,7 +26,6 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
             keyboards.create.reply_keyboard,
             resize_keyboard=True,
             one_time_keyboard=False,
-            input_field_placeholder='Escribe el nombre'
         )
         update.message.reply_text(
             '¡Empecemos registrando tu tienda 🏬!',
@@ -105,7 +104,7 @@ def logo(update: Update, context: CallbackContext) -> str:
         reply_markup=ReplyKeyboardMarkup(
             keyboards.create.reply_keyboard_back,
             resize_keyboard=True,
-            one_time_keyboard=False    
+            one_time_keyboard=False
         )
     )
     
@@ -128,7 +127,7 @@ def logo_attach(update: Update, context: CallbackContext) -> str:
         reply_markup=ReplyKeyboardMarkup(
             keyboards.create.reply_keyboard_back,
             resize_keyboard=True,
-            one_time_keyboard=False    
+            one_time_keyboard=False
         )
     )
     
@@ -146,7 +145,7 @@ def skip_logo(update: Update, context: CallbackContext) -> str:
         reply_markup=ReplyKeyboardMarkup(
             keyboards.create.reply_keyboard_back,
             resize_keyboard=True,
-            one_time_keyboard=False    
+            one_time_keyboard=False
         )
     )
 
