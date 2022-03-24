@@ -10,7 +10,7 @@ from utils.helpers import timeit
 API_URL = config('API_URL')
 
 @timeit
-def get_posts(token: str, page=1) -> Tuple[Dict, int]:
+def get_posts(token: Dict, page=1) -> Tuple[Dict, int]:
     url = f"{API_URL}/me/posts?page={page}"
 
     headers = {

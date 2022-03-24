@@ -207,7 +207,7 @@ def update_shop(update: Update, context: CallbackContext) -> str:
 
     payload = {field: value}
 
-    token = user_data['token']
+    token = get_token_or_refresh(user_data)
     shop_id = user_data['shop']['id']
 
     shop = do_shop_update(token, shop_id, payload)
@@ -237,7 +237,7 @@ def update_logo(update: Update, context: CallbackContext) -> str:
         resize_keyboard=True,
         one_time_keyboard=False
     )
-    token = user_data['token']
+    token = get_token_or_refresh(user_data)
     shop_id = user_data['shop']['id']
 
     response = do_shop_logo_update(shop_id, logo_path, token)
@@ -261,7 +261,7 @@ def update_logo_attach(update: Update, context: CallbackContext) -> str:
         resize_keyboard=True,
         one_time_keyboard=False
     )
-    token = user_data['token']
+    token = get_token_or_refresh(user_data)
     shop_id = user_data['shop']['id']
 
     response = do_shop_logo_update(shop_id, photo_path, token)
@@ -289,7 +289,7 @@ def update_location(update: Update, context: CallbackContext) -> str:
         resize_keyboard=True,
         one_time_keyboard=False
     )
-    token = user_data['token']
+    token = get_token_or_refresh(user_data)
     shop_id = user_data['shop']['id']
 
     shop = do_shop_update(token, shop_id, payload)

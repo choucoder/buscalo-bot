@@ -145,7 +145,7 @@ def update_photo(update: Update, context: CallbackContext) -> str:
     photo_file.download(photo_path)
 
     _ = user_data.pop('product_edit_field')
-    token = user_data['token']
+    token = get_token_or_refresh(user_data)
     product_id = user_data['current_product']['id']
 
     product = do_photo_update(token, photo_path, product_id)
@@ -172,7 +172,7 @@ def update_photo_attach(update: Update, context: CallbackContext) -> str:
     file.download(photo_path)
 
     _ = user_data.pop('product_edit_field')
-    token = user_data['token']
+    token = get_token_or_refresh(user_data)
     product_id = user_data['current_product']['id']
 
     product = do_photo_update(token, photo_path, product_id)

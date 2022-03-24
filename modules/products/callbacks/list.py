@@ -3,6 +3,7 @@ from telegram import (
 )
 from telegram.ext import CallbackContext
 from modules.base.render import get_product_list_section_help
+from modules.base.requests import get_token_or_refresh
 
 from modules.products import keyboards
 from modules import shops
@@ -14,7 +15,7 @@ from ..render import render_product
 def navigate_to_self(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
 
-    token = user_data['token']
+    token = get_token_or_refresh(user_data)
     shop_id = user_data['shop']['id']
 
     products, count = get_products(token, shop_id, page=1)
@@ -59,7 +60,7 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
 def navigate_to_self_non_owner(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
 
-    token = user_data['token']
+    token = get_token_or_refresh(user_data)
     user_data['shop'] = user_data['post']['shop']
     shop_id = user_data['post']['shop']['id']
 
@@ -129,7 +130,7 @@ def prev(update: Update, context: CallbackContext) -> str:
             pages=user_data['count_products']
         )
     else:
-        token = user_data['token']
+        token = get_token_or_refresh(user_data)
         shop_id = user_data['shop']['id']
         current_page = user_data['current_product_page']
 
@@ -173,7 +174,7 @@ def prev_non_owner(update: Update, context: CallbackContext) -> str:
         )
 
     else:
-        token = user_data['token']
+        token = get_token_or_refresh(user_data)
         shop_id = user_data['shop']['id']
         current_page = user_data['current_product_page']
 
@@ -216,7 +217,7 @@ def next(update: Update, context: CallbackContext) -> str:
             pages=user_data['count_products']
         )
     else:
-        token = user_data['token']
+        token = get_token_or_refresh(user_data)
         shop_id = user_data['shop']['id']
         current_page = user_data['current_product_page']
 
@@ -259,7 +260,7 @@ def next_non_owner(update: Update, context: CallbackContext) -> str:
         )
 
     else:
-        token = user_data['token']
+        token = get_token_or_refresh(user_data)
         shop_id = user_data['shop']['id']
         current_page = user_data['current_product_page']
 

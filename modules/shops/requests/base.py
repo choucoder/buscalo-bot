@@ -7,12 +7,12 @@ from decouple import config
 
 API_URL = config('API_URL')
 
-def is_shop_created(access):
+def is_shop_created(token: Dict):
     url = f"{API_URL}/me/shop"
 
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': f'Bearer {access}',
+        'Authorization': f'Bearer {token["access"]}',
     }
 
     response = requests.request("GET", url, headers=headers)
@@ -24,7 +24,7 @@ def is_shop_created(access):
     return False
 
 
-def do_shop_register(token: str, data: Dict) -> Dict:
+def do_shop_register(token: Dict, data: Dict) -> Dict:
     url = f"{API_URL}/shops/"
     path = data.pop('logo', None)
     payload = json.dumps(data)

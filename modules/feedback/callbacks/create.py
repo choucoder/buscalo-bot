@@ -5,6 +5,7 @@ from telegram.ext import CallbackContext
 
 from modules import feedback
 from modules.base.render import get_start_message
+from modules.base.requests import get_token_or_refresh
 from modules.feedback import keyboards
 from modules.welcome import keyboards as welcome_keyboards
 from utils.helpers import get_unique_filename
@@ -23,7 +24,7 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        'Escribe tus sugerencia(s) 👇',
+        'Escribe tu sugerencia 👇',
         reply_markup=markup,
         parse_mode=ParseMode.MARKDOWN
     )
@@ -35,7 +36,7 @@ def send(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
     text = update.message.text
 
-    token = user_data['token']
+    token = get_token_or_refresh(user_data)
     markup = ReplyKeyboardMarkup(
         welcome_keyboards.welcome_reply_keyboard,
         resize_keyboard=True,

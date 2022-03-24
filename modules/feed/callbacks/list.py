@@ -6,6 +6,7 @@ from telegram.ext import CallbackContext
 
 from modules.base import states as base_states
 from modules.base.render import get_start_message
+from modules.base.requests import get_token_or_refresh
 from modules.feed.requests.list import post_react
 from modules.posts.requests.create import get_feed
 from modules.shops.states import SHOP_DETAILS
@@ -19,7 +20,6 @@ from ..render import render_feed
 
 def navigate_to_self(update: Update, context: CallbackContext, swipe_down=True) -> str:
     user_data =context.user_data
-    token = user_data['token']
 
     markup = ReplyKeyboardMarkup(
         reply_keyboard,
@@ -28,6 +28,7 @@ def navigate_to_self(update: Update, context: CallbackContext, swipe_down=True) 
     )
 
     if swipe_down:
+        token = get_token_or_refresh(user_data)
         update.message.reply_text(
             "Aqui puedes deslizar para ver estados y postearlos subiendo "
             "una foto con subtítulo o selecionando la opción ➕ Nuevo estado",
@@ -67,7 +68,7 @@ def navigate_to_self(update: Update, context: CallbackContext, swipe_down=True) 
 
 def swipe_down(update: Update, context: CallbackContext):
     user_data =context.user_data
-    token = user_data['token']
+    token = get_token_or_refresh(user_data)
 
     response = get_feed(token)
 
@@ -102,7 +103,7 @@ def back(update: Update, context: CallbackContext) -> str:
 
 def post_like(update: Update, context: CallbackContext) -> None:
     user_data = context.user_data
-    token = user_data['token']
+    token = get_token_or_refresh(user_data)
 
     query = update.callback_query
     post_id = query.data.split('-')[-1]
@@ -113,7 +114,7 @@ def post_like(update: Update, context: CallbackContext) -> None:
 
 
 def navigate_to_shop_details(update: Update, context: CallbackContext) -> str:
-    user_data =context.user_data
+    user_data = context.user_data
     post = user_data.get('post', None)
 
     if post and post['shop']:

@@ -3,6 +3,7 @@ from telegram import (
 )
 from telegram.ext import CallbackContext
 from modules.base.render import get_start_message
+from modules.base.requests import get_token_or_refresh
 
 from modules.posts import keyboards
 from modules.welcome import keyboards as welcome_keyboards
@@ -14,7 +15,7 @@ from ..render import render_post
 def navigate_to_self(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
 
-    token = user_data['token']
+    token = get_token_or_refresh(user_data)
 
     posts, count = get_posts(token, page=1)
 
@@ -87,7 +88,7 @@ def prev(update: Update, context: CallbackContext):
             pages=user_data['count_posts']
         )
     else:
-        token = user_data['token']
+        token = get_token_or_refresh(user_data)
         current_page = user_data['current_post_page']
 
         posts, count = get_posts(token, page=current_page - 1)
@@ -129,7 +130,7 @@ def next(update: Update, context: CallbackContext):
             pages=user_data['count_posts']
         )
     else:
-        token = user_data['token']
+        token = get_token_or_refresh(user_data)
         current_page = user_data['current_post_page']
 
         posts, count = get_posts(token, page=current_page + 1)
