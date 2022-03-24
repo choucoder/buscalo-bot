@@ -7,7 +7,7 @@ from decouple import config
 
 API_URL = config('API_URL')
 
-def do_product_register(token: str, data: Dict, shop_id: str) -> Dict:
+def do_product_register(token: Dict, data: Dict, shop_id: str) -> Dict:
     url = f"{API_URL}/shops/{shop_id}/products"
     path = data.pop('photo', None)
     payload = json.dumps(data)
@@ -27,7 +27,7 @@ def do_product_register(token: str, data: Dict, shop_id: str) -> Dict:
     return product_data
 
 
-def do_product_photo_update(product_id: str, path: str, token: str) -> Dict:
+def do_product_photo_update(product_id: str, path: str, token: Dict) -> Dict:
     url = f"{API_URL}/products/{product_id}"
 
     filename = path.split('/')[-1]

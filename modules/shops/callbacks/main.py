@@ -21,7 +21,7 @@ def navigate_to_self(update: Update, context: CallbackContext, show=True) -> str
     user_data = context.user_data
 
     token = get_token_or_refresh(user_data)    
-    shop = base.is_shop_created(token['access'])
+    shop = base.is_shop_created(token)
 
     if not shop:
         markup = ReplyKeyboardMarkup(
@@ -86,7 +86,5 @@ def back(update: Update, context: CallbackContext) -> str:
         get_start_message(),
         reply_markup=markup
     )
-
-    # token = get_token_or_refresh(user_data)
 
     return base_states.BACK

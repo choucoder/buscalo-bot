@@ -15,10 +15,6 @@ from ..states import *
 
 
 def navigate_to_self(update: Update, context: CallbackContext) -> str:
-    user_data = context.user_data
-
-    # token = get_token_or_refresh(user_data)
-
     markup = ReplyKeyboardMarkup(
         keyboards.settings.reply_keyboard,
         resize_keyboard=True,

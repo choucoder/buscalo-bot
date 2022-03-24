@@ -190,7 +190,7 @@ def prev(update: Update, context: CallbackContext) -> str:
         render_search_product(update, user_data['search_product'], user_data)
 
     else:
-        token = user_data['token']
+        token = get_token_or_refresh(user_data)
         query = user_data['query']
         current_page = user_data['current_page']
         
@@ -213,7 +213,7 @@ def next(update: Update, context: CallbackContext) -> str:
         render_search_product(update, user_data['search_product'], user_data)
 
     else:
-        token = user_data['token']
+        token = get_token_or_refresh(user_data)
         query = user_data['query']
         current_page = user_data['current_page']
 
@@ -285,7 +285,8 @@ def view_store_products(update: Update, context: CallbackContext):
     markup = get_view_store_products_inline_keyboard_markup(
         product_id, shop_id, page=1
     )
-    products, count = get_products(context.user_data['token'], shop_id, page=1)
+    token = get_token_or_refresh(context.user_data)
+    products, count = get_products(token, shop_id, page=1)
     update.callback_query.answer()
 
     render_search_product_inline(update, products[0], markup, context.user_data)
@@ -296,7 +297,8 @@ def view_store_products_next(update: Update, context: CallbackContext):
     _, product_id, shop_id, page = query.data.split('-')
     page = int(page)
 
-    products, count = get_products(context.user_data['token'], shop_id, page=page)
+    token = get_token_or_refresh(context.user_data)
+    products, count = get_products(token, shop_id, page=page)
     update.callback_query.answer()
 
     if page < count:
@@ -321,7 +323,8 @@ def view_store_products_prev(update: Update, context: CallbackContext):
         markup = get_view_store_products_inline_keyboard_markup(
             product_id, shop_id, page
         )
-        products, count = get_products(context.user_data['token'], shop_id, page=page)
+        token = get_token_or_refresh(context.user_data)
+        products, count = get_products(token, shop_id, page=page)
         render_search_product_inline(update, products[0], markup, context.user_data)
     else:
         update.callback_query.answer()
@@ -333,7 +336,8 @@ def view_store_products_back(update: Update, context: CallbackContext):
 
     update.callback_query.answer()
 
-    product = get_product(context.user_data['token'], product_id)
+    token = get_token_or_refresh(context.user_data)
+    product = get_product(token, product_id)
     markup = get_product_search_inline_markup(product)
 
     render_search_product_inline(update, product, markup, context.user_data)
@@ -341,7 +345,7 @@ def view_store_products_back(update: Update, context: CallbackContext):
 
 def like_product(update: Update, context: CallbackContext):
     user_data = context.user_data
-    token = user_data['token']
+    token = get_token_or_refresh(user_data)
 
     query = update.callback_query
     product_id = query.data.split('-')[-1]

@@ -4,6 +4,7 @@ from telegram import (
     ReplyKeyboardMarkup, Update
 )
 from telegram.ext import CallbackContext
+from modules.base.requests import get_token_or_refresh
 from modules.shops.keyboards.search import get_shop_contact_inline_markup
 
 from modules.shops.render import render_shop
@@ -15,7 +16,7 @@ from ..states import *
 
 def navigate_to_self(update: Update, context: CallbackContext, show_contact_keyboard=False) -> str:
     user_data = context.user_data
-    token = user_data['token']
+    token = get_token_or_refresh(user_data)
 
     shop = user_data['post']['shop']
     shop_id = shop['id']

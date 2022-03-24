@@ -93,7 +93,7 @@ def photo_attach(update: Update, context: CallbackContext) -> str:
 
 def publisher_type(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
-    token = user_data['token']
+    token = get_token_or_refresh(user_data)
 
     type = update.message.text
     if "Usuario" in type:

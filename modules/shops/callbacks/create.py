@@ -21,7 +21,7 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
 
     token = get_token_or_refresh(user_data)
 
-    if not base.is_shop_created(token['access']):
+    if not base.is_shop_created(token):
         markup = ReplyKeyboardMarkup(
             keyboards.create.reply_keyboard,
             resize_keyboard=True,
