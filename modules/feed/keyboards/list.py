@@ -29,7 +29,7 @@ def get_feed_inline_keyboard_markup(feed: Dict) -> InlineKeyboardMarkup:
                 callback_data=f"LIKE_POST-{post['id']}"
             ),
             InlineKeyboardButton(
-                text=emojize('Reportar :warning:', use_aliases=True),
+                text=emojize(':warning: Reportar', use_aliases=True),
                 callback_data=f"REPORT_POST-{post['id']}"
             )
         ],
@@ -43,7 +43,7 @@ def get_feed_inline_keyboard_markup(feed: Dict) -> InlineKeyboardMarkup:
         inline_reply_keyboard.append(
             [
                 InlineKeyboardButton(
-                    text=emojize('Chat de tienda :speech_balloon:', use_aliases=True),
+                    text=emojize(':speech_balloon: Chat de tienda', use_aliases=True),
                     url=url,
                 )
             ]
