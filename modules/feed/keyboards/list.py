@@ -31,7 +31,7 @@ def get_feed_inline_keyboard_markup(feed: Dict) -> InlineKeyboardMarkup:
         ],
     ]
     if shop:
-        if user['telegram_username'].startswith('none-'):
+        if user['telegram_username'] and not user['telegram_username'].startswith('none-'):
             url = f"t.me/{user['telegram_username']}"
         else:
             url = f"tg://user?id={user['telegram_user_id']}"

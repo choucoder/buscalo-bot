@@ -70,7 +70,7 @@ def get_product_search_inline_markup(product: Dict, is_added=False) -> InlineKey
     username = product['shop']['user']['telegram_username']
     product_id = product['id']
 
-    if username:
+    if username and not username.startswith("none-"):
         url = f"t.me/{username}?start=holacomoesas"
     else:
         url = f"tg://user?id={user_id}"
