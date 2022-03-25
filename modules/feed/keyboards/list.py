@@ -28,6 +28,10 @@ def get_feed_inline_keyboard_markup(feed: Dict) -> InlineKeyboardMarkup:
                 text=emojize(':heart:/:broken_heart:', use_aliases=True),
                 callback_data=f"LIKE_POST-{post['id']}"
             ),
+            InlineKeyboardButton(
+                text=emojize('Reportar :warning:', use_aliases=True),
+                callback_data=f"REPORT_POST-{post['id']}"
+            )
         ],
     ]
     if shop:
