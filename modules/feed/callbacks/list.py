@@ -15,7 +15,7 @@ from modules.welcome import keyboards as welcome_keyboards
 from modules.welcome import states as welcome_states
 from ..keyboards.list import reply_keyboard, get_feed_inline_keyboard_markup
 from ..states import *
-from ..render import render_feed
+from ..render import render_feed, render_feed_back, render_report_options_feed_inline
 
 
 def navigate_to_self(update: Update, context: CallbackContext, swipe_down=True) -> str:
@@ -124,3 +124,26 @@ def navigate_to_shop_details(update: Update, context: CallbackContext) -> str:
         update.message.reply_text(
             'El estado no fue publicado por una tienda'
         )
+
+
+def post_report(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    post_id = query.data.split('-')[-1]
+    user_id = context.user_data['profile_data']['id']
+
+    # token = get_token_or_refresh(context.user_data)
+    # feed = get_user_feed(token, {})
+
+    update.callback_query.answer()
+    feed = context.user_data['feed']
+    render_report_options_feed_inline(update, feed)
+
+
+def post_report_back(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    post_id = query.data.split('-')[-1]
+    user_id = context.user_data['profile_data']['id']
+
+    update.callback_query.answer()
+    feed = context.user_data['feed']
+    render_feed_back(update, feed)
