@@ -18,6 +18,17 @@ from ..states import *
 from ..render import render_feed, render_feed_back, render_report_options_feed_inline
 
 
+report_options = [
+    (1, 'Desnudos'),
+    (2, 'Violencia'),
+    (3, 'Suicidio'),
+    (4, 'Informacion Falsa'),
+    (5, 'Spam'),
+    (6, 'Lenguaje que incita al odio'),
+    (7, 'Terrorismo'),
+    (8, 'Otro'),
+]
+
 def navigate_to_self(update: Update, context: CallbackContext, swipe_down=True) -> str:
     user_data =context.user_data
 
@@ -145,5 +156,21 @@ def post_report_back(update: Update, context: CallbackContext) -> None:
     user_id = context.user_data['profile_data']['id']
 
     update.callback_query.answer()
+    feed = context.user_data['feed']
+    render_feed_back(update, feed)
+
+
+def report(update: Update, context: CallbackContext):
+    query = update.callback_query
+    query = query.split('-')
+
+    report_option = query[-1]
+    post_id = query[-2]
+
+    report = report_options[report_option-1][1]
+
+    update.callback_query.answer(
+        text=f"Post {post_id} ha sido reportado como {report}"
+    )
     feed = context.user_data['feed']
     render_feed_back(update, feed)
