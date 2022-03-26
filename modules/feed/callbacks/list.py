@@ -164,7 +164,7 @@ def report(update: Update, context: CallbackContext):
     query = update.callback_query.data
     query = query.split('-')
 
-    report_option = query[-1]
+    report_option = int(query[-1])
     post_id = query[-2]
 
     report = report_options[report_option-1][1]
