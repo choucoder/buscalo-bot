@@ -169,8 +169,9 @@ def report(update: Update, context: CallbackContext):
 
     report = report_options[report_option-1][1]
 
+    feed = context.user_data['feed']
+    render_feed_back(update, feed)
+
     update.callback_query.answer(
         text=f"Post {post_id} ha sido reportado como {report}"
     )
-    feed = context.user_data['feed']
-    render_feed_back(update, feed)
