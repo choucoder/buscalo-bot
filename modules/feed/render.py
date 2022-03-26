@@ -99,7 +99,7 @@ def render_report_options_feed_inline(update: Update, feed: Dict):
     text += "7. Terrorismo\n"
     text += "8. Otro\n"
 
-    update.callback_query.edit_message_text(
+    update.callback_query.edit_message_caption(
         text,
         parse_mode=ParseMode.MARKDOWN
     )
