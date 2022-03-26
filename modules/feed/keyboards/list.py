@@ -82,7 +82,7 @@ def get_feed_report_inline_keyboard_markup(feed: Dict) -> InlineKeyboardMarkup:
         )
 
     inline_reply_keyboard = []
-    for i in enumerate(inline_keyboard_buttons):
+    for i, kb in enumerate(inline_keyboard_buttons):
         if i % 4 == 0:
             inline_reply_keyboard.append([])
             inline_reply_keyboard[-1].append(inline_keyboard_buttons[i])
