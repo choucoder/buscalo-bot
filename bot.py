@@ -381,6 +381,7 @@ def main() -> None:
             MessageHandler(Filters.regex('Nuevo estado$'), posts.callbacks.create.navigate_to_self),
             MessageHandler(Filters.regex('Ver tienda$'), feed.callbacks.list.navigate_to_shop_details),
             CallbackQueryHandler(feed.callbacks.list.post_like, pattern='^LIKE_POST'),
+            CallbackQueryHandler(feed.callbacks.list.report, pattern='^FEED_REPORT_OPTION'),
             CallbackQueryHandler(feed.callbacks.list.post_report_back, pattern='^REPORT_POST_BACK'),
             CallbackQueryHandler(feed.callbacks.list.post_report, pattern='^REPORT_POST'),
         ],
