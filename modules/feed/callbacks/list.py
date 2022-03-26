@@ -161,7 +161,7 @@ def post_report_back(update: Update, context: CallbackContext) -> None:
 
 
 def report(update: Update, context: CallbackContext):
-    query = update.callback_query
+    query = update.callback_query.data
     query = query.split('-')
 
     report_option = query[-1]
