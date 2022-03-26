@@ -104,7 +104,7 @@ def render_report_options_feed_inline(update: Update, feed: Dict):
         parse_mode=ParseMode.MARKDOWN
     )
     update.callback_query.edit_message_reply_markup(
-        get_feed_report_inline_keyboard_markup(post)
+        get_feed_report_inline_keyboard_markup(feed)
     )
 
 
