@@ -60,7 +60,7 @@ def render_feed(update: Update, feed: Dict, markup=None) -> None:
         )
 
 
-def render_report_options_feed_inline(update: Update, feed: Dict, markup: InlineKeyboardMarkup):
+def render_report_options_feed_inline(update: Update, feed: Dict):
     post = feed['post']
     user = post['user']
     shop = post['shop']
@@ -108,7 +108,7 @@ def render_report_options_feed_inline(update: Update, feed: Dict, markup: Inline
     )
 
 
-def render_feed_back(update: Update, feed: Dict, markup=None):
+def render_feed_back(update: Update, feed: Dict):
     post = feed['post']
     user = post['user']
     shop = post['shop']
