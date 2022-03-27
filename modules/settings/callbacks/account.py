@@ -1,3 +1,4 @@
+import emoji
 from telegram import (
     ParseMode, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 )
@@ -36,8 +37,8 @@ def navigate_to_self_delete(update: Update, context: CallbackContext) -> str:
     )
 
     update.message.reply_text(
-        "Desea eliminar su cuenta? 👇\n\n"
-        "Se eliminara toda su cuenta incluida su tienda, productos, estados",
+        ":warning: Esta seguro que desea eliminar su cuenta? :warning:\n\n"
+        "Su cuenta sera eliminada junto con su tienda, productos y estados compartidos",
         reply_markup=markup,
         parse_mode=ParseMode.MARKDOWN
     )
@@ -51,4 +52,8 @@ def delete_cancel(update: Update, context: CallbackContext) -> str:
 
 
 def delete_confirm(update: Update, context: CallbackContext) -> str:
-    pass
+    text = "Su cuenta ha sido eliminada. Para volver a registrarse tendra que ejecutar el comando /start en el bot"
+    update.message.reply_text(
+        text,
+        reply_markup=ReplyKeyboardRemove()
+    )
