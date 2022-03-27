@@ -1,4 +1,4 @@
-import emoji
+from emoji import emojize
 from telegram import (
     ParseMode, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 )
@@ -36,9 +36,12 @@ def navigate_to_self_delete(update: Update, context: CallbackContext) -> str:
         one_time_keyboard=False,
     )
 
+    text = ":warning: Esta seguro que desea eliminar su cuenta? :warning:\n\n"
+    text += "Su cuenta sera eliminada junto con su tienda, productos y estados compartidos"
+    text = emojize(text, use_aliases=True)
+
     update.message.reply_text(
-        ":warning: Esta seguro que desea eliminar su cuenta? :warning:\n\n"
-        "Su cuenta sera eliminada junto con su tienda, productos y estados compartidos",
+        text,
         reply_markup=markup,
         parse_mode=ParseMode.MARKDOWN
     )
