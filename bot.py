@@ -507,6 +507,9 @@ def main() -> None:
             CallbackQueryHandler(products.callbacks.search.view_store_products, pattern='^VIEW_STORE_PRODUCTS'),
             CallbackQueryHandler(products.callbacks.search.like_product, pattern='^LIKE_PRODUCT'),
             CallbackQueryHandler(products.callbacks.search.chat, pattern='^CHAT'),
+            CallbackQueryHandler(products.callbacks.search.report, pattern='^PRODUCT_REPORT_OPTION'),
+            CallbackQueryHandler(products.callbacks.search.product_report_back, pattern='^REPORT_PRODUCT_BACK'),
+            CallbackQueryHandler(products.callbacks.search.product_report, pattern='^REPORT_PRODUCT'),
         ],
         states={
             products.states.SEARCH_SETTINGS: [
