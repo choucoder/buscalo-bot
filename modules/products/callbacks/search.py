@@ -20,9 +20,22 @@ from ..requests.search import (
 from ..render import (
     render_search_product, render_search_product_inline,
     render_search_product_map,
+    render_report_options_product_inline,
+    render_product_back,
 )
 from ..keyboards.search import get_product_search_inline_markup
 
+
+report_options = [
+    (1, 'Desnudos'),
+    (2, 'Violencia'),
+    (3, 'Suicidio'),
+    (4, 'Informacion Falsa'),
+    (5, 'Spam'),
+    (6, 'Lenguaje que incita al odio'),
+    (7, 'Terrorismo'),
+    (8, 'Otro'),
+]
 
 def navigate_to_self(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
@@ -384,3 +397,40 @@ def view_product_shop_map(update: Update, context: CallbackContext):
         update.message.reply_text(
             'No se puede obtener la localizacion de la tienda'
         )
+
+
+def product_report(update: Update, context: CallbackContext):
+    query = update.callback_query
+    product_id = query.data.split('-')[-1]
+
+    product = context.user_data['search_product']
+    render_report_options_product_inline(update, product)
+
+    update.callback_query.answer()
+
+
+def product_report_back(update: Update, context: CallbackContext):
+    query = update.callback_query
+    product_id = query.data.split('-')[-1]
+
+    product = context.user_data['search_product']
+    render_product_back(update, product, context.user_data)
+
+    update.callback_query.answer()
+
+
+def report(update: Update, context: CallbackContext):
+    query = update.callback_query.data
+    query = query.split('-')
+
+    report_option = int(query[-1])
+    product_id = query[-2]
+
+    report = report_options[report_option-1][1]
+    product = context.user_data['search_product']
+
+    render_product_back(update, product, context.user_data)
+
+    update.callback_query.answer(
+        text=f"Este producto {product_id} ha sido reportado como {report}"
+    )

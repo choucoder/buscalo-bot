@@ -157,3 +157,46 @@ def get_view_store_products_inline_keyboard_markup(product_id, shop_id, page=1):
     markup = InlineKeyboardMarkup(reply_keyboard)
 
     return markup
+
+
+def get_product_report_inline_keyboard_markup(product: Dict) -> InlineKeyboardMarkup:
+    problems_options = [
+        (1, 'Desnudos'),
+        (2, 'Violencia'),
+        (3, 'Suicidio'),
+        (4, 'Informacion Falsa'),
+        (5, 'Spam'),
+        (6, 'Lenguaje que incita al odio'),
+        (7, 'Terrorismo'),
+        (8, 'Otro'),
+    ]
+
+    inline_keyboard_buttons = []
+
+    for option in problems_options:
+        _id, _ = option
+        inline_keyboard_buttons.append(
+            InlineKeyboardButton(
+                text=emojize(f"{_id}", use_aliases=True),
+                callback_data=f"PRODUCT_REPORT_OPTION-{product['id']}-{_id}"
+            )
+        )
+
+    inline_reply_keyboard = []
+    for i, kb in enumerate(inline_keyboard_buttons):
+        if i % 4 == 0:
+            inline_reply_keyboard.append([])
+            inline_reply_keyboard[-1].append(inline_keyboard_buttons[i])
+        else:
+            inline_reply_keyboard[-1].append(inline_keyboard_buttons[i])
+    
+    inline_reply_keyboard.append(
+        [
+            InlineKeyboardButton(
+                text=emojize(':arrow_left: Atras', use_aliases=True),
+                callback_data=f"REPORT_PRODUCT_BACK-{product['id']}"
+            ) 
+        ]
+    )
+
+    return InlineKeyboardMarkup(inline_reply_keyboard)
