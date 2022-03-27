@@ -84,15 +84,19 @@ def get_product_search_inline_markup(product: Dict, is_added=False) -> InlineKey
         ],
         [
             InlineKeyboardButton(
-                text=emojize('Chat de tienda :speech_balloon:', use_aliases=True),
-                url=url,
-                switch_inline_query=f"p-{product['id']}",
-                switch_inline_query_current_chat=f"p-{product['id']}"
-            ),
-            InlineKeyboardButton(
                 text=emojize(':heart:/:broken_heart:', use_aliases=True),
                 callback_data=f"LIKE_PRODUCT-{product_id}"
+            ),
+            InlineKeyboardButton(
+                text=emojize(':warning: Reportar', use_aliases=True),
+                callback_data=f"REPORT_PRODUCT-{product_id}"
             )
+        ],
+        [
+            InlineKeyboardButton(
+                text=emojize(':speech_balloon: Chat de tienda', use_aliases=True),
+                url=url,
+            ),
         ],
     ]
 
@@ -117,14 +121,11 @@ def get_product_search_inline_markup(product: Dict, is_added=False) -> InlineKey
         else:
             text += f"Ubicacion: Desconocida"
 
-
-        reply_keyboard_product_search.append(
-            [
-                InlineKeyboardButton(
-                    text=emojize('WhatsApp :speech_balloon:', use_aliases=True),
-                    url=f"wa.me/{product['shop']['phone_number']}?text={text}"
-                )
-            ]
+        reply_keyboard_product_search[-1].append(
+            InlineKeyboardButton(
+                text=emojize(':speech_balloon: WhatsApp', use_aliases=True),
+                url=f"wa.me/{product['shop']['phone_number']}?text={text}"
+            )
         )
 
     markup = InlineKeyboardMarkup(reply_keyboard_product_search)
