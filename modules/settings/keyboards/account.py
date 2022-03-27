@@ -15,5 +15,5 @@ reply_keyboard_delete = [
     [
         KeyboardButton(text=emojize('Continuar', use_aliases=True)),
         KeyboardButton(text=emojize('Cancelar', use_aliases=True)),
-    ], 
+    ],
 ]
