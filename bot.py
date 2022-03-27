@@ -601,13 +601,50 @@ def main() -> None:
     )
     conversations.append(user_edit_conv)
 
+    settings_account_delete_conv = ConversationHandler(
+        entry_points=[
+            MessageHandler(Filters.regex('Cancelar$'), settings.callbacks.account.delete_cancel),
+            MessageHandler(Filters.regex('Continuar$'), settings.callbacks.account.delete_confirm),
+        ],
+        states={},
+        map_to_parent={
+            settings.states.SETTINGS_ACCOUNT_DELETE_CANCEL: settings.states.SETTINGS_ACCOUNT, 
+        },
+        fallbacks={},
+        persistent=True,
+        name='settings_account_delete',
+    )
+    conversations.append(settings_account_delete_conv)
+
+    settings_account_conv = ConversationHandler(
+        entry_points=[
+            MessageHandler(Filters.regex('Atras$'), settings.callbacks.account.back),
+            MessageHandler(Filters.regex('Eliminar cuenta$'), settings.callbacks.account.navigate_to_self_delete),
+        ],
+        states={
+            settings.states.SETTINGS_ACCOUNT_DELETE: [
+                settings_account_delete_conv
+            ]
+        },
+        map_to_parent={
+            settings.states.SETTINGS_ACCOUNT_BACK: settings.states.SETTINGS,
+            settings.states.SETTINGS_ACCOUNT: settings.states.SETTINGS_ACCOUNT,
+        },
+        fallbacks={},
+        persistent=True,
+        name='settings_account',
+    )
+    conversations.append(settings_account_conv)
+
     settings_conv = ConversationHandler(
         entry_points=[
             MessageHandler(Filters.regex('Atras$'), settings.callbacks.main.back),
             MessageHandler(Filters.regex('Perfil$'), users.callbacks.edit.navigate_to_self),
+            MessageHandler(Filters.regex('Cuenta$'), settings.callbacks.account.navigate_to_self),
         ],
         states={
             users.states.USER_EDIT: [user_edit_conv],
+            settings.states.SETTINGS_ACCOUNT: [settings_account_conv],
         },
         map_to_parent={
             settings.states.SETTINGS_BACK: WELCOME,
