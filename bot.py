@@ -612,13 +612,12 @@ def main() -> None:
         states={},
         map_to_parent={
             settings.states.SETTINGS_ACCOUNT_DELETE_CANCEL: settings.states.SETTINGS_ACCOUNT,
-            USER_REGISTRATION: USER_REGISTRATION,
         },
         fallbacks={},
         persistent=True,
         name='settings_account_delete',
     )
-    conversations.append(settings_account_delete_conv)
+    # conversations.append(settings_account_delete_conv)
 
     settings_account_conv = ConversationHandler(
         entry_points=[
@@ -751,7 +750,11 @@ def main() -> None:
         name='user_registration',
     )
     conversations.append(user_registration_conv)
-
+    # Noobs
+    settings_account_delete_conv.states[USER_REGISTRATION] = [
+        user_registration_conv
+    ]
+    
     start_conversation = ConversationHandler(
         entry_points=[
             CommandHandler('start', start),
