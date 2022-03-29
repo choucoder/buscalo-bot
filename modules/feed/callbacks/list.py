@@ -140,10 +140,8 @@ def navigate_to_shop_details(update: Update, context: CallbackContext) -> str:
 def post_report(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     feed_id = query.data.split('-')[-1]
-    # token = get_token_or_refresh(context.user_data)
-    # feed = get_user_feed(token, {})
-
     update.callback_query.answer()
+    
     feed = {'id': feed_id}
     render_report_options_feed_inline(update, feed)
 
@@ -181,7 +179,7 @@ def report(update: Update, context: CallbackContext):
             render_feed_back(update, feed)
 
             update.callback_query.answer(
-                text=response['msg']
+                text=response['msg'],
             )
         else:
             update.callback_query.answer(
