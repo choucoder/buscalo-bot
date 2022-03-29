@@ -7,7 +7,7 @@ from telegram.ext import CallbackContext
 from modules.base import states as base_states
 from modules.base.render import get_start_message
 from modules.base.requests import get_token_or_refresh
-from modules.feed.requests.list import post_react
+from modules.feed.requests.list import get_feed_single, post_react, do_feed_report
 from modules.posts.requests.create import get_feed
 from modules.shops.states import SHOP_DETAILS
 from modules import shops
@@ -139,25 +139,29 @@ def navigate_to_shop_details(update: Update, context: CallbackContext) -> str:
 
 def post_report(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
-    post_id = query.data.split('-')[-1]
-    user_id = context.user_data['profile_data']['id']
-
+    feed_id = query.data.split('-')[-1]
     # token = get_token_or_refresh(context.user_data)
     # feed = get_user_feed(token, {})
 
     update.callback_query.answer()
-    feed = context.user_data['feed']
+    feed = {'id': feed_id}
     render_report_options_feed_inline(update, feed)
 
 
 def post_report_back(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
-    post_id = query.data.split('-')[-1]
-    user_id = context.user_data['profile_data']['id']
+    feed_id = query.data.split('-')[-1]
 
-    update.callback_query.answer()
-    feed = context.user_data['feed']
-    render_feed_back(update, feed)
+    token = get_token_or_refresh(context.user_data)
+    feed = get_feed_single(token, feed_id)
+    
+    if feed:
+        update.callback_query.answer()
+        render_feed_back(update, feed)
+    else:
+        update.callback_query.answer(
+            text="Este post no esta disponible"
+        )
 
 
 def report(update: Update, context: CallbackContext):
@@ -165,13 +169,25 @@ def report(update: Update, context: CallbackContext):
     query = query.split('-')
 
     report_option = int(query[-1])
-    post_id = query[-2]
+    feed_id = query[-2]
 
-    report = report_options[report_option-1][1]
+    token = get_token_or_refresh(context.user_data)
+    response = do_feed_report(token, feed_id, report_option)
 
-    feed = context.user_data['feed']
-    render_feed_back(update, feed)
+    if response.status_code in (200, 201):
+        response = response.json()
+        if response['deleted'] == 0:
+            feed = response['data']
+            render_feed_back(update, feed)
 
-    update.callback_query.answer(
-        text=f"Post {post_id} ha sido reportado como {report}"
-    )
+            update.callback_query.answer(
+                text=response['msg']
+            )
+        else:
+            update.callback_query.answer(
+                text=response['msg']
+            )
+    else:
+        update.callback_query.answer(
+            text="Este post no puede ser reportado porque no esta disponible"
+        )

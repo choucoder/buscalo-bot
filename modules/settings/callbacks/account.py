@@ -5,6 +5,8 @@ from telegram import (
 from telegram.ext import CallbackContext
 
 from modules import settings
+from modules.base.requests import get_token_or_refresh
+from modules.users.requests.delete import do_user_delete
 from ..states import *
 
 
@@ -55,8 +57,22 @@ def delete_cancel(update: Update, context: CallbackContext) -> str:
 
 
 def delete_confirm(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+
     text = "Su cuenta ha sido eliminada. Para volver a registrarse tendra que ejecutar el comando /start en el bot"
-    update.message.reply_text(
-        text,
-        reply_markup=ReplyKeyboardRemove()
-    )
+    token = get_token_or_refresh(user_data)
+    response = do_user_delete(token)
+
+    if response.status_code == 204:
+        user_data.clear()
+        update.message.reply_text(
+            text,
+            reply_markup=ReplyKeyboardRemove()
+        )
+    else:
+        update.message.reply_text(
+            "Hubo un error al intentar eliminar su cuenta. Intentelo de nuevo",
+            parse_mode=ParseMode.MARKDOWN
+        )
+        navigate_to_self(update, context)
+        return SETTINGS_ACCOUNT_DELETE_CANCEL

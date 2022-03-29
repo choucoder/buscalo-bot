@@ -30,7 +30,7 @@ def get_feed_inline_keyboard_markup(feed: Dict) -> InlineKeyboardMarkup:
             ),
             InlineKeyboardButton(
                 text=emojize(':warning: Reportar', use_aliases=True),
-                callback_data=f"REPORT_POST-{post['id']}"
+                callback_data=f"REPORT_POST-{feed['id']}"
             )
         ],
     ]
@@ -55,10 +55,6 @@ def get_feed_inline_keyboard_markup(feed: Dict) -> InlineKeyboardMarkup:
 
 
 def get_feed_report_inline_keyboard_markup(feed: Dict) -> InlineKeyboardMarkup:
-    post = feed['post']
-    user = feed['user']
-    shop = post['shop']
-
     problems_options = [
         (1, 'Desnudos'),
         (2, 'Violencia'),
@@ -77,7 +73,7 @@ def get_feed_report_inline_keyboard_markup(feed: Dict) -> InlineKeyboardMarkup:
         inline_keyboard_buttons.append(
             InlineKeyboardButton(
                 text=emojize(f"{_id}", use_aliases=True),
-                callback_data=f"FEED_REPORT_OPTION-{post['id']}-{_id}"
+                callback_data=f"FEED_REPORT_OPTION-{feed['id']}-{_id}"
             )
         )
 
@@ -93,7 +89,7 @@ def get_feed_report_inline_keyboard_markup(feed: Dict) -> InlineKeyboardMarkup:
         [
             InlineKeyboardButton(
                 text=emojize(':arrow_left: Atras', use_aliases=True),
-                callback_data=f"REPORT_POST_BACK-{post['id']}"
+                callback_data=f"REPORT_POST_BACK-{feed['id']}"
             ) 
         ]
     )
