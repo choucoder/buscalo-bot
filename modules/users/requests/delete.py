@@ -9,7 +9,7 @@ API_URL = config('API_URL')
 
 
 def do_user_delete(token: Dict) -> requests.Response:
-    url = f"{API_URL}/users"
+    url = f"{API_URL}/me"
 
     payload = json.dumps({})
     headers = {
