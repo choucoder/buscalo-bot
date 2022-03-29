@@ -44,39 +44,13 @@ from modules import feed
 from modules import feedback
 from modules import settings
 from modules import users
+from modules.welcome.callbacks import start
 
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
 )
 logger = logging.getLogger(__name__)
-
-
-def start(update: Update, context: CallbackContext) -> str:
-    user_data = context.user_data
-    _ = user_data.pop('count_products', 0)
-
-    if not update.effective_user.is_bot:
-        if not user_data.get('token', None):
-            user_id = update.effective_user.id
-            response = get_and_login_or_abort(user_id)
-
-            if not response:
-                return users.callbacks.create.navigate_to_self(update, context)
-            else:
-                user_data['profile_data'] = response['user']
-                user_data['token'] = response['token']
-                return welcome_callbacks.start_app(update, context)
-        else:
-            return welcome_callbacks.start_app(update, context)
-
-    else:
-        update.message.reply_text(
-            'No puedes registrarte porque eres un bot'
-        )
-        update.effective_user.decline_join_request(
-            update.effective_chat.id
-        )
 
 
 def wrong(update: Update, context: CallbackContext) -> str:
@@ -745,10 +719,6 @@ def main() -> None:
         name='user_registration',
     )
     conversations.append(user_registration_conv)
-    # Noobs
-    settings_account_delete_conv.states[USER_REGISTRATION] = [
-        user_registration_conv
-    ]
 
     start_conversation = ConversationHandler(
         entry_points=[
@@ -768,6 +738,7 @@ def main() -> None:
         conv = conversations[i]
         conv.entry_points.append(CommandHandler('start', start))
         conv.map_to_parent[WELCOME] = WELCOME
+        conv.map_to_parent[USER_REGISTRATION] = USER_REGISTRATION
         conv.fallbacks.append(MessageHandler(Filters.all, wrong))
 
     # Adding handler for create a post
