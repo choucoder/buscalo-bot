@@ -770,6 +770,7 @@ def main() -> None:
         conv = conversations[i]
         conv.entry_points.append(CommandHandler('start', start))
         conv.map_to_parent[WELCOME] = WELCOME
+        conv.fallbacks.append(MessageHandler(Filters.all, wrong))
 
     # Adding handler for create a post
     welcome_selection_conv.entry_points.extend(message_handlers)
