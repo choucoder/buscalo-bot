@@ -608,7 +608,8 @@ def main() -> None:
         ],
         states={},
         map_to_parent={
-            settings.states.SETTINGS_ACCOUNT_DELETE_CANCEL: settings.states.SETTINGS_ACCOUNT, 
+            settings.states.SETTINGS_ACCOUNT_DELETE_CANCEL: settings.states.SETTINGS_ACCOUNT,
+            settings.states.SETTINGS_ACCOUNT_DELETE_CONFIRM: [start_conversation],
         },
         fallbacks={},
         persistent=True,

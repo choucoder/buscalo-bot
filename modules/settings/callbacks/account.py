@@ -6,6 +6,7 @@ from telegram.ext import CallbackContext
 
 from modules import settings
 from modules.base.requests import get_token_or_refresh
+from modules.base.states import WELCOME
 from modules.users.requests.delete import do_user_delete
 from ..states import *
 
@@ -69,6 +70,7 @@ def delete_confirm(update: Update, context: CallbackContext) -> str:
             text,
             reply_markup=ReplyKeyboardRemove()
         )
+        return SETTINGS_ACCOUNT_DELETE_CONFIRM
     else:
         update.message.reply_text(
             "Hubo un error al intentar eliminar su cuenta. Intentelo de nuevo",
