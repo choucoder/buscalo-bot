@@ -164,9 +164,7 @@ def main() -> None:
             shops.states.SHOP_SETTINGS_BACK: shops.states.SHOP_MAIN,
             shops.states.SHOP_SETTINGS: shops.states.SHOP_SETTINGS
         },
-        fallbacks={
-
-        },
+        fallbacks=[],
         persistent=True,
         name='shop_settings'
     )
@@ -251,9 +249,7 @@ def main() -> None:
             products.states.PRODUCT_END_REGISTRATION: shops.states.SHOP_MAIN,
             products.states.PRODUCT_CREATE_BACK: shops.states.SHOP_MAIN,
         },
-        fallbacks={
-
-        },
+        fallbacks=[],
         persistent=True,
         name='product_create',
     )
@@ -679,8 +675,7 @@ def main() -> None:
             feedback.states.FEEDBACK: [feedback_conv],
             settings.states.SETTINGS: [settings_conv],
         },
-        fallbacks=[
-        ],
+        fallbacks=[],
         map_to_parent={
             WELCOME: WELCOME
         },
@@ -745,7 +740,7 @@ def main() -> None:
         map_to_parent={
             WELCOME: WELCOME,
         },
-        fallbacks=[MessageHandler(Filters.all, wrong)],
+        fallbacks=[],
         persistent=True,
         name='user_registration',
     )
