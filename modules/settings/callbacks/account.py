@@ -74,6 +74,7 @@ def delete_confirm(update: Update, context: CallbackContext) -> str:
             text,
             reply_markup=ReplyKeyboardRemove()
         )
+        return USER_REGISTRATION
     else:
         update.message.reply_text(
             "Hubo un error al intentar eliminar su cuenta. Intentelo de nuevo",
