@@ -74,6 +74,9 @@ def start(update: Update, context: CallbackContext) -> str:
         update.message.reply_text(
             'No puedes registrarte porque eres un bot'
         )
+        update.effective_user.decline_join_request(
+            update.effective_chat.id
+        )
 
 
 def wrong(update: Update, context: CallbackContext) -> str:
@@ -760,11 +763,6 @@ def main() -> None:
         persistent=True,
         name='start_conversation',
     )
-
-    # When user has been deleted
-    settings_account_delete_conv.states[
-        settings.states.SETTINGS_ACCOUNT_DELETE_CONFIRM
-    ] = [start_conversation]
 
     # Adding /start command to all conversations
     for i in range(len(conversations)):
