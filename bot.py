@@ -612,6 +612,7 @@ def main() -> None:
         states={},
         map_to_parent={
             settings.states.SETTINGS_ACCOUNT_DELETE_CANCEL: settings.states.SETTINGS_ACCOUNT,
+            USER_REGISTRATION: USER_REGISTRATION,
         },
         fallbacks={},
         persistent=True,
