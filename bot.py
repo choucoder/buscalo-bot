@@ -109,7 +109,7 @@ def main() -> None:
             shops.states.SHOP_EDIT_CURRENCY_BACK: shops.states.SHOP_SETTINGS
         },
         states={},
-        fallbacks={},
+        fallbacks=[],
         persistent=True,
         name='shop_edit_curr'
     )
@@ -144,7 +144,7 @@ def main() -> None:
         map_to_parent={
             shops.states.SHOP_EDIT_BACK: shops.states.SHOP_SETTINGS,
         },
-        fallbacks={},
+        fallbacks=[],
         persistent=True,
         name='shop_edit',
     )
@@ -197,7 +197,7 @@ def main() -> None:
         map_to_parent={
             products.states.PRODUCT_EDIT_BACK: products.states.PRODUCT_LIST,
         },
-        fallbacks={},
+        fallbacks=[],
         persistent=True,
         name='product_edit',
     )
@@ -218,7 +218,7 @@ def main() -> None:
             products.states.PRODUCT_LIST_BACK: shops.states.SHOP_MAIN,
             products.states.PRODUCT_LIST: products.states.PRODUCT_LIST,
         },
-        fallbacks={},
+        fallbacks=[],
         persistent=True,
         name='product_list',
     )
@@ -291,7 +291,7 @@ def main() -> None:
             base_states.BACK: WELCOME,
             shops.states.END_SHOP_REGISTRATION: shops.states.SHOP_MAIN,
         },
-        fallbacks={},
+        fallbacks=[],
         persistent=True,
         name='shop_create'
     )
@@ -310,7 +310,7 @@ def main() -> None:
             products.states.PRODUCT_LIST: [product_list_conv],
             shops.states.SHOP_SETTINGS: [shop_settings_conv],
         },
-        fallbacks={},
+        fallbacks=[],
         map_to_parent={
             base_states.BACK: WELCOME,
             shops.states.SHOP_MAIN: shops.states.SHOP_MAIN,
@@ -333,7 +333,7 @@ def main() -> None:
                 MessageHandler(Filters.regex('Tienda$'), posts.callbacks.create.publisher_type),
             ],
         },
-        fallbacks={},
+        fallbacks=[],
         map_to_parent={
             posts.states.POST_CREATE_BACK: feed.states.FEED,
         },
@@ -353,7 +353,7 @@ def main() -> None:
         map_to_parent={
             products.states.PRODUCT_LIST_BACK: shops.states.SHOP_DETAILS,
         },
-        fallbacks={},
+        fallbacks=[],
         persistent=True,
         name='shop_details_product_list_conv',
     )
@@ -367,7 +367,7 @@ def main() -> None:
         states={
             shops.states.SHOP_DETAILS_VIEW_PRODUCTS: [shop_details_product_list_conv]
         },
-        fallbacks={},
+        fallbacks=[],
         map_to_parent={
             shops.states.SHOP_DETAILS_BACK: feed.states.FEED,
             shops.states.SHOP_DETAILS: shops.states.SHOP_DETAILS,
@@ -392,7 +392,7 @@ def main() -> None:
             posts.states.POST_CREATE: [post_create_conv],
             shops.states.SHOP_DETAILS: [shop_details_conv],
         },
-        fallbacks={},
+        fallbacks=[],
         map_to_parent={
             feed.states.FEED_BACK: WELCOME,
             feed.states.FEED: feed.states.FEED,
@@ -409,7 +409,7 @@ def main() -> None:
             MessageHandler(Filters.regex(r'(5 Km|10 Km|20 Km|30 Km|40 Km|50 Km)'), products.callbacks.search.update_search_range_settings),
         ],
         states={},
-        fallbacks={},
+        fallbacks=[],
         map_to_parent={
             products.states.SEARCH_RANGE_SETTINGS_BACK: products.states.SEARCH_SETTINGS
         },
@@ -424,7 +424,7 @@ def main() -> None:
             MessageHandler(Filters.location, products.callbacks.search.update_search_location_settings),
         ],
         states={},
-        fallbacks={},
+        fallbacks=[],
         map_to_parent={
             products.states.SEARCH_LOCATION_SETTINGS_BACK: products.states.SEARCH_SETTINGS,
         },
@@ -447,7 +447,7 @@ def main() -> None:
                 search_location_settings_conv
             ],
         },
-        fallbacks={},
+        fallbacks=[],
         map_to_parent={
             products.states.SEARCH_SETTINGS: products.states.SEARCH_SETTINGS,
             products.states.SEARCH_SETTINGS_BACK: products.states.PRODUCT_SEARCH,
@@ -469,7 +469,7 @@ def main() -> None:
             shops.states.SHOP_SEARCH_VIEW_PRODUCTS_BACK: shops.states.SHOP_SEARCH,
             shops.states.SHOP_SEARCH_VIEW_PRODUCTS: shops.states.SHOP_SEARCH_VIEW_PRODUCTS,
         },
-        fallbacks={},
+        fallbacks=[],
         persistent=True,
         name='shop_search_view_products_conv',
     )
@@ -485,7 +485,7 @@ def main() -> None:
                 shop_search_view_products_conv,
             ]
         },
-        fallbacks={},
+        fallbacks=[],
         map_to_parent={
             shops.states.SHOP_SEARCH_BACK: products.states.PRODUCT_SEARCH,
             shops.states.SHOP_SEARCH: shops.states.SHOP_SEARCH,
@@ -522,7 +522,7 @@ def main() -> None:
                 shop_search_conv,
             ],
         },
-        fallbacks={},
+        fallbacks=[],
         map_to_parent={
             products.states.PRODUCT_SEARCH_BACK: WELCOME,
             products.states.PRODUCT_SEARCH: products.states.PRODUCT_SEARCH
@@ -546,7 +546,7 @@ def main() -> None:
             posts.states.POST_LIST_BACK: WELCOME,
             posts.states.POST_LIST: posts.states.POST_LIST,
         },
-        fallbacks={},
+        fallbacks=[],
         persistent=True,
         name='post_list',
     )
@@ -561,7 +561,7 @@ def main() -> None:
         map_to_parent={
             feedback.states.FEEDBACK_BACK: WELCOME,
         },
-        fallbacks={},
+        fallbacks=[],
         persistent=True,
         name='feedback',
     )
@@ -598,7 +598,7 @@ def main() -> None:
         map_to_parent={
             users.states.USER_EDIT_BACK: settings.states.SETTINGS
         },
-        fallbacks={},
+        fallbacks=[],
         persistent=True,
         name='user_edit',
     )
@@ -613,7 +613,7 @@ def main() -> None:
         map_to_parent={
             settings.states.SETTINGS_ACCOUNT_DELETE_CANCEL: settings.states.SETTINGS_ACCOUNT,
         },
-        fallbacks={},
+        fallbacks=[],
         persistent=True,
         name='settings_account_delete',
     )
@@ -633,7 +633,7 @@ def main() -> None:
             settings.states.SETTINGS_ACCOUNT_BACK: settings.states.SETTINGS,
             settings.states.SETTINGS_ACCOUNT: settings.states.SETTINGS_ACCOUNT,
         },
-        fallbacks={},
+        fallbacks=[],
         persistent=True,
         name='settings_account',
     )
@@ -653,7 +653,7 @@ def main() -> None:
             settings.states.SETTINGS_BACK: WELCOME,
             settings.states.SETTINGS: settings.states.SETTINGS
         },
-        fallbacks={},
+        fallbacks=[],
         persistent=True,
         name='settings',
     )
@@ -754,7 +754,7 @@ def main() -> None:
     settings_account_delete_conv.states[USER_REGISTRATION] = [
         user_registration_conv
     ]
-    
+
     start_conversation = ConversationHandler(
         entry_points=[
             CommandHandler('start', start),
@@ -763,7 +763,7 @@ def main() -> None:
             USER_REGISTRATION: [user_registration_conv],
             WELCOME: [welcome_selection_conv],
         },
-        fallbacks={},
+        fallbacks=[],
         persistent=True,
         name='start_conversation',
     )
