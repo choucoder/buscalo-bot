@@ -8,6 +8,7 @@ from modules import settings
 from modules.base.requests import get_token_or_refresh
 from modules.base.states import USER_REGISTRATION, WELCOME
 from modules.users.requests.delete import do_user_delete
+from modules.welcome.callbacks import start
 from ..states import *
 
 
@@ -74,7 +75,7 @@ def delete_confirm(update: Update, context: CallbackContext) -> str:
             text,
             reply_markup=ReplyKeyboardRemove()
         )
-        return USER_REGISTRATION
+        return start(update, context)
     else:
         update.message.reply_text(
             "Hubo un error al intentar eliminar su cuenta. Intentelo de nuevo",
