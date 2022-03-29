@@ -79,5 +79,7 @@ def rating_product(token: Dict, product_id: str) -> str:
         return "Te gusto este producto"
     elif response.status_code == 204:
         return "Ya no te gusta este producto"
+    elif response.status_code == 404:
+        return "El producto al que intentas reaccionar ya no esta disponible"
     else:
         return "Error de validacion de los datos"
