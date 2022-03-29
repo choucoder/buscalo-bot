@@ -609,7 +609,6 @@ def main() -> None:
         states={},
         map_to_parent={
             settings.states.SETTINGS_ACCOUNT_DELETE_CANCEL: settings.states.SETTINGS_ACCOUNT,
-            settings.states.SETTINGS_ACCOUNT_DELETE_CONFIRM: [start_conversation],
         },
         fallbacks={},
         persistent=True,
@@ -761,6 +760,11 @@ def main() -> None:
         persistent=True,
         name='start_conversation',
     )
+
+    # When user has been deleted
+    settings_account_delete_conv.states[
+        settings.states.SETTINGS_ACCOUNT_DELETE_CONFIRM
+    ] = [start_conversation]
 
     # Adding /start command to all conversations
     for i in range(len(conversations)):
