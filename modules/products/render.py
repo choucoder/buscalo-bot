@@ -103,6 +103,8 @@ def render_search_product(update: Update, product: Dict, user_data) -> None:
 
     text += f":heart: {product['votes_amount']}\t\t `@{product['shop']['id']}`\n"
 
+    print("foto de producto: ", product['photo'])
+    
     is_photo = False
 
     if product['photo']:
