@@ -71,7 +71,7 @@ def price(update: Update, context: CallbackContext) -> str:
         user_data['product_cache']['price'] = float(price)
 
         markup = ReplyKeyboardMarkup(
-            keyboards.create.reply_keyboard_skip,
+            keyboards.create.reply_keyboard,
             resize_keyboard=True,
             one_time_keyboard=False,
         )

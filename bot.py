@@ -212,9 +212,6 @@ def main() -> None:
             ],
             products.states.PRODUCT_PHOTO: [
                 MessageHandler(Filters.regex('Atras$'), products.callbacks.create.back),
-                CommandHandler(
-                    'omitir', products.callbacks.create.skip_photo
-                ),
                 MessageHandler(Filters.photo, products.callbacks.create.photo),
                 MessageHandler(Filters.attachment, products.callbacks.create.photo_attach),
             ],
