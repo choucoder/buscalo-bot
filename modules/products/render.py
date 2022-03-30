@@ -101,7 +101,7 @@ def render_search_product(update: Update, product: Dict, user_data) -> None:
     else:
         text += "\n"
 
-    text += f":heart: {product['votes_amount']}\n"
+    text += f":heart: {product['votes_amount']}\t\t\t `@{product['shop']['id']}`\n"
 
     is_photo = False
 
@@ -160,7 +160,7 @@ def render_search_product_inline(update: Update, product: Dict, markup: InlineKe
     else:
         text += "\n"
 
-    text += f":heart: {product['votes_amount']}\n"
+    text += f":heart: {product['votes_amount']}\t\t\t `@{product['shop']['id']}`\n"
     
     is_photo = False
 
@@ -258,7 +258,7 @@ def render_product_back(update: Update, product: Dict, user_data):
     else:
         text += "\n"
 
-    text += f":heart: {product['votes_amount']}\n"
+    text += f":heart: {product['votes_amount']}\t\t\t `@{product['shop']['id']}`\n"
 
     is_photo = False
 
