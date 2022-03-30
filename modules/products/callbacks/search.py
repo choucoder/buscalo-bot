@@ -311,7 +311,11 @@ def view_store_products_next(update: Update, context: CallbackContext):
     page = int(page) + 1
 
     token = get_token_or_refresh(context.user_data)
-    products, count = get_products(token, shop_id, page=page)
+    try:
+        products, count = get_products(token, shop_id, page=page)
+    except:
+        products = []
+        count = 0
     update.callback_query.answer()
 
     if page <= count and products:
@@ -325,18 +329,20 @@ def view_store_products_next(update: Update, context: CallbackContext):
 def view_store_products_prev(update: Update, context: CallbackContext):
     query = update.callback_query
     _, product_id, shop_id, page = query.data.split('-')
-    page = int(page)
+    page = int(page) - 1
 
-    if page > 1:
-        page = page - 1
+    if page >= 1:
         update.callback_query.answer()
 
         markup = get_view_store_products_inline_keyboard_markup(
             product_id, shop_id, page
         )
         token = get_token_or_refresh(context.user_data)
-        products, count = get_products(token, shop_id, page=page)
-        render_search_product_inline(update, products[0], markup, context.user_data)
+        try:
+            products, count = get_products(token, shop_id, page=page)
+            render_search_product_inline(update, products[0], markup, context.user_data)
+        except:
+            pass
     else:
         update.callback_query.answer()
 
