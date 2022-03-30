@@ -28,7 +28,7 @@ genders_en = {
 
 terms_and_conditions = (
     "*Terminos y condiciones*\n\n"
-    "Acepto que la información que he suministrado en este bot es "
+    "\t\t\tAcepto que la información que he suministrado en este bot es "
     "correcta y que soy mayor de 13 años de edad.\n\n"
     "\t\t\tEl uso o la publicación de imagenes pornográficas, material que pueda contribuir "
     "a actividades terroristas o acciones que se consideren un delito penal, "
