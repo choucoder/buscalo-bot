@@ -308,15 +308,13 @@ def view_store_products(update: Update, context: CallbackContext):
 def view_store_products_next(update: Update, context: CallbackContext):
     query = update.callback_query
     _, product_id, shop_id, page = query.data.split('-')
-    page = int(page)
+    page = int(page) + 1
 
     token = get_token_or_refresh(context.user_data)
     products, count = get_products(token, shop_id, page=page)
     update.callback_query.answer()
 
-    if page < count:
-        page = page + 1
-
+    if page <= count and products:
         markup = get_view_store_products_inline_keyboard_markup(
             product_id, shop_id, page
         )
