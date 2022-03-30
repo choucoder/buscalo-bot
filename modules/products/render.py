@@ -74,7 +74,7 @@ def render_search_product(update: Update, product: Dict, user_data) -> None:
         currency = ''
 
     text += f"💲 Precio: {product['price']} {currency}\n"
-    text += f":department_store: {product['shop']['name']}\n"
+    text += f":department_store: Tienda: {product['shop']['name']}\n"
     text += f"ID Tienda: `{product['shop']['id']}`\n"
      
     if "address" in product['shop'] and product['shop']['address']:
