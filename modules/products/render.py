@@ -142,9 +142,9 @@ def render_search_product_inline(update: Update, product: Dict, markup: InlineKe
         state = address.get('state', None)
         country = address.get('country', None)
 
-        text += f":globe_with_meridians: {city}, {state}, {country}\n\n"
+        text += f":globe_with_meridians: {city}, {state}, {country}\n"
     else:
-        text += f":globe_with_meridians: Desconocida :grey_exclamation:"
+        text += f":globe_with_meridians: Desconocida :grey_exclamation:\n"
 
     shop_location = product['shop']['location']
     user_location = user_data['user']['location']
@@ -242,7 +242,7 @@ def render_product_back(update: Update, product: Dict, user_data):
 
         text += f":globe_with_meridians: {city}, {state}, {country}\n"
     else:
-        text += f":globe_with_meridians: Desconocida :grey_exclamation:"
+        text += f":globe_with_meridians: Desconocida :grey_exclamation:\n"
 
     shop_location = product['shop']['location']
     user_location = user_data['user']['location']
