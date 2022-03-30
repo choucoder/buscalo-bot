@@ -44,7 +44,7 @@ def get_shop_contact_inline_markup(shop: Dict) -> InlineKeyboardMarkup:
     reply_keyboard_inline = [
         [
             InlineKeyboardButton(
-                text=emojize('Chat de tienda :speech_balloon:', use_aliases=True),
+                text=emojize(':speech_balloon: Chat de tienda', use_aliases=True),
                 url=url
             )
         ]
@@ -54,7 +54,7 @@ def get_shop_contact_inline_markup(shop: Dict) -> InlineKeyboardMarkup:
         reply_keyboard_inline.append(
             [
                 InlineKeyboardButton(
-                    text=emojize('Chat de WhatsApp :telephone_receiver:', use_aliases=True),
+                    text=emojize(':telephone_receiver: Chat de WhatsApp', use_aliases=True),
                     url=f"wa.me/{shop['phone_number']}?text=Buenas!"
                 )
             ]
