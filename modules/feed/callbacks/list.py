@@ -155,7 +155,7 @@ def post_report_back(update: Update, context: CallbackContext) -> None:
     
     if feed:
         update.callback_query.answer()
-        render_feed_back(update, feed)
+        render_feed_back(update, feed, context.user_data)
     else:
         update.callback_query.answer(
             text="Este post no esta disponible"
@@ -176,7 +176,7 @@ def report(update: Update, context: CallbackContext):
         response = response.json()
         if response['deleted'] == 0:
             feed = response['data']
-            render_feed_back(update, feed)
+            render_feed_back(update, feed, context.user_data)
 
             update.callback_query.answer(
                 text=response['msg'],

@@ -80,7 +80,7 @@ def render_report_options_feed_inline(update: Update, feed: Dict):
     )
 
 
-def render_feed_back(update: Update, feed: Dict):
+def render_feed_back(update: Update, feed: Dict, user_data):
     post = feed['post']
     user = post['user']
     shop = post['shop']
@@ -118,7 +118,7 @@ def render_feed_back(update: Update, feed: Dict):
     )
 
     update.callback_query.edit_message_reply_markup(
-        get_feed_inline_keyboard_markup(feed, user)
+        get_feed_inline_keyboard_markup(feed, user_data)
     )
 
     print("feed back")
