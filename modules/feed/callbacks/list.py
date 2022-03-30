@@ -187,5 +187,5 @@ def report(update: Update, context: CallbackContext):
             )
     else:
         update.callback_query.answer(
-            text="Este post no puede ser reportado porque no esta disponible"
+            text="El post ha sido eliminado"
         )

@@ -15,7 +15,7 @@ from ..states import *
 from ..requests.list import get_products
 from ..requests.search import (
     get_product, product_search, do_update_search_settings,
-    rating_product,
+    rating_product, do_product_report,
 )
 from ..render import (
     render_search_product, render_search_product_inline,
@@ -403,7 +403,8 @@ def product_report(update: Update, context: CallbackContext):
     query = update.callback_query
     product_id = query.data.split('-')[-1]
 
-    product = context.user_data['search_product']
+    token = get_token_or_refresh(context.user_data)
+    product = get_product(token, product_id)
     render_report_options_product_inline(update, product)
 
     update.callback_query.answer()
@@ -413,10 +414,16 @@ def product_report_back(update: Update, context: CallbackContext):
     query = update.callback_query
     product_id = query.data.split('-')[-1]
 
-    product = context.user_data['search_product']
-    render_product_back(update, product, context.user_data)
+    token = get_token_or_refresh(context.user_data)
+    product = get_product(token, product_id)
 
-    update.callback_query.answer()
+    if product:
+        update.callback_query.answer()
+        render_product_back(update, product, context.user_data)
+    else:
+        update.callback_query.answer(
+            text="Este producto no esta disponible"
+        )
 
 
 def report(update: Update, context: CallbackContext):
@@ -426,11 +433,22 @@ def report(update: Update, context: CallbackContext):
     report_option = int(query[-1])
     product_id = query[-2]
 
-    report = report_options[report_option-1][1]
-    product = context.user_data['search_product']
+    token = get_token_or_refresh(context.user_data)
+    response = do_product_report(token, product_id, report_option)
 
-    render_product_back(update, product, context.user_data)
-
-    update.callback_query.answer(
-        text=f"Este producto {product_id} ha sido reportado como {report}"
-    )
+    if response.status_code in (200, 201):
+        response = response.json()
+        if response['deleted'] == 0:
+            product = response['data']
+            render_product_back(update, product, context.user_data)
+            update.callback_query.answer(
+                text=response['msg']
+            )
+        else:
+            update.callback_query.answer(
+                text=response['msg']
+            )
+    else:
+        update.callback_query.answer(
+            text="El producto ha sido eliminado"
+        )
