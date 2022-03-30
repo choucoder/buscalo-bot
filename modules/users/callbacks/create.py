@@ -446,3 +446,37 @@ def accept_conditions(update: Update, context: CallbackContext) -> str:
             "El email que ingresaste ya lo ocupa otra persona\n"
         )
         return navigate_to_self(update, context)
+
+
+def resume_registration(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+
+    user_data['profile_data'] = {
+        'telegram_user_id': update.effective_user.id,
+        'telegram_chat_id': update.effective_chat.id,
+        'telegram_username': update.effective_user.username,
+        'username': update.effective_user.username,
+    }
+
+    if not user_data['profile_data']['telegram_username']:
+        username = str(uuid4()).replace('-', '')[:16]
+        username = "none-" + username
+        user_data['profile_data']['telegram_username'] = username
+        user_data['profile_data']['username'] = username
+
+    user_data['is_registered'] = False
+    user_data['level'] = USER_REGISTRATION
+    user_data['level_state'] = GENDER
+    
+    markup = ReplyKeyboardMarkup(
+        reply_keyboard_gender,
+        resize_keyboard=True,
+        one_time_keyboard=False,
+    )
+
+    update.message.reply_text(
+        "¿Cual es tu género?\n\n"
+        "Selecciona una de las siguientes opciones 👇👇👇",
+        reply_markup=markup
+    )  
+    return RESUME_REGISTRATION

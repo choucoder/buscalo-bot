@@ -659,23 +659,34 @@ def main() -> None:
             MessageHandler(
                 Filters.regex('(Masculino|Femenino|Prefiero no decir)$'),
                 users.callbacks.create.gender
-            )
+            ),
+            CommandHandler('start', users.callbacks.create.resume_registration),
         ],
         states={
+            users.states.RESUME_REGISTRATION: [
+                MessageHandler(
+                    Filters.regex('(Masculino|Femenino|Prefiero no decir)$'),
+                    users.callbacks.create.gender
+                ),
+                CommandHandler('start', users.callbacks.create.resume_registration),
+            ],
             users.states.FIRST_NAME: [
                 MessageHandler(
                     Filters.text, users.callbacks.create.first_name
                 ),
+                CommandHandler('start', users.callbacks.create.resume_registration),
             ],
             users.states.LAST_NAME: [
                 MessageHandler(
                     Filters.text, users.callbacks.create.last_name
-                )
+                ),
+                CommandHandler('start', users.callbacks.create.resume_registration),
             ],
             users.states.AGE: [
                 MessageHandler(
                     Filters.text, users.callbacks.create.age
-                )
+                ),
+                CommandHandler('start', users.callbacks.create.resume_registration),
             ],
             users.states.EMAIL: [
                 CommandHandler(
@@ -683,7 +694,8 @@ def main() -> None:
                 ),
                 MessageHandler(
                     Filters.text, users.callbacks.create.email
-                )
+                ),
+                CommandHandler('start', users.callbacks.create.resume_registration),
             ],
             users.states.PHOTO: [
                 MessageHandler(
@@ -691,7 +703,8 @@ def main() -> None:
                 ),
                 MessageHandler(
                     Filters.attachment, users.callbacks.create.photo_attach
-                )
+                ),
+                CommandHandler('start', users.callbacks.create.resume_registration),
             ],
             users.states.LOCATION: [
                 MessageHandler(
@@ -700,22 +713,23 @@ def main() -> None:
                 CommandHandler(
                     'Omitir', users.callbacks.create.skip_location
                 ),
+                CommandHandler('start', users.callbacks.create.resume_registration),
             ],
             users.states.ACCEPT_CONDITIONS: [
                 MessageHandler(
                     Filters.regex('^Aceptar$'),
                     users.callbacks.create.accept_conditions
-                )
+                ),
+                CommandHandler('start', users.callbacks.create.resume_registration),
             ]
         },
         map_to_parent={
             WELCOME: WELCOME,
         },
-        fallbacks=[],
+        fallbacks=[MessageHandler(Filters.all, wrong)],
         persistent=True,
         name='user_registration',
     )
-    conversations.append(user_registration_conv)
 
     start_conversation = ConversationHandler(
         entry_points=[
