@@ -75,7 +75,7 @@ def render_search_product(update: Update, product: Dict, user_data) -> None:
 
     text += f"💲 Precio: {product['price']} {currency}\n"
     text += f":department_store: Tienda: {product['shop']['name']}\n"
-    text += f"ID Tienda: `{product['shop']['id']}`\n"
+    # text += f"ID Tienda: `{product['shop']['id']}`\n"
      
     if "address" in product['shop'] and product['shop']['address']:
         address = product['shop']['address']
@@ -83,9 +83,9 @@ def render_search_product(update: Update, product: Dict, user_data) -> None:
         state = address.get('state', None)
         country = address.get('country', None)
 
-        text += f":globe_with_meridians: Ubicación: {city}, {state}, {country}\n"
+        text += f":globe_with_meridians: {city}, {state}, {country}\n"
     else:
-        text += f":globe_with_meridians: Ubicación: Desconocida :grey_exclamation:"
+        text += f":globe_with_meridians: Desconocida :grey_exclamation:"
 
     shop_location = product['shop']['location']
     user_location = user_data['user']['location']
@@ -134,7 +134,7 @@ def render_search_product_inline(update: Update, product: Dict, markup: InlineKe
 
     text += f"💲 Precio: {product['price']} {currency}\n"
     text += f":department_store: {product['shop']['name']}\n"
-    text += f"ID Tienda: `{product['shop']['id']}`\n"
+    # text += f"ID Tienda: `{product['shop']['id']}`\n"
 
     if "address" in product['shop'] and product['shop']['address']:
         address = product['shop']['address']
@@ -142,9 +142,9 @@ def render_search_product_inline(update: Update, product: Dict, markup: InlineKe
         state = address.get('state', None)
         country = address.get('country', None)
 
-        text += f":globe_with_meridians: Ubicación: {city}, {state}, {country}\n\n"
+        text += f":globe_with_meridians: {city}, {state}, {country}\n\n"
     else:
-        text += f":globe_with_meridians: Ubicación: Desconocida :grey_exclamation:"
+        text += f":globe_with_meridians: Desconocida :grey_exclamation:"
 
     shop_location = product['shop']['location']
     user_location = user_data['user']['location']
@@ -232,7 +232,7 @@ def render_product_back(update: Update, product: Dict, user_data):
 
     text += f"💲 Precio: {product['price']} {currency}\n"
     text += f":department_store: {product['shop']['name']}\n"
-    text += f"ID Tienda: `{product['shop']['id']}`\n"
+    # text += f"ID Tienda: `{product['shop']['id']}`\n"
      
     if "address" in product['shop'] and product['shop']['address']:
         address = product['shop']['address']
@@ -240,9 +240,9 @@ def render_product_back(update: Update, product: Dict, user_data):
         state = address.get('state', None)
         country = address.get('country', None)
 
-        text += f":globe_with_meridians: Ubicación: {city}, {state}, {country}\n"
+        text += f":globe_with_meridians: {city}, {state}, {country}\n"
     else:
-        text += f":globe_with_meridians: Ubicación: Desconocida :grey_exclamation:"
+        text += f":globe_with_meridians: Desconocida :grey_exclamation:"
 
     shop_location = product['shop']['location']
     user_location = user_data['user']['location']
