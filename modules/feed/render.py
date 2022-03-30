@@ -118,7 +118,7 @@ def render_feed_back(update: Update, feed: Dict):
     )
 
     update.callback_query.edit_message_reply_markup(
-        get_feed_inline_keyboard_markup(feed)
+        get_feed_inline_keyboard_markup(feed, user)
     )
 
     print("feed back")
