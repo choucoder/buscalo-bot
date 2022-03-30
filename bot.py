@@ -587,7 +587,7 @@ def main() -> None:
         persistent=True,
         name='settings_account_delete',
     )
-    # conversations.append(settings_account_delete_conv)
+    conversations.append(settings_account_delete_conv)
 
     settings_account_conv = ConversationHandler(
         entry_points=[
