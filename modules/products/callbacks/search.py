@@ -153,6 +153,7 @@ def handle_query(update: Update, context: CallbackContext) -> str:
 
     if query.startswith('@') and len(query) >=8 and ' ' not in query:
         shop_id = query[1: ]
+        _ = user_data.pop('qs_shop', None)
         return shops.callbacks.search.navigate_to_self(update, context, shop_id=shop_id)
     else:
         query = query.lower()
