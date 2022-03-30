@@ -82,27 +82,43 @@ def get_product_search_inline_markup(product: Dict, user, is_added=False) -> Inl
                 callback_data=f"VIEW_STORE_PRODUCTS-{product_id}-{shop_id}"
             ),
         ],
-        [
-            InlineKeyboardButton(
-                text=emojize(':heart:/:broken_heart:', use_aliases=True),
-                callback_data=f"LIKE_PRODUCT-{product_id}"
-            )
-        ],
-        [
-            InlineKeyboardButton(
-                text=emojize(':speech_balloon: Chat de tienda', use_aliases=True),
-                url=url,
-            ),
-        ],
     ]
 
     if user['id'] != product['shop']['user']['id']:
-        reply_keyboard_product_search[-2].append(
-            InlineKeyboardButton(
-                text=emojize(':warning: Reportar', use_aliases=True),
-                callback_data=f"REPORT_PRODUCT-{product_id}"
-            )
+        reply_keyboard_product_search.append(
+            [
+                InlineKeyboardButton(
+                    text=emojize(':heart:/:broken_heart:', use_aliases=True),
+                    callback_data=f"LIKE_PRODUCT-{product_id}"
+                ),
+                InlineKeyboardButton(
+                    text=emojize(':warning: Reportar', use_aliases=True),
+                    callback_data=f"REPORT_PRODUCT-{product_id}"
+                )
+            ]
         )
+        reply_keyboard_product_search.append(
+            [
+                InlineKeyboardButton(
+                    text=emojize(':speech_balloon: Chat de tienda', use_aliases=True),
+                    url=url,
+                ),
+            ]
+        )
+    else:
+        reply_keyboard_product_search.append(
+            [
+                InlineKeyboardButton(
+                    text=emojize(':heart:/:broken_heart:', use_aliases=True),
+                    callback_data=f"LIKE_PRODUCT-{product_id}"
+                ),
+                InlineKeyboardButton(
+                    text=emojize(':speech_balloon: Chat de tienda', use_aliases=True),
+                    url=url,
+                ),
+            ]
+        )
+
 
     if product['shop']['phone_number']:
         text = f"{product['name']}\n"
@@ -125,12 +141,22 @@ def get_product_search_inline_markup(product: Dict, user, is_added=False) -> Inl
         else:
             text += f"Ubicacion: Desconocida"
 
-        reply_keyboard_product_search[-1].append(
-            InlineKeyboardButton(
-                text=emojize(':speech_balloon: WhatsApp', use_aliases=True),
-                url=f"wa.me/{product['shop']['phone_number']}?text={text}"
+        if user['id'] != product['shop']['user']['id']:
+            reply_keyboard_product_search[-1].append(
+                InlineKeyboardButton(
+                    text=emojize(':speech_balloon: WhatsApp', use_aliases=True),
+                    url=f"wa.me/{product['shop']['phone_number']}?text={text}"
+                )
             )
-        )
+        else:
+            reply_keyboard_product_search.append(
+                [
+                    InlineKeyboardButton(
+                        text=emojize(':speech_balloon: WhatsApp', use_aliases=True),
+                        url=f"wa.me/{product['shop']['phone_number']}?text={text}"
+                    )  
+                ]
+            )
 
     markup = InlineKeyboardMarkup(reply_keyboard_product_search)
 
