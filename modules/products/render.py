@@ -109,18 +109,18 @@ def render_search_product(update: Update, product: Dict, user_data) -> None:
         response = requests.get(f"{API_URL}{product['photo']}")
         is_photo = True
 
-    if is_photo:    
+    if is_photo:  
         update.message.reply_photo(
             caption=emojize(text, use_aliases=True),
             photo=response.content,
-            reply_markup=get_product_search_inline_markup(product),
+            reply_markup=get_product_search_inline_markup(product, user_data['profile_data']),
             parse_mode=ParseMode.MARKDOWN,
         )
     else:
         update.message.reply_text(
             emojize(text, use_aliases=True),
             parse_mode=ParseMode.MARKDOWN,
-            reply_markup=get_product_search_inline_markup(product),
+            reply_markup=get_product_search_inline_markup(product, user_data['profile_data']),
         )
 
 
@@ -281,5 +281,5 @@ def render_product_back(update: Update, product: Dict, user_data):
         )
 
     update.callback_query.edit_message_reply_markup(
-        get_product_search_inline_markup(product)
+        get_product_search_inline_markup(product, user_data['profile_data'])
     )

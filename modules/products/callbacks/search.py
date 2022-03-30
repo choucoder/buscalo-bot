@@ -351,7 +351,7 @@ def view_store_products_back(update: Update, context: CallbackContext):
 
     token = get_token_or_refresh(context.user_data)
     product = get_product(token, product_id)
-    markup = get_product_search_inline_markup(product)
+    markup = get_product_search_inline_markup(product, context.user_data['profile_data'])
 
     render_search_product_inline(update, product, markup, context.user_data)
 
