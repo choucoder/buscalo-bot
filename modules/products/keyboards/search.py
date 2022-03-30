@@ -64,7 +64,7 @@ reply_keyboard_search_location_settings = [
 ]
 
 
-def get_product_search_inline_markup(product: Dict, is_added=False) -> InlineKeyboardMarkup:
+def get_product_search_inline_markup(product: Dict, user, is_added=False) -> InlineKeyboardMarkup:
     shop_id = product['shop']['id']
     user_id = product['shop']['user']['telegram_user_id']
     username = product['shop']['user']['telegram_username']

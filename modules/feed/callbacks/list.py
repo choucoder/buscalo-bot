@@ -53,7 +53,7 @@ def navigate_to_self(update: Update, context: CallbackContext, swipe_down=True) 
             feed = response[0]
             user_data['post'] = feed['post']
             user_data['feed'] = feed
-            markup = get_feed_inline_keyboard_markup(feed)
+            markup = get_feed_inline_keyboard_markup(feed, user_data['profile_data'])
             render_feed(update, feed, markup=markup)
         else:
             user_data.pop('post', None)
@@ -71,7 +71,7 @@ def navigate_to_self(update: Update, context: CallbackContext, swipe_down=True) 
                 parse_mode=ParseMode.MARKDOWN
             )
             feed = user_data['feed']
-            markup = get_feed_inline_keyboard_markup(feed)
+            markup = get_feed_inline_keyboard_markup(feed, user_data['profile_data'])
             render_feed(update, feed, markup=markup)
 
     return FEED
@@ -87,7 +87,7 @@ def swipe_down(update: Update, context: CallbackContext):
         feed = response[0]
         user_data['post'] = feed['post']
         user_data['feed'] = feed
-        markup = get_feed_inline_keyboard_markup(feed)
+        markup = get_feed_inline_keyboard_markup(feed, user_data['profile_data'])
         render_feed(update, feed, markup=markup)
     else:
         user_data.pop('post', None)

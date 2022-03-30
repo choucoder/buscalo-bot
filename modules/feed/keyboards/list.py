@@ -17,7 +17,7 @@ reply_keyboard = [
     ]
 ]
 
-def get_feed_inline_keyboard_markup(feed: Dict) -> InlineKeyboardMarkup:
+def get_feed_inline_keyboard_markup(feed: Dict, user_data: Dict) -> InlineKeyboardMarkup:
     post = feed['post']
     user = feed['user']
     shop = post['shop']
@@ -27,13 +27,18 @@ def get_feed_inline_keyboard_markup(feed: Dict) -> InlineKeyboardMarkup:
             InlineKeyboardButton(
                 text=emojize(':heart:/:broken_heart:', use_aliases=True),
                 callback_data=f"LIKE_POST-{post['id']}"
-            ),
+            )
+        ],
+    ]
+
+    if user_data['id'] != post['user']['id']:
+        inline_reply_keyboard[-1].append(
             InlineKeyboardButton(
                 text=emojize(':warning: Reportar', use_aliases=True),
                 callback_data=f"REPORT_POST-{feed['id']}"
             )
-        ],
-    ]
+        )
+
     if shop:
         if user['telegram_username'] and not user['telegram_username'].startswith('none-'):
             url = f"t.me/{user['telegram_username']}"
