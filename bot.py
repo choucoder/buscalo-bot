@@ -733,12 +733,14 @@ def main() -> None:
         name='start_conversation',
     )
 
+    # Noobs
+    settings_account_delete_conv.states[USER_REGISTRATION] = [user_registration_conv]
+
     # Adding /start command to all conversations
     for i in range(len(conversations)):
         conv = conversations[i]
         conv.entry_points.append(CommandHandler('start', start))
         conv.map_to_parent[WELCOME] = WELCOME
-        conv.map_to_parent[USER_REGISTRATION] = USER_REGISTRATION
         conv.fallbacks.append(MessageHandler(Filters.all, wrong))
 
     # Adding handler for create a post
