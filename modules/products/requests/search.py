@@ -56,9 +56,11 @@ def get_product(token: Dict, product_id: str) -> Dict:
     }
 
     response = requests.get(url, headers=headers, data=payload)
-    response = response.json()
-
-    return response["data"]
+    if response.status_code == 200:
+        response = response.json()
+        return response["data"]
+    else:
+        return {}
 
 @timeit
 def rating_product(token: Dict, product_id: str) -> str:
@@ -83,3 +85,21 @@ def rating_product(token: Dict, product_id: str) -> str:
         return "El producto al que intentas reaccionar ya no esta disponible"
     else:
         return "Error de validacion de los datos"
+
+@timeit
+def do_product_report(token: Dict, product_id: str, type_id: str) -> Dict:
+    url = f"{API_URL}/reports"
+    
+    payload = json.dumps({
+        'id': product_id,
+        'issued_by_model': 1,
+        'type': type_id,
+    })
+
+    headers = {
+        'Content-Type': "application/json",
+        'Authorization': f'Bearer {token["access"]}',
+    }
+
+    response = requests.post(url, headers=headers, data=payload)
+    return response
