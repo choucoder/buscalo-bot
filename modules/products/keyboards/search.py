@@ -86,10 +86,6 @@ def get_product_search_inline_markup(product: Dict, user, is_added=False) -> Inl
             InlineKeyboardButton(
                 text=emojize(':heart:/:broken_heart:', use_aliases=True),
                 callback_data=f"LIKE_PRODUCT-{product_id}"
-            ),
-            InlineKeyboardButton(
-                text=emojize(':warning: Reportar', use_aliases=True),
-                callback_data=f"REPORT_PRODUCT-{product_id}"
             )
         ],
         [
@@ -99,6 +95,14 @@ def get_product_search_inline_markup(product: Dict, user, is_added=False) -> Inl
             ),
         ],
     ]
+
+    if user['id'] != product['shop']['user']['id']:
+        reply_keyboard_product_search[-2].append(
+            InlineKeyboardButton(
+                text=emojize(':warning: Reportar', use_aliases=True),
+                callback_data=f"REPORT_PRODUCT-{product_id}"
+            )
+        )
 
     if product['shop']['phone_number']:
         text = f"{product['name']}\n"
