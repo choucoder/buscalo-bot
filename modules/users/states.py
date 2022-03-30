@@ -11,4 +11,5 @@
     USER_EDIT_BACK,
     USER_EDIT_TYPING,
     USER_EDIT_CHOOSING,
-) = map(chr, range(100, 112))
+    RESUME_REGISTRATION,
+) = map(chr, range(100, 113))
