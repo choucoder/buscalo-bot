@@ -144,7 +144,7 @@ def get_product_search_inline_markup(product: Dict, user, is_added=False) -> Inl
         if user['id'] != product['shop']['user']['id']:
             reply_keyboard_product_search[-1].append(
                 InlineKeyboardButton(
-                    text=emojize(':speech_balloon: WhatsApp', use_aliases=True),
+                    text=emojize(':telephone_receiver: WhatsApp', use_aliases=True),
                     url=f"wa.me/{product['shop']['phone_number']}?text={text}"
                 )
             )
@@ -152,7 +152,7 @@ def get_product_search_inline_markup(product: Dict, user, is_added=False) -> Inl
             reply_keyboard_product_search.append(
                 [
                     InlineKeyboardButton(
-                        text=emojize(':speech_balloon: WhatsApp', use_aliases=True),
+                        text=emojize(':telephone_receiver: WhatsApp', use_aliases=True),
                         url=f"wa.me/{product['shop']['phone_number']}?text={text}"
                     )  
                 ]
