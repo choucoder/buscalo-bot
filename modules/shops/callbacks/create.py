@@ -1,5 +1,7 @@
 import pprint
 
+import flag
+from emoji import emojize
 from telegram import (
     ReplyKeyboardMarkup, ReplyKeyboardRemove, Update, ParseMode
 )
@@ -15,6 +17,30 @@ from utils.helpers import get_unique_filename
 from ..states import *
 from ..requests.base import do_shop_register
 
+
+currencies = [
+    (':ar:', 'ARS'),
+    (':bo:', 'BOB'),
+    (':br:', 'BRL'),
+    (':cl:', 'CLP'),
+    (':co:', 'COP'),
+    (':cr:', 'CRC'),
+    (':cu:', 'CUP'),
+    (':do:', 'DOP'),
+    (':sv:', 'SVC'),
+    (':gt:', 'GTQ'),
+    (':ht:', 'HTG'),
+    (':hn:', 'HNL'),
+    (':mx:', 'MXN'),
+    (':ni:', 'NIO'),
+    (':pa:', 'PAB'),
+    (':py:', 'PYG'),
+    (':pe:', 'PEN'),
+    (':uy:', 'UYU'),
+    (':ve:', 'VES'),
+    (':us:', 'USD'),
+    (':cn:', 'CNY')
+]
 
 def navigate_to_self(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
@@ -165,28 +191,67 @@ def location(update: Update, context: CallbackContext) -> str:
         "type": "Point",
         "coordinates": location
     }
-    token = get_token_or_refresh(user_data)
-    shop = do_shop_register(token, user_data["shop"].copy())
 
-    if "logo" in user_data["shop"]:
-        shop["local_logo"] = user_data["shop"]["logo"]
+    currencies_text = "*Monedas disponibles*\n"
 
-    user_data["shop"] = shop
+    for country_code, code in currencies:
+        currencies_text += emojize(f":point_right: ", use_aliases=True) + flag.flag(country_code) + f"{code}\n"
 
-    markup = ReplyKeyboardMarkup(
-        keyboards.main.reply_keyboard,
-        resize_keyboard=True,
-        one_time_keyboard=False
-    )
+    text = "\nEscribe el codigo de la moneda en la cual estaran basados los precios en tu tienda :point_down:"
+    text = emojize(text, use_aliases=True)
+    
     update.message.reply_text(
-        "Tu tienda 🏬 ha sido registrada exitosamente\n\n"
-        "\t\t" + get_shop_section_help(),
-        reply_markup=markup,
+        currencies_text + text,
         parse_mode=ParseMode.MARKDOWN
     )
 
-    return END_SHOP_REGISTRATION
+    return SHOP_CURRENCY
 
+
+def currency(update: Update, context: CallbackContext) -> str:
+    user_data = context.user_data
+
+    currency = update.message.text
+    currency = currency.upper()
+
+    if currency in [curr[1] for curr in currencies]:
+        user_data['shop']['currency'] = currency
+
+        token = get_token_or_refresh(user_data)
+        shop = do_shop_register(token, user_data["shop"].copy())
+
+        if "logo" in user_data["shop"]:
+            shop["local_logo"] = user_data["shop"]["logo"]
+
+        user_data["shop"] = shop
+
+        markup = ReplyKeyboardMarkup(
+            keyboards.main.reply_keyboard,
+            resize_keyboard=True,
+            one_time_keyboard=False
+        )
+        update.message.reply_text(
+            "Tu tienda 🏬 ha sido registrada exitosamente\n\n"
+            "\t\t" + get_shop_section_help(),
+            reply_markup=markup,
+            parse_mode=ParseMode.MARKDOWN
+        )
+
+        return END_SHOP_REGISTRATION
+
+    else:
+        currencies_text = "*Monedas disponibles*\n"
+
+        for country_code, code in currencies:
+            currencies_text += emojize(f":point_right: ", use_aliases=True) + flag.flag(country_code) + f"{code}\n"
+
+        text = "\nEscribe el codigo de la moneda en la cual estaran basados los precios de tus productos :point_down:"
+        text = emojize(text, use_aliases=True)
+        
+        update.message.reply_text(
+            currencies_text + text,
+            parse_mode=ParseMode.MARKDOWN
+        )
 
 def skip_location(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data

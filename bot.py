@@ -37,6 +37,7 @@ from modules.welcome import callbacks as welcome_callbacks
 from modules.welcome import states as welcome_states
 from modules.base import states as base_states
 from modules.base.requests import get_and_login_or_abort
+from modules.base.constants import currencies
 from modules import shops
 from modules import products
 from modules import posts
@@ -46,6 +47,9 @@ from modules import settings
 from modules import users
 from modules.welcome.callbacks import start
 
+
+currs = [curr[1] for curr in currencies]
+print()
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
@@ -253,6 +257,10 @@ def main() -> None:
                     Filters.location, shops.callbacks.create.location
                 ),
             ],
+            shops.states.SHOP_CURRENCY: [
+                MessageHandler(Filters.regex(f"({'|'.join(currs)})$"),shops.callbacks.create.currency),
+                MessageHandler(Filters.regex('Atras$'), shops.callbacks.create.back),
+            ]
         },
         map_to_parent={
             base_states.BACK: WELCOME,
