@@ -49,7 +49,7 @@ from modules.welcome.callbacks import start
 
 
 currs = [curr[1] for curr in currencies]
-print()
+currs = currs + [curr.lower() for curr in currs]
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
