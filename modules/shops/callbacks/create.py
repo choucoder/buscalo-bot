@@ -85,9 +85,16 @@ def name(update: Update, context: CallbackContext) -> str:
     name = update.message.text
     user_data["shop"]["name"] = name
 
+    markup = ReplyKeyboardMarkup(
+        keyboards.create.reply_keyboard_back,
+        resize_keyboard=True,
+        one_time_keyboard=False
+    )
+
     update.message.reply_text(
         "Escribe una descripción para tu tienda 👇",
-        parse_mode=ParseMode.MARKDOWN
+        parse_mode=ParseMode.MARKDOWN,
+        reply_markup=markup
     )
 
     return SHOP_DESCRIPTION
