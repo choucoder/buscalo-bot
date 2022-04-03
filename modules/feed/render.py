@@ -7,6 +7,7 @@ from geopy.distance import geodesic
 from telegram import (
     InlineKeyboardMarkup, InputMediaPhoto, Update, ParseMode
 )
+from telegram.utils.helpers import escape_markdown
 import requests
 from decouple import config
 from modules.feed.keyboards.list import get_feed_inline_keyboard_markup, get_feed_report_inline_keyboard_markup
@@ -47,14 +48,14 @@ def render_feed(update: Update, feed: Dict, markup=None) -> None:
 
     if markup:
         update.message.reply_photo(
-            caption=emojize(text, use_aliases=True),
+            caption=escape_markdown(emojize(text, use_aliases=True), 2),
             photo=response.content,
             reply_markup=markup,
             parse_mode=ParseMode.MARKDOWN_V2
         )
     else:
         update.message.reply_photo(
-            caption=emojize(text, use_aliases=True),
+            caption=escape_markdown(emojize(text, use_aliases=True), 2),
             photo=response.content,
             parse_mode=ParseMode.MARKDOWN_V2
         )
@@ -72,7 +73,7 @@ def render_report_options_feed_inline(update: Update, feed: Dict):
     text += "8. Otro\n"
 
     update.callback_query.edit_message_caption(
-        text,
+        escape_markdown(text, 2),
         parse_mode=ParseMode.MARKDOWN_V2
     )
     update.callback_query.edit_message_reply_markup(
@@ -112,7 +113,7 @@ def render_feed_back(update: Update, feed: Dict, user_data):
     update.callback_query.edit_message_media(
         InputMediaPhoto(
             response.content,
-            caption=emojize(text, use_aliases=True),
+            caption=escape_markdown(emojize(text, use_aliases=True), 2),
             parse_mode=ParseMode.MARKDOWN_V2
         )
     )
