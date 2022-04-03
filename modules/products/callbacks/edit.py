@@ -6,7 +6,7 @@ from modules.base.requests import get_token_or_refresh
 
 from modules.products import keyboards, callbacks
 from modules import shops
-from utils.helpers import get_unique_filename
+from utils.helpers import get_text_validated, get_unique_filename
 from ..states import *
 from ..requests.edit import do_update, do_photo_update
 from ..render import render_product
@@ -107,10 +107,10 @@ def update_product(update: Update, context: CallbackContext) -> str:
     payload = {}
 
     if field == 'name':
-        payload['name'] = value
+        payload['name'] = get_text_validated(value, max_length=256)
 
     elif field == 'details':
-        payload['details'] = value
+        payload['details'] = get_text_validated(value, max_length=512)
     else:
         price = value.replace(',', '.')
         try:

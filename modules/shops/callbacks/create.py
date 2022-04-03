@@ -13,7 +13,7 @@ from modules.base.render import get_shop_section_help, render_send_location_help
 from modules.shops.requests import base
 from modules.shops import keyboards
 from modules import welcome
-from utils.helpers import get_unique_filename
+from utils.helpers import get_text_validated, get_unique_filename
 from ..states import *
 from ..requests.base import do_shop_register
 
@@ -83,7 +83,7 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
 def name(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
     name = update.message.text
-    user_data["shop"]["name"] = name
+    user_data["shop"]["name"] = get_text_validated(name, max_length=64)
 
     markup = ReplyKeyboardMarkup(
         keyboards.create.reply_keyboard_back,
@@ -104,7 +104,7 @@ def description(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
 
     description = update.message.text
-    user_data["shop"]["description"] = description
+    user_data["shop"]["description"] = get_text_validated(description, max_length=512)
 
     markup = ReplyKeyboardMarkup(
         keyboards.create.reply_keyboard_back,

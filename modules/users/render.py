@@ -7,6 +7,7 @@ from geopy.distance import geodesic
 from telegram import (
     InlineKeyboardMarkup, Update, ParseMode
 )
+from telegram.utils.helpers import escape_markdown
 import requests
 from decouple import config
 
@@ -57,27 +58,27 @@ def render_user(update: Update, user: Dict, markup=None):
     if markup:
         if is_photo:
             update.message.reply_photo(
-                caption=emojize(text, use_aliases=True),
+                caption=escape_markdown(emojize(text, use_aliases=True)),
                 photo=response.content,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=markup    
             )
         else:
             update.message.reply_text(
-                emojize(text, use_aliases=True),
+                escape_markdown(emojize(text, use_aliases=True)),
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=markup
             )
     else:
         if is_photo:
             update.message.reply_photo(
-                caption=emojize(text, use_aliases=True),
+                caption=escape_markdown(emojize(text, use_aliases=True)),
                 photo=response.content,
                 parse_mode=ParseMode.MARKDOWN,
             )
         else:
             update.message.reply_text(
-                emojize(text, use_aliases=True),
+                escape_markdown(emojize(text, use_aliases=True)),
                 reply_markup=markup,
                 parse_mode=ParseMode.MARKDOWN,
             )

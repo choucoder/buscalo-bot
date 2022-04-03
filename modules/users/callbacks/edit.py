@@ -11,7 +11,7 @@ from modules.base.requests import get_token_or_refresh
 from modules.base.render import render_send_location_help
 from modules.users.render import render_user
 from modules.welcome import keyboards as welcome_keyboards
-from utils.helpers import get_unique_filename, calc_age
+from utils.helpers import get_text_validated, get_unique_filename, calc_age
 from ..states import *
 from ..requests.edit import *
 
@@ -173,7 +173,7 @@ def update_text_fields(update: Update, context: CallbackContext) -> str:
 
     if field == 'first_name' or field == 'last_name':
         payload = {
-            field: query,
+            field: get_text_validated(query, max_length=150),
         }
         if 'first_name' == field:
             msg = 'Tu nombre ha sido actualizado'

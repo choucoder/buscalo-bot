@@ -8,7 +8,7 @@ from telegram.ext import (
     CallbackContext,
 )
 
-from utils.helpers import calc_age, email_is_valid, get_unique_filename
+from utils.helpers import calc_age, email_is_valid, get_text_validated, get_unique_filename
 from ..keyboards.create import (
     reply_keyboard_skip, reply_keyboard_accept_conditions,
     reply_keyboard_gender
@@ -95,7 +95,7 @@ def first_name(update: Update, context: CallbackContext) -> str:
     answer = ' '.join([name.capitalize() for name in answer.split()])
 
     user_data = context.user_data
-    user_data['profile_data']['first_name'] = answer
+    user_data['profile_data']['first_name'] = get_text_validated(answer, max_length=150)
     user_data['level_state'] = LAST_NAME
 
     name = answer.split()[0]
@@ -113,7 +113,7 @@ def last_name(update: Update, context: CallbackContext) -> str:
     answer = ' '.join([name.capitalize() for name in answer.split()])
 
     user_data = context.user_data
-    user_data['profile_data']['last_name'] = answer
+    user_data['profile_data']['last_name'] = get_text_validated(answer, max_length=150)
     user_data['level_state'] = EMAIL
 
     name = user_data['profile_data']['first_name'].split()[0]

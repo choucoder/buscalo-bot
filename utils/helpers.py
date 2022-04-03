@@ -103,3 +103,9 @@ def email_is_valid(email: str) -> bool:
     if re.fullmatch(regex, email):
         return True
     return False
+
+
+def get_text_validated(text: str, max_length=64) -> str:
+    if len(text) >= max_length:
+        text = text[: max_length - 1]
+    return text
