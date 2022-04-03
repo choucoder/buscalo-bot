@@ -117,6 +117,7 @@ def description(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
 
     user_data['shop_edit_field'] = 'description'
+
     markup = ReplyKeyboardMarkup(
         keyboards.edit.reply_keyboard_back,
         resize_keyboard=True,
@@ -201,7 +202,7 @@ def update_shop(update: Update, context: CallbackContext) -> str:
     if field == 'name':
         value = get_text_validated(update.message.text, max_length=64)
     else:
-        field = get_text_validated(update.message.text, max_length=512)
+        value = get_text_validated(update.message.text, max_length=512)
 
     markup = ReplyKeyboardMarkup(
         keyboards.edit.reply_keyboard,
@@ -230,7 +231,7 @@ def update_shop(update: Update, context: CallbackContext) -> str:
 
 def update_logo(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
-    _ = user_data.pop('shop_edit_field')
+    _ = user_data.pop('shop_edit_field', None)
 
     logo_path = get_unique_filename()
     logo_file = update.message.photo[-1].get_file()
@@ -258,7 +259,7 @@ def update_logo_attach(update: Update, context: CallbackContext) -> str:
     file.download(photo_path)
 
     user_data = context.user_data
-    _ = user_data.pop('shop_edit_field')
+    _ = user_data.pop('shop_edit_field', None)
 
     markup = ReplyKeyboardMarkup(
         keyboards.edit.reply_keyboard,
@@ -278,7 +279,7 @@ def update_logo_attach(update: Update, context: CallbackContext) -> str:
 
 def update_location(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
-    _ = user_data.pop('shop_edit_field')
+    _ = user_data.pop('shop_edit_field', None)
     location = update.message.location
     location = [location.latitude, location.longitude]
 
