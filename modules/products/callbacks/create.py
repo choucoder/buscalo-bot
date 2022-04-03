@@ -9,7 +9,7 @@ from modules import shops
 from modules.base.states import BACK
 from modules.products.requests.create import do_product_register
 from modules.shops import render
-from utils.helpers import get_unique_filename
+from utils.helpers import get_text_validated, get_unique_filename
 from ..states import *
 from ..requests.create import do_product_register
 from ..render import render_product
@@ -37,7 +37,7 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
 def name(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
     name = update.message.text
-    user_data['product_cache']['name'] = name
+    user_data['product_cache']['name'] = get_text_validated(name, max_length=256)
 
     update.message.reply_text(
         "Escribe los detalles acerca del producto 👇",
@@ -51,7 +51,7 @@ def details(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
     details = update.message.text
 
-    user_data['product_cache']['details'] = details
+    user_data['product_cache']['details'] = get_text_validated(details, max_length=512)
 
     update.message.reply_text(
         "Ingresa el precio del producto en tu moneda local o en $ 👇\n\n"

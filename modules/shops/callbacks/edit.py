@@ -11,7 +11,7 @@ from modules.base.requests import get_token_or_refresh
 from modules.base.states import BACK
 from modules.base.render import render_send_location_help
 from modules.shops import keyboards, callbacks
-from utils.helpers import get_unique_filename
+from utils.helpers import get_text_validated, get_unique_filename
 from ..states import *
 from ..requests.base import do_shop_logo_update, do_shop_update
 from ..render import show_shop
@@ -197,7 +197,11 @@ def phone_number(update: Update, context: CallbackContext) -> str:
 def update_shop(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
     field = user_data.pop('shop_edit_field')
-    value = update.message.text
+
+    if field == 'name':
+        value = get_text_validated(update.message.text, max_length=64)
+    else:
+        field = get_text_validated(update.message.text, max_length=512)
 
     markup = ReplyKeyboardMarkup(
         keyboards.edit.reply_keyboard,

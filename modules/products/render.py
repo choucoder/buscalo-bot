@@ -7,7 +7,7 @@ from geopy.distance import geodesic
 from telegram import (
     InlineKeyboardMarkup, Update, ParseMode, InputMediaPhoto
 )
-
+from telegram.utils.helpers import escape_markdown
 import requests
 from decouple import config
 
@@ -40,27 +40,27 @@ def render_product(update: Update, product: Dict, markup=None, current_page=None
     if markup:
         if is_photo:
             update.message.reply_photo(
-                caption=emojize(text, use_aliases=True),
+                caption=escape_markdown(emojize(text, use_aliases=True), 1),
                 photo=response.content,
                 reply_markup=markup,
                 parse_mode=ParseMode.MARKDOWN
             )
         else:
             update.message.reply_text(
-                emojize(text, use_aliases=True),
+                escape_markdown(emojize(text, use_aliases=True)),
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=markup
             )
     else:
         if is_photo:
             update.message.reply_photo(
-                caption=emojize(text, use_aliases=True),
+                caption=escape_markdown(emojize(text, use_aliases=True)),
                 photo=response.content,
                 parse_mode=ParseMode.MARKDOWN
             )
         else:
             update.message.reply_text(
-                emojize(text, use_aliases=True),
+                escape_markdown(emojize(text, use_aliases=True)),
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=markup
             )
@@ -113,14 +113,14 @@ def render_search_product(update: Update, product: Dict, user_data) -> None:
 
     if is_photo:  
         update.message.reply_photo(
-            caption=emojize(text, use_aliases=True),
+            caption=escape_markdown(emojize(text, use_aliases=True)),
             photo=response.content,
             reply_markup=get_product_search_inline_markup(product, user_data['profile_data']),
             parse_mode=ParseMode.MARKDOWN,
         )
     else:
         update.message.reply_text(
-            emojize(text, use_aliases=True),
+            escape_markdown(emojize(text, use_aliases=True)),
             parse_mode=ParseMode.MARKDOWN,
             reply_markup=get_product_search_inline_markup(product, user_data['profile_data']),
         )
@@ -176,7 +176,7 @@ def render_search_product_inline(update: Update, product: Dict, markup: InlineKe
         )
     else:
         update.callback_query.edit_message_text(
-           emojize(text, use_aliases=True),
+           escape_markdown(emojize(text, use_aliases=True)),
            parse_mode=ParseMode.MARKDOWN
         )
     
@@ -210,12 +210,12 @@ def render_report_options_product_inline(update: Update, product: Dict):
 
     if is_photo:
         update.callback_query.edit_message_caption(
-            text,
+            escape_markdown(text),
             parse_mode=ParseMode.MARKDOWN
         )   
     else:
         update.callback_query.edit_message_text(
-            text,
+            escape_markdown(text),
             parse_mode=ParseMode.MARKDOWN
         )
     
@@ -272,13 +272,13 @@ def render_product_back(update: Update, product: Dict, user_data):
         update.callback_query.edit_message_media(
             InputMediaPhoto(
                 response.content,
-                caption=emojize(text, use_aliases=True),
+                caption=escape_markdown(emojize(text, use_aliases=True)),
                 parse_mode=ParseMode.MARKDOWN
             )
         )
     else:
         update.callback_query.edit_message_text(
-            emojize(text),
+            escape_markdown(emojize(text)),
             parse_mode=ParseMode.MARKDOWN
         )
 

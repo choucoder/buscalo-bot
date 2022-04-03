@@ -8,7 +8,7 @@ from modules.base.render import get_start_message
 from modules.base.requests import get_token_or_refresh
 from modules.feedback import keyboards
 from modules.welcome import keyboards as welcome_keyboards
-from utils.helpers import get_unique_filename
+from utils.helpers import get_text_validated, get_unique_filename
 from ..states import *
 from ..requests import *
 
@@ -35,6 +35,7 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
 def send(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
     text = update.message.text
+    text = get_text_validated(text, max_length=4096)
 
     token = get_token_or_refresh(user_data)
     markup = ReplyKeyboardMarkup(

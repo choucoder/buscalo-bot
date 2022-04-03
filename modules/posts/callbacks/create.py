@@ -7,7 +7,7 @@ from modules import feed
 from modules.base.requests import get_token_or_refresh
 from modules.posts import keyboards
 from modules.base.states import BACK
-from utils.helpers import get_unique_filename
+from utils.helpers import get_text_validated, get_unique_filename
 from ..states import *
 from ..requests.create import do_post_create
 from ..render import render_post
@@ -43,6 +43,7 @@ def photo(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
 
     caption = update.message.caption
+    caption = get_text_validated(caption, max_length=65565)
     photo_path = get_unique_filename()
     photo_file = update.message.photo[-1].get_file()
     photo_file.download(photo_path)
@@ -68,7 +69,8 @@ def photo(update: Update, context: CallbackContext) -> str:
 def photo_attach(update: Update, context: CallbackContext) -> str:
     user_data = context.user_data
     caption = update.message.caption
-    
+    caption = get_text_validated(caption, max_length=65565)
+
     photo_path = get_unique_filename()
     file = context.bot.getFile(update.message.document.file_id)
     file.download(photo_path)
@@ -123,7 +125,7 @@ def publisher_type(update: Update, context: CallbackContext) -> str:
 
 def fast_post_text(update: Update, context: CallbackContext) -> None:
     user_data = context.user_data
-    user_data['text'] = update.message.text
+    user_data['text'] = get_text_validated(update.message.text, max_length=65565)
 
 
 def fast_post(update: Update, context: CallbackContext) -> str:
@@ -132,6 +134,7 @@ def fast_post(update: Update, context: CallbackContext) -> str:
     caption = update.message.caption
     if not caption:
         caption = user_data.pop('text', '')
+    caption = get_text_validated(caption, max_length=65565)
 
     photo_path = get_unique_filename()
     photo_file = update.message.photo[-1].get_file()
@@ -162,6 +165,7 @@ def fast_post_attach(update: Update, context: CallbackContext) -> str:
     caption = update.message.caption
     if not caption:
         caption = user_data.pop('text', '')
+    caption = get_text_validated(caption, max_length=65565)
 
     payload = {
         'text': caption,
