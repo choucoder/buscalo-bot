@@ -28,13 +28,13 @@ genders_en = {
 
 terms_and_conditions = (
     "*Terminos y condiciones*\n\n"
-    "\t\t\tAcepto que la información que he suministrado en este bot es "
-    "correcta y que soy mayor de 13 años de edad.\n\n"
-    "\t\t\tEl uso o la publicación de imagenes pornográficas, material que pueda contribuir "
+    "\t\tAcepto que la información que he suministrado en este bot es "
+    "correcta y que soy mayor de 18 años de edad.\n\n"
+    "\t\tAdemas, me comprometo a no publicar imagenes pornográficas, material que pueda contribuir "
     "a actividades terroristas o acciones que se consideren un delito penal, "
     "propaganda de violencia, discriminación racial, así como material que pueda "
-    "ofender la dignidad humana, esta prohibido. Y su uso "
-    "conllevará a la denegación del acceso del usuario al servicio (bot)"
+    "ofender la dignidad humana, ya que está prohibido; y su uso "
+    "conllevará a la denegación y eliminacion de la cuenta de usuario."
 )
 
 
@@ -154,9 +154,9 @@ def age(update: Update, context: CallbackContext) -> str:
                 )
                 return AGE
 
-            elif user_age < 13:
+            elif user_age < 18:
                 update.message.reply_text(
-                    "Debes tener 13 años en adelante para poder registrarte"
+                    "Debes tener 18 años en adelante para poder registrarte"
                 )
                 update.message.reply_text(
                     f"¿Cual es tu fecha de nacimiento {name}? 📅\n\n"
@@ -207,9 +207,9 @@ def age(update: Update, context: CallbackContext) -> str:
                 )
                 return AGE
 
-            elif user_age < 13:
+            elif user_age < 18:
                 update.message.reply_text(
-                    "Debes tener 13 años en adelante para poder registrarte"
+                    "Debes tener 18 años en adelante para poder registrarte"
                 )
                 update.message.reply_text(
                     f"¿Cual es tu fecha de nacimiento {name}? 📅\n\n"
