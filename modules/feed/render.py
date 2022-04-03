@@ -50,13 +50,13 @@ def render_feed(update: Update, feed: Dict, markup=None) -> None:
             caption=emojize(text, use_aliases=True),
             photo=response.content,
             reply_markup=markup,
-            parse_mode=ParseMode.MARKDOWN
+            parse_mode=ParseMode.MARKDOWN_V2
         )
     else:
         update.message.reply_photo(
             caption=emojize(text, use_aliases=True),
             photo=response.content,
-            parse_mode=ParseMode.MARKDOWN
+            parse_mode=ParseMode.MARKDOWN_V2
         )
 
 
@@ -73,7 +73,7 @@ def render_report_options_feed_inline(update: Update, feed: Dict):
 
     update.callback_query.edit_message_caption(
         text,
-        parse_mode=ParseMode.MARKDOWN
+        parse_mode=ParseMode.MARKDOWN_V2
     )
     update.callback_query.edit_message_reply_markup(
         get_feed_report_inline_keyboard_markup(feed)
@@ -113,7 +113,7 @@ def render_feed_back(update: Update, feed: Dict, user_data):
         InputMediaPhoto(
             response.content,
             caption=emojize(text, use_aliases=True),
-            parse_mode=ParseMode.MARKDOWN
+            parse_mode=ParseMode.MARKDOWN_V2
         )
     )
 
