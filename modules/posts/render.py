@@ -47,15 +47,30 @@ def render_post(update: Update, post: Dict, markup=None, current_page=None, page
     response = requests.get(f"{API_URL}{post['photo']}")
 
     if markup:
-        update.message.reply_photo(
-            caption=escape_markdown(emojize(text, use_aliases=True), 1),
-            photo=response.content,
-            reply_markup=markup,
-            parse_mode=ParseMode.MARKDOWN
-        )
+        try:
+            update.message.reply_photo(
+                caption=emojize(text, use_aliases=True),
+                photo=response.content,
+                reply_markup=markup,
+                parse_mode=ParseMode.MARKDOWN
+            )
+        except:
+            update.message.reply_photo(
+                caption=escape_markdown(emojize(text, use_aliases=True), 1),
+                photo=response.content,
+                reply_markup=markup,
+                parse_mode=ParseMode.MARKDOWN
+            )
     else:
-        update.message.reply_photo(
-            caption=escape_markdown(emojize(text, use_aliases=True), 1),
-            photo=response.content,
-            parse_mode=ParseMode.MARKDOWN
-        )  
+        try:
+            update.message.reply_photo(
+                caption=emojize(text, use_aliases=True),
+                photo=response.content,
+                parse_mode=ParseMode.MARKDOWN
+            )
+        except:
+            update.message.reply_photo(
+                caption=escape_markdown(emojize(text, use_aliases=True), 1),
+                photo=response.content,
+                parse_mode=ParseMode.MARKDOWN
+            )  

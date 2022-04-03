@@ -47,18 +47,33 @@ def render_feed(update: Update, feed: Dict, markup=None) -> None:
     response = requests.get(f"{API_URL}{post['photo']}")
 
     if markup:
-        update.message.reply_photo(
-            caption=escape_markdown(emojize(text, use_aliases=True), 2),
-            photo=response.content,
-            reply_markup=markup,
-            parse_mode=ParseMode.MARKDOWN_V2
-        )
+        try:
+            update.message.reply_photo(
+                caption=emojize(text, use_aliases=True),
+                photo=response.content,
+                reply_markup=markup,
+                parse_mode=ParseMode.MARKDOWN_V2
+            )
+        except:
+            update.message.reply_photo(
+                caption=escape_markdown(emojize(text, use_aliases=True), 2),
+                photo=response.content,
+                reply_markup=markup,
+                parse_mode=ParseMode.MARKDOWN_V2
+            )
     else:
-        update.message.reply_photo(
-            caption=escape_markdown(emojize(text, use_aliases=True), 2),
-            photo=response.content,
-            parse_mode=ParseMode.MARKDOWN_V2
-        )
+        try:
+            update.message.reply_photo(
+                caption=emojize(text, use_aliases=True),
+                photo=response.content,
+                parse_mode=ParseMode.MARKDOWN_V2
+            )
+        except:
+            update.message.reply_photo(
+                caption=escape_markdown(emojize(text, use_aliases=True), 2),
+                photo=response.content,
+                parse_mode=ParseMode.MARKDOWN_V2
+            )
 
 
 def render_report_options_feed_inline(update: Update, feed: Dict):
@@ -72,10 +87,17 @@ def render_report_options_feed_inline(update: Update, feed: Dict):
     text += "7. Terrorismo\n"
     text += "8. Otro\n"
 
-    update.callback_query.edit_message_caption(
-        escape_markdown(text, 2),
-        parse_mode=ParseMode.MARKDOWN_V2
-    )
+    try:
+        update.callback_query.edit_message_caption(
+            text,
+            parse_mode=ParseMode.MARKDOWN_V2
+        )
+    except:
+        update.callback_query.edit_message_caption(
+            escape_markdown(text, 2),
+            parse_mode=ParseMode.MARKDOWN_V2
+        )
+
     update.callback_query.edit_message_reply_markup(
         get_feed_report_inline_keyboard_markup(feed)
     )
@@ -110,16 +132,23 @@ def render_feed_back(update: Update, feed: Dict, user_data):
 
     response = requests.get(f"{API_URL}{post['photo']}")
 
-    update.callback_query.edit_message_media(
-        InputMediaPhoto(
-            response.content,
-            caption=escape_markdown(emojize(text, use_aliases=True), 2),
-            parse_mode=ParseMode.MARKDOWN_V2
+    try:
+        update.callback_query.edit_message_media(
+            InputMediaPhoto(
+                response.content,
+                caption=emojize(text, use_aliases=True),
+                parse_mode=ParseMode.MARKDOWN_V2
+            )
         )
-    )
+    except:
+        update.callback_query.edit_message_media(
+            InputMediaPhoto(
+                response.content,
+                caption=escape_markdown(emojize(text, use_aliases=True), 2),
+                parse_mode=ParseMode.MARKDOWN_V2
+            )
+        )
 
     update.callback_query.edit_message_reply_markup(
         get_feed_inline_keyboard_markup(feed, user_data)
     )
-
-    print("feed back")

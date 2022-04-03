@@ -39,31 +39,61 @@ def render_product(update: Update, product: Dict, markup=None, current_page=None
 
     if markup:
         if is_photo:
-            update.message.reply_photo(
-                caption=escape_markdown(emojize(text, use_aliases=True), 1),
-                photo=response.content,
-                reply_markup=markup,
-                parse_mode=ParseMode.MARKDOWN
-            )
+            try:
+                update.message.reply_photo(
+                    caption=emojize(text, use_aliases=True),
+                    photo=response.content,
+                    reply_markup=markup,
+                    parse_mode=ParseMode.MARKDOWN
+                )
+            except:
+                update.message.reply_photo(
+                    caption=escape_markdown(emojize(text, use_aliases=True), 1),
+                    photo=response.content,
+                    reply_markup=markup,
+                    parse_mode=ParseMode.MARKDOWN
+                )
         else:
-            update.message.reply_text(
-                escape_markdown(emojize(text, use_aliases=True)),
-                parse_mode=ParseMode.MARKDOWN,
-                reply_markup=markup
-            )
+            try:
+                update.message.reply_text(
+                    emojize(text, use_aliases=True),
+                    parse_mode=ParseMode.MARKDOWN,
+                    reply_markup=markup
+                )
+            except:
+                update.message.reply_text(
+                    escape_markdown(emojize(text, use_aliases=True)),
+                    parse_mode=ParseMode.MARKDOWN,
+                    reply_markup=markup
+                )
     else:
         if is_photo:
-            update.message.reply_photo(
-                caption=escape_markdown(emojize(text, use_aliases=True)),
-                photo=response.content,
-                parse_mode=ParseMode.MARKDOWN
-            )
+            try:
+                update.message.reply_photo(
+                    caption=emojize(text, use_aliases=True),
+                    photo=response.content,
+                    parse_mode=ParseMode.MARKDOWN
+                )
+            except:
+                update.message.reply_photo(
+                    caption=escape_markdown(emojize(text, use_aliases=True)),
+                    photo=response.content,
+                    parse_mode=ParseMode.MARKDOWN
+                )
         else:
-            update.message.reply_text(
-                escape_markdown(emojize(text, use_aliases=True)),
-                parse_mode=ParseMode.MARKDOWN,
-                reply_markup=markup
-            )
+            try:
+                update.message.reply_text(
+                    emojize(text, use_aliases=True),
+                    parse_mode=ParseMode.MARKDOWN,
+                    reply_markup=markup
+                )
+            except:
+                update.message.reply_text(
+                    escape_markdown(emojize(text, use_aliases=True)),
+                    parse_mode=ParseMode.MARKDOWN,
+                    reply_markup=markup
+                )
+
 
 def render_search_product(update: Update, product: Dict, user_data) -> None:
     text = f"*{product['name']}* :pushpin:\n\n"
@@ -111,19 +141,34 @@ def render_search_product(update: Update, product: Dict, user_data) -> None:
         response = requests.get(f"{API_URL}{product['photo']}")
         is_photo = True
 
-    if is_photo:  
-        update.message.reply_photo(
-            caption=escape_markdown(emojize(text, use_aliases=True)),
-            photo=response.content,
-            reply_markup=get_product_search_inline_markup(product, user_data['profile_data']),
-            parse_mode=ParseMode.MARKDOWN,
-        )
+    if is_photo:
+        try: 
+            update.message.reply_photo(
+                caption=emojize(text, use_aliases=True),
+                photo=response.content,
+                reply_markup=get_product_search_inline_markup(product, user_data['profile_data']),
+                parse_mode=ParseMode.MARKDOWN,
+            )
+        except:
+            update.message.reply_photo(
+                caption=escape_markdown(emojize(text, use_aliases=True)),
+                photo=response.content,
+                reply_markup=get_product_search_inline_markup(product, user_data['profile_data']),
+                parse_mode=ParseMode.MARKDOWN,
+            )
     else:
-        update.message.reply_text(
-            escape_markdown(emojize(text, use_aliases=True)),
-            parse_mode=ParseMode.MARKDOWN,
-            reply_markup=get_product_search_inline_markup(product, user_data['profile_data']),
-        )
+        try:
+            update.message.reply_text(
+                emojize(text, use_aliases=True),
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=get_product_search_inline_markup(product, user_data['profile_data']),
+            )
+        except:
+            update.message.reply_text(
+                escape_markdown(emojize(text, use_aliases=True)),
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=get_product_search_inline_markup(product, user_data['profile_data']),
+            )
 
 
 def render_search_product_inline(update: Update, product: Dict, markup: InlineKeyboardMarkup, user_data):    
@@ -171,14 +216,25 @@ def render_search_product_inline(update: Update, product: Dict, markup: InlineKe
         is_photo = True
     
     if is_photo:
-        update.callback_query.edit_message_media(
-            InputMediaPhoto(response.content, caption=emojize(text, use_aliases=True), parse_mode=ParseMode.MARKDOWN)
-        )
+        try:
+            update.callback_query.edit_message_media(
+                InputMediaPhoto(response.content, caption=emojize(text, use_aliases=True), parse_mode=ParseMode.MARKDOWN)
+            )
+        except:
+            update.callback_query.edit_message_media(
+                InputMediaPhoto(response.content, caption=escape_markdown(emojize(text, use_aliases=True)), parse_mode=ParseMode.MARKDOWN)
+            )
     else:
-        update.callback_query.edit_message_text(
-           escape_markdown(emojize(text, use_aliases=True)),
-           parse_mode=ParseMode.MARKDOWN
-        )
+        try:
+            update.callback_query.edit_message_text(
+                emojize(text, use_aliases=True),
+                parse_mode=ParseMode.MARKDOWN
+            )
+        except:
+            update.callback_query.edit_message_text(
+                escape_markdown(emojize(text, use_aliases=True)),
+                parse_mode=ParseMode.MARKDOWN
+            )
     
     # markup = get_product_search_inline_markup(product)
     update.callback_query.edit_message_reply_markup(markup)
@@ -209,15 +265,27 @@ def render_report_options_product_inline(update: Update, product: Dict):
         is_photo = True
 
     if is_photo:
-        update.callback_query.edit_message_caption(
-            escape_markdown(text),
-            parse_mode=ParseMode.MARKDOWN
-        )   
+        try:
+            update.callback_query.edit_message_caption(
+                text,
+                parse_mode=ParseMode.MARKDOWN
+            )
+        except:
+            update.callback_query.edit_message_caption(
+                escape_markdown(text),
+                parse_mode=ParseMode.MARKDOWN
+            )   
     else:
-        update.callback_query.edit_message_text(
-            escape_markdown(text),
-            parse_mode=ParseMode.MARKDOWN
-        )
+        try:
+            update.callback_query.edit_message_text(
+                text,
+                parse_mode=ParseMode.MARKDOWN
+            )
+        except:
+            update.callback_query.edit_message_text(
+                escape_markdown(text),
+                parse_mode=ParseMode.MARKDOWN
+            )
     
     update.callback_query.edit_message_reply_markup(
         get_product_report_inline_keyboard_markup(product)
@@ -268,19 +336,34 @@ def render_product_back(update: Update, product: Dict, user_data):
         response = requests.get(f"{API_URL}{product['photo']}")
         is_photo = True
 
-    if is_photo: 
-        update.callback_query.edit_message_media(
-            InputMediaPhoto(
-                response.content,
-                caption=escape_markdown(emojize(text, use_aliases=True)),
+    if is_photo:
+        try:
+            update.callback_query.edit_message_media(
+                InputMediaPhoto(
+                    response.content,
+                    caption=emojize(text, use_aliases=True),
+                    parse_mode=ParseMode.MARKDOWN
+                )
+            )
+        except:
+            update.callback_query.edit_message_media(
+                InputMediaPhoto(
+                    response.content,
+                    caption=escape_markdown(emojize(text, use_aliases=True)),
+                    parse_mode=ParseMode.MARKDOWN
+                )
+            )
+    else:
+        try:
+            update.callback_query.edit_message_text(
+                emojize(text, use_aliases=True),
                 parse_mode=ParseMode.MARKDOWN
             )
-        )
-    else:
-        update.callback_query.edit_message_text(
-            escape_markdown(emojize(text)),
-            parse_mode=ParseMode.MARKDOWN
-        )
+        except:
+            update.callback_query.edit_message_text(
+                escape_markdown(emojize(text, use_aliases=True)),
+                parse_mode=ParseMode.MARKDOWN
+            )
 
     update.callback_query.edit_message_reply_markup(
         get_product_search_inline_markup(product, user_data['profile_data'])
