@@ -1,4 +1,5 @@
 import json
+from timeit import timeit
 
 import requests
 from decouple import config
@@ -10,7 +11,7 @@ from modules.base.requests import (
 
 API_URL = config('API_URL')
 
-
+@timeit
 def do_register_request(data):
     url = f"{API_URL}/users/"
     photo_path = data.pop('photo', None)
@@ -27,7 +28,7 @@ def do_register_request(data):
         username = data['username']
         password = data['telegram_user_id']
         response_login = get_session_token(username, password)
-        
+        print("photo path: ", photo_path)
         if photo_path:
             response_update_photo = do_update_photo(photo_path, response_login['access'])
             response_update_photo_data = response_update_photo.json()['data']
@@ -41,6 +42,7 @@ def do_register_request(data):
         return None, None
 
 
+@timeit
 def do_update_photo(path, access):
     filename = path.split('/')[-1]
     ext = filename.split('.')[-1]
