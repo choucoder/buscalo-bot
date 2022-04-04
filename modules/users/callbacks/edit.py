@@ -274,23 +274,11 @@ def update_photo(update: Update, context: CallbackContext) -> str:
 
 
 def update_photo_attach(update: Update, context: CallbackContext) -> str:
-    photo_path = get_unique_filename()
-    file = context.bot.getFile(update.message.document.file_id)
-    file.download(photo_path)
-
-    user_data = context.user_data
-
-    token = get_token_or_refresh(user_data)
-    user_data['profile_data'] = do_user_photo_update(token, photo_path)
-
-    markup = ReplyKeyboardMarkup(
-        users.keyboards.edit.reply_keyboard,
-        resize_keyboard=True,
-        one_time_keyboard=False,
+    update.message.reply_text(
+        f"Debes subir una foto!\n\n"
+        f"Asegurate de estar enviando la foto como imagen y no como archivo adjunto",
+        parse_mode=ParseMode.MARKDOWN,
     )
-
-    render_user(update, user_data['profile_data'], markup=markup)
-    return USER_EDIT_CHOOSING
 
 
 def update_location(update: Update, context: CallbackContext) -> str:

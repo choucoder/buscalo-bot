@@ -323,8 +323,8 @@ def photo_attach(update: Update, context: CallbackContext) -> str:
     name = user_data['profile_data']['first_name'].split()[0]
 
     update.message.reply_text(
-        f"{name}, debes enviar una foto!\n\n"
-        f"Asegurate de estar enviando la foto como imagen y no como archivo adjunto;",
+        f"{name}, debes subir una foto!\n\n"
+        f"Asegurate de estar enviando la foto como imagen y no como archivo adjunto",
         parse_mode=ParseMode.MARKDOWN,
     )
 

@@ -254,27 +254,11 @@ def update_logo(update: Update, context: CallbackContext) -> str:
 
 
 def update_logo_attach(update: Update, context: CallbackContext) -> str:
-    photo_path = get_unique_filename()
-    file = context.bot.getFile(update.message.document.file_id)
-    file.download(photo_path)
-
-    user_data = context.user_data
-    _ = user_data.pop('shop_edit_field', None)
-
-    markup = ReplyKeyboardMarkup(
-        keyboards.edit.reply_keyboard,
-        resize_keyboard=True,
-        one_time_keyboard=False
+    update.message.reply_text(
+        f"Debes subir una foto!\n\n"
+        f"Asegurate de estar enviando la foto como imagen y no como archivo adjunto",
+        parse_mode=ParseMode.MARKDOWN,
     )
-    token = get_token_or_refresh(user_data)
-    shop_id = user_data['shop']['id']
-
-    response = do_shop_logo_update(shop_id, photo_path, token)
-    shop = response['data']
-    user_data['shop'] = shop
-    show_shop(update, shop, markup=markup)
-
-    return SHOP_EDIT_CHOOSING
 
 
 def update_location(update: Update, context: CallbackContext) -> str:

@@ -146,27 +146,11 @@ def logo(update: Update, context: CallbackContext) -> str:
 
 
 def logo_attach(update: Update, context: CallbackContext) -> str:
-    user_data = context.user_data
-
-    logo_path = get_unique_filename()
-    file = context.bot.getFile(update.message.document.file_id)
-    file.download(logo_path)
-
-    user_data["shop"]["logo"] = logo_path
-    
     update.message.reply_text(
-        "¿Donde esta ubicada tu tienda?!\n\n"
-        "\t\t\tLa ubicación es solicitada para que los usuarios cercanos puedan encontrar lo que vendes\n\n"
-        "👇 Presiona el botón en forma de clip📎, selecciona ubicación 📍y envia la ubicación de tu tienda",
+        f"Debes subir una foto!\n\n"
+        f"Asegurate de estar enviando la foto como imagen y no como archivo adjunto",
         parse_mode=ParseMode.MARKDOWN,
-        reply_markup=ReplyKeyboardMarkup(
-            keyboards.create.reply_keyboard_back,
-            resize_keyboard=True,
-            one_time_keyboard=False
-        )
     )
-    
-    return SHOP_LOCATION
 
 
 def skip_logo(update: Update, context: CallbackContext) -> str:
