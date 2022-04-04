@@ -1,5 +1,4 @@
 import json
-from timeit import timeit
 
 import requests
 from decouple import config
@@ -7,9 +6,11 @@ from decouple import config
 from modules.base.requests import (
     get_session_token,
 )
+from utils.helpers import timeit
 
 
 API_URL = config('API_URL')
+
 
 @timeit
 def do_register_request(data):
