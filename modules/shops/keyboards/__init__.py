@@ -1,5 +1,6 @@
 from .create import *
 from .edit import *
+from .list import *
 
 __all__ = (
     'create',
@@ -8,4 +9,5 @@ __all__ = (
     'settings',
     'details',
     'search',
+    'list',
 )
