@@ -2,6 +2,7 @@ from typing import Dict
 
 from emoji import emojize
 import flag
+from geopy.distance import geodesic
 from telegram import (
     Update, ParseMode
 )
@@ -181,7 +182,7 @@ def render_shop(update: Update, shop: Dict, markup=None, hidden_ws=False) -> Non
                 )
 
 
-def render_shop_search(update: Update, shop: Dict, markup=None, hidden_ws=False, current_page=None, pages=None) -> None:
+def render_shop_search(update: Update, shop: Dict, user_data, markup=None, hidden_ws=False, current_page=None, pages=None) -> None:
     text = f"*{shop['name']}*\n\n"
     text += f":information_source: {shop['description']}\n"
 
@@ -194,6 +195,20 @@ def render_shop_search(update: Update, shop: Dict, markup=None, hidden_ws=False,
         text += f":globe_with_meridians: {city}, {state}, {country}\n"
     else:
         text += f":globe_with_meridians: Desconocida\n"
+
+    shop_location = shop['location']
+    user_location = user_data['location']
+    
+    if shop_location and user_location:
+        shop_location = shop_location['coordinates']
+        user_location = user_location['coordinates']
+
+        distance = geodesic(shop_location, user_location)
+        distance_km = round(distance.km, 2)
+
+        text += f":round_pushpin: A {distance_km} km de ti\n"
+    else:
+        text += "\n"
 
     if shop['currency']:
         text += f"🪙 Moneda: {shop['currency']['code']} " + flag.flag(f":{shop['currency']['country_code']}:") + "\n"

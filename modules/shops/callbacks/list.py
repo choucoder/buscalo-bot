@@ -36,7 +36,8 @@ def navigate_to_self(update: Update, context: CallbackContext) -> str:
 
         markup = keyboards.search.get_shop_contact_inline_markup(shops[0])
         render_shop_search(
-            update, shops[0], markup=markup,
+            update, shops[0], user_data['profile_data'],
+            markup=markup,
             current_page=user_data['current_shop_page'],
             pages=user_data['count_shops']
         )
@@ -82,7 +83,7 @@ def prev(update: Update, context: CallbackContext) -> str:
     elif user_data['current_shop_page'] == 1:
         markup = keyboards.search.get_shop_contact_inline_markup(user_data['current_shop'])
         render_shop_search(
-            update, user_data['current_shop'],
+            update, user_data['current_shop'], user_data['profile_data'],
             markup=markup,
             current_page=user_data['current_shop_page'],
             pages=user_data['count_shops']
@@ -100,7 +101,8 @@ def prev(update: Update, context: CallbackContext) -> str:
         markup = keyboards.search.get_shop_contact_inline_markup(user_data['current_shop'])
 
         render_shop_search(
-            update, shops[0], markup=markup,
+            update, shops[0], user_data['profile_data'],
+            markup=markup,
             current_page=user_data['current_shop_page'],
             pages=user_data['count_shops']
         )
@@ -117,7 +119,7 @@ def next(update: Update, context: CallbackContext) -> str:
         markup = keyboards.search.get_shop_contact_inline_markup(user_data['current_shop'])
 
         render_shop_search(
-            update, user_data['current_shop'],
+            update, user_data['current_shop'], user_data['profile_data'],
             markup=markup,
             current_page=user_data['current_shop_page'],
             pages=user_data['count_shops']
@@ -135,7 +137,8 @@ def next(update: Update, context: CallbackContext) -> str:
         markup = keyboards.search.get_shop_contact_inline_markup(user_data['current_shop'])
 
         render_shop_search(
-            update, shops[0], markup=markup,
+            update, shops[0], user_data['profile_data'],
+            markup=markup,
             current_page=user_data['current_shop_page'],
             pages=user_data['count_shops']
         )
