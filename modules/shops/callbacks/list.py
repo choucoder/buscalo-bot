@@ -4,8 +4,7 @@ from telegram import (
 from telegram.ext import CallbackContext
 from modules.base.requests import get_token_or_refresh
 
-from modules.products import keyboards
-from modules import shops
+from modules.shops import keyboards
 from modules.base.render import get_start_message
 from modules.welcome import keyboards as welcome_keyboards
 from ..states import *
