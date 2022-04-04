@@ -15,7 +15,6 @@ welcome_reply_keyboard = [
         KeyboardButton(text=emojize(':postbox: Mis estados', use_aliases=True)),
     ],
     [
-        KeyboardButton(text=emojize(':information_source: Feedback', use_aliases=True)),
         KeyboardButton(text=emojize(':gear: Configuracion', use_aliases=True)),
     ]
 ]
