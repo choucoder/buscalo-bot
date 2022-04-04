@@ -634,10 +634,29 @@ def main() -> None:
     )
     conversations.append(settings_conv)
 
+    shop_list_conv = ConversationHandler(
+        entry_points=[
+            MessageHandler(Filters.regex('Atras$'), shops.callbacks.list.back),
+            MessageHandler(Filters.regex('Anterior$'), shops.callbacks.list.prev),
+            MessageHandler(Filters.regex('^Siguiente'), shops.callbacks.list.next),
+        ],
+        states={
+        },
+        map_to_parent={
+            shops.states.SHOP_LIST_ALL_BACK: WELCOME,
+            shops.states.SHOP_LIST_ALL: shops.states.SHOP_LIST_ALL,
+        },
+        fallbacks=[],
+        persistent=True,
+        name='shop_list',
+    )
+    conversations.append(shop_list_conv)
+
     welcome_selection_conv = ConversationHandler(
         entry_points=[
             MessageHandler(Filters.regex('Interactuar$'), feed.callbacks.list.navigate_to_self),
             MessageHandler(Filters.regex('Mi tienda$'), shops.callbacks.main.navigate_to_self),
+            MessageHandler(Filters.regex('Tiendas$'), shops.callbacks.list.navigate_to_self),
             MessageHandler(Filters.regex('Buscar productos$'), products.callbacks.search.navigate_to_self),
             MessageHandler(Filters.regex('Mis estados$'), posts.callbacks.list.navigate_to_self),
             MessageHandler(Filters.regex('Feedback$'), feedback.callbacks.create.navigate_to_self),
@@ -653,6 +672,7 @@ def main() -> None:
             posts.states.POST_LIST: [post_list_conv],
             feedback.states.FEEDBACK: [feedback_conv],
             settings.states.SETTINGS: [settings_conv],
+            shops.states.SHOP_LIST_ALL: [shop_list_conv],
         },
         fallbacks=[],
         map_to_parent={
