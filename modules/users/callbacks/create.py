@@ -319,28 +319,13 @@ def photo(update: Update, context: CallbackContext) -> str:
 
 
 def photo_attach(update: Update, context: CallbackContext) -> str:
-    photo_path = get_unique_filename()
-    file = context.bot.getFile(update.message.document.file_id)
-    file.download(photo_path)
-
     user_data = context.user_data
-    user_data['profile_data']['photo'] = photo_path
-    user_data['level_state'] = LOCATION
     name = user_data['profile_data']['first_name'].split()[0]
 
     update.message.reply_text(
-        f"¿Cual es tu ubicación {name}?\n\n"
-        "\t\t\tLa ubicación es solicitada para proporcionarte contenido en base a tu ubicación\n\n"
-        "👇 Presiona el botón en forma de clip📎, selecciona ubicación 📍y envia donde te encuentras",
+        f"{name}, debes subir una imagen\n\n",
         parse_mode=ParseMode.MARKDOWN,
-        reply_markup=ReplyKeyboardMarkup(
-            keyboard=reply_keyboard_skip,
-            resize_keyboard=True,
-            one_time_keyboard=False,
-        ),
     )
-
-    return LOCATION
 
 
 def skip_photo(update: Update, context: CallbackContext) -> str:
