@@ -165,27 +165,8 @@ def update_photo(update: Update, context: CallbackContext) -> str:
 
 
 def update_photo_attach(update: Update, context: CallbackContext) -> str:
-    user_data = context.user_data
-
-    photo_path = get_unique_filename()
-    file = context.bot.getFile(update.message.document.file_id)
-    file.download(photo_path)
-
-    _ = user_data.pop('product_edit_field')
-    token = get_token_or_refresh(user_data)
-    product_id = user_data['current_product']['id']
-
-    product = do_photo_update(token, photo_path, product_id)
-    
-    if product:
-        user_data['current_product'] = product
-
-    markup = ReplyKeyboardMarkup(
-        keyboards.edit.reply_keyboard,
-        resize_keyboard=True,
-        one_time_keyboard=False
+    update.message.reply_text(
+        f"Debes subir una foto!\n\n"
+        f"Asegurate de estar enviando la foto como imagen y no como archivo adjunto",
+        parse_mode=ParseMode.MARKDOWN,
     )
-
-    render_product(update, user_data['current_product'], markup=markup)
-
-    return PRODUCT_EDIT_CHOOSING
