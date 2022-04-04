@@ -639,7 +639,7 @@ def main() -> None:
             MessageHandler(Filters.regex('Interactuar$'), feed.callbacks.list.navigate_to_self),
             MessageHandler(Filters.regex('Mi tienda$'), shops.callbacks.main.navigate_to_self),
             MessageHandler(Filters.regex('Buscar productos$'), products.callbacks.search.navigate_to_self),
-            MessageHandler(Filters.regex('Mis posts$'), posts.callbacks.list.navigate_to_self),
+            MessageHandler(Filters.regex('Mis estados$'), posts.callbacks.list.navigate_to_self),
             MessageHandler(Filters.regex('Feedback$'), feedback.callbacks.create.navigate_to_self),
             MessageHandler(Filters.regex('Configuracion$'), settings.callbacks.main.navigate_to_self),
             MessageHandler(Filters.text & (~Filters.command), posts.callbacks.create.fast_post_text),
