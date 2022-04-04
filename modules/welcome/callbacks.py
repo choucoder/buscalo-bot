@@ -32,9 +32,6 @@ def start_app(update: Update, context: CallbackContext) -> str:
         reply_markup=markup,
         parse_mode=ParseMode.MARKDOWN
     )
-    update.message.reply_text(
-        "https://www.youtube.com/watch?v=WLeeL-Qi9ss"
-    )
     token = get_token_or_refresh(user_data)
     user_data['user'] = get_user(token)
 
