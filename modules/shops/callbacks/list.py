@@ -91,7 +91,7 @@ def prev(update: Update, context: CallbackContext) -> str:
         token = get_token_or_refresh(user_data)
         current_page = user_data['current_shop_page']
 
-        shops, count = get_shops(token, page=1)
+        shops, count = get_shops(token, page=current_page - 1)
 
         user_data['current_shop'] = shops[0]
         user_data['current_shop_page'] -= 1
@@ -127,7 +127,7 @@ def next(update: Update, context: CallbackContext) -> str:
         token = get_token_or_refresh(user_data)
         current_page = user_data['current_shop_page']
 
-        shops, count = get_shops(token, page=1)
+        shops, count = get_shops(token, page=current_page + 1)
 
         user_data['current_shop'] = shops[0]
         user_data['current_shop_page'] += 1
