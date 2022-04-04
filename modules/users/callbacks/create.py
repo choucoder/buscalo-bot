@@ -424,7 +424,10 @@ def accept_conditions(update: Update, context: CallbackContext) -> str:
         )
 
         start_app(update, context)
-
+        update.message.reply_text(
+            "https://www.youtube.com/watch?v=WLeeL-Qi9ss"
+        )
+        
         return WELCOME
     else:
         update.message.reply_text(
