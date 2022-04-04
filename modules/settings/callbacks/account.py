@@ -67,10 +67,6 @@ def delete_confirm(update: Update, context: CallbackContext) -> str:
 
     if response.status_code == 204:
         user_data.clear()
-        _ = context.user_data.pop('token', None)
-        _ = context.user_data.pop('profile_data', None)
-        _ = context.user_data.pop('shop', None)
-
         update.message.reply_text(
             text,
             reply_markup=ReplyKeyboardRemove()
