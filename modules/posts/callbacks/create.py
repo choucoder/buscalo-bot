@@ -67,30 +67,11 @@ def photo(update: Update, context: CallbackContext) -> str:
 
 
 def photo_attach(update: Update, context: CallbackContext) -> str:
-    user_data = context.user_data
-    caption = update.message.caption
-    caption = get_text_validated(caption, max_length=65565)
-
-    photo_path = get_unique_filename()
-    file = context.bot.getFile(update.message.document.file_id)
-    file.download(photo_path)
-
-    user_data['post_create']['text'] = caption
-    user_data['post_create']['photo'] = photo_path
-
-    markup = ReplyKeyboardMarkup(
-        keyboards.create.publisher_type_keyboard,
-        resize_keyboard=True,
-        one_time_keyboard=False,
-    )
-
     update.message.reply_text(
-        'Selecciona con que perfil publicar tu estado 👇',
-        reply_markup=markup,
-        parse_mode=ParseMode.MARKDOWN
+        f"Debes subir una foto!\n\n"
+        f"Asegurate de estar enviando la foto como imagen y no como archivo adjunto",
+        parse_mode=ParseMode.MARKDOWN,
     )
-    
-    return POST_CREATE_PUBLISHER_TYPE
 
 
 def publisher_type(update: Update, context: CallbackContext) -> str:
@@ -157,27 +138,8 @@ def fast_post(update: Update, context: CallbackContext) -> str:
 
 
 def fast_post_attach(update: Update, context: CallbackContext) -> str:
-    user_data = context.user_data
-    photo_path = get_unique_filename()
-    file = context.bot.getFile(update.message.document.file_id)
-    file.download(photo_path)
-
-    caption = update.message.caption
-    if not caption:
-        caption = user_data.pop('text', '')
-    caption = get_text_validated(caption, max_length=65565)
-
-    payload = {
-        'text': caption,
-        'photo': photo_path,
-        'as_shop': False,
-    }
-
-    token = get_token_or_refresh(user_data)
-    response = do_post_create(token, payload)
-    post = response['data']
-
-    render_post(update, post)
     update.message.reply_text(
-        'El estado ha sido subido correctamente\n',
+        f"Debes subir una foto!\n\n"
+        f"Asegurate de estar enviando la foto como imagen y no como archivo adjunto",
+        parse_mode=ParseMode.MARKDOWN,
     )

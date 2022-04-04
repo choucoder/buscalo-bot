@@ -118,26 +118,11 @@ def photo(update: Update, context: CallbackContext) -> str:
 
 
 def photo_attach(update: Update, context: CallbackContext) -> str:
-    user_data = context.user_data
-
-    photo_path = get_unique_filename()
-    file = context.bot.getFile(update.message.document.file_id)
-    file.download(photo_path)
-    user_data['product_cache']['photo'] = photo_path
-
-    token = get_token_or_refresh(user_data)
-    product = do_product_register(
-        token,
-        user_data['product_cache'].copy(),
-        user_data['shop']['id']
-    )
-    render_product(update, product)
     update.message.reply_text(
-        '¡Producto registrado exitosamente!'
+        f"Debes subir una foto!\n\n"
+        f"Asegurate de estar enviando la foto como imagen y no como archivo adjunto",
+        parse_mode=ParseMode.MARKDOWN,
     )
-    shops.callbacks.main.navigate_to_self(update, context, show=False)
-
-    return PRODUCT_END_REGISTRATION
 
 
 def skip_photo(update: Update, context: CallbackContext) -> str:
